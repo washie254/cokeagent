@@ -175,7 +175,7 @@
 
 <section class="section intro">
 	<div class="container">
-    <h2>THE AGENTS DASH BOARD</h2> 
+    <h2>THE DISTRIBUTOR DASH BOARD</h2> 
     <!-- Tab links -->
     <div class="tab">
     <button class="tablinks" onclick="openCity(event, 'Activedistributors')">Active  Distributors</button>

@@ -162,11 +162,10 @@
         <p> your profile information is as follows</p>
         <?php
 
-                $con = mysqli_connect('localhost','root','','coke');
                 $user = $_SESSION['username'];
 
                 $query0 = "SELECT * FROM agents WHERE username='$user'";
-                $result0 = mysqli_query($con, $query0);
+                $result0 = mysqli_query($db, $query0);
                 
                 while($row = mysqli_fetch_array($result0, MYSQLI_NUM)){
                     $uid=$row[0];
@@ -241,15 +240,10 @@
       <tbody>
         <!-- [ LOOP THE REGISTERED AGENTS ] -->
         <?php
-          $con = mysqli_connect('localhost','root','','coke');
-    
-          if (!$con) {
-            die('Could not connect: ' . mysqli_error($con));
-          }
 
           $agent = $_SESSION['username'];
           $sql = "SELECT * FROM tasks WHERE agent='$agent' AND status='PENDING'";
-          $result = mysqli_query($con, $sql);
+          $result = mysqli_query($db, $sql);
           while($row = mysqli_fetch_array($result, MYSQLI_NUM))
           {	
           
@@ -288,15 +282,9 @@
 			<tbody>
 				<!-- [ LOOP THE REGISTERED AGENTS ] -->
 				<?php
-				$con = mysqli_connect('localhost','root','','coke');
-			
-				if (!$con) {
-					die('Could not connect: ' . mysqli_error($con));
-				}
-
 				$agent = $_SESSION['username'];
 				$sql = "SELECT * FROM tasks WHERE agent='$agent' AND status='AWAITING APPROVAL' OR status='COMPLETED'";
-				$result = mysqli_query($con, $sql);
+				$result = mysqli_query($db, $sql);
 				while($row = mysqli_fetch_array($result, MYSQLI_NUM))
 				{	
 				

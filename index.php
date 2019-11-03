@@ -1,5 +1,6 @@
 <?php 
-	session_start(); 
+	include('server.php');
+	//session_start(); 
 
 	if (!isset($_SESSION['username'])) {
 		$_SESSION['msg'] = "You must log in first";
@@ -103,15 +104,10 @@
 			<tbody>
 				<!-- [ LOOP THE REGISTERED AGENTS ] -->
 				<?php
-				$con = mysqli_connect('localhost','root','','coke');
-			
-				if (!$con) {
-					die('Could not connect: ' . mysqli_error($con));
-				}
 
 				$agent = $_SESSION['username'];
 				$sql = "SELECT * FROM tasks WHERE agent='$agent' and status='PENDING'";
-				$result = mysqli_query($con, $sql);
+				$result = mysqli_query($db, $sql);
 				while($row = mysqli_fetch_array($result, MYSQLI_NUM))
 				{	
 				
@@ -122,7 +118,9 @@
 						echo '<td>'.$row[4].'</td> '; //DESCRIPTION
 						echo '<td>'.$row[5]." ".$row[6].'</td> '; //DATE TIME ASSIGNRD
 						echo '<td>'.$row[10].'</td> '; //TASK STATUS
-						echo '<td><button class="btn btn-secondary">DO IT !</button></td> '; //EMAIL
+						echo '<td>
+								<a href="file.php?id='.$row[0].'"><strong><button type="button" class="btn btn-success">File Report</button>
+							  </td> '; //EMAIL
 					echo '</tr>';
 				}
 				?>
