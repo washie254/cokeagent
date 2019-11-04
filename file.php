@@ -198,7 +198,7 @@
                         <textarea type="text" class="form-control" name="remarks" placeholder="Remarks on the Distributor"></textarea>
                     </div>
 
-                    <button type="submit" class="btn btn-success" name="filesoda" style="width:100%;"><b>File Marchandise </b></button>
+                    <button type="submit" class="btn btn-success" name="filearchandise" style="width:100%;"><b>File Marchandise </b></button>
 
                 <?php
             }
