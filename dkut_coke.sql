@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Nov 04, 2019 at 01:08 PM
+-- Generation Time: Nov 13, 2019 at 04:26 PM
 -- Server version: 10.4.6-MariaDB
 -- PHP Version: 7.1.32
 
@@ -21,6 +21,21 @@ SET time_zone = "+00:00";
 --
 -- Database: `dkut_coke`
 --
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `admins`
+--
+
+CREATE TABLE `admins` (
+  `id` int(11) NOT NULL,
+  `fname` varchar(20) NOT NULL,
+  `lname` varchar(20) NOT NULL,
+  `email` varchar(40) NOT NULL,
+  `tel` varchar(15) NOT NULL,
+  `password` varchar(255) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
 
@@ -102,11 +117,28 @@ INSERT INTO `distributors` (`id`, `distname`, `distoname`, `distemail`, `distel`
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `managers`
+--
+
+CREATE TABLE `managers` (
+  `id` int(11) NOT NULL,
+  `fname` varchar(20) NOT NULL,
+  `lname` varchar(20) NOT NULL,
+  `email` varchar(35) NOT NULL,
+  `tel` varchar(15) NOT NULL,
+  `password` varchar(255) NOT NULL,
+  `status` varchar(15) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `tasks`
 --
 
 CREATE TABLE `tasks` (
   `id` int(11) NOT NULL,
+  `agentid` int(11) NOT NULL,
   `agent` varchar(255) NOT NULL,
   `distributor` varchar(255) NOT NULL,
   `category` varchar(255) NOT NULL,
@@ -118,18 +150,22 @@ CREATE TABLE `tasks` (
   `remarks` varchar(255) NOT NULL,
   `status` varchar(255) NOT NULL,
   `lat` float NOT NULL,
-  `lng` float NOT NULL
+  `lng` float NOT NULL,
+  `distributorgrade` varchar(20) NOT NULL,
+  `distributorremarks` varchar(255) NOT NULL,
+  `manageremarks` varchar(255) NOT NULL,
+  `managergrade` double NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `tasks`
 --
 
-INSERT INTO `tasks` (`id`, `agent`, `distributor`, `category`, `description`, `datecreated`, `timecreated`, `datecompleted`, `timecompleted`, `remarks`, `status`, `lat`, `lng`) VALUES
-(1, 'agent001', 'Distributor001', 'Merchandise', 'supply 50  coke t-shirts  and provide remarks on the distributors progress on the remarks section ', '2019-08-10', '06:31:47', '0000-00-00', '00:00:00', '', 'PENDING', 0, 0),
-(2, 'agent002', 'Distributor 002 ', 'Soda', 'supply 50 crates on soft drinks to the distributor and take a review on the operation performed by the distributor ', '2019-08-10', '06:38:37', '0000-00-00', '00:00:00', '', 'PENDING', 0, 0),
-(4, 'agent001', 'Distributor001', 'Dasani', 'SAMPLE SAMPLE', '2019-08-10', '07:18:19', '0000-00-00', '00:00:00', '', 'PENDING', 0, 0),
-(5, 'agent001', 'Distributor001', 'Soda', 'Tricky kidogo', '2019-08-10', '07:19:04', '0000-00-00', '00:00:00', '', 'PENDING', 0, 0);
+INSERT INTO `tasks` (`id`, `agentid`, `agent`, `distributor`, `category`, `description`, `datecreated`, `timecreated`, `datecompleted`, `timecompleted`, `remarks`, `status`, `lat`, `lng`, `distributorgrade`, `distributorremarks`, `manageremarks`, `managergrade`) VALUES
+(1, 1, 'agent001', 'Distributor001', 'Merchandise', 'supply 50  coke t-shirts  and provide remarks on the distributors progress on the remarks section ', '2019-08-10', '06:31:47', '0000-00-00', '00:00:00', '', 'PENDING', 0, 0, '', '', '', 0),
+(2, 2, 'agent002', 'Distributor 002 ', 'Soda', 'supply 50 crates on soft drinks to the distributor and take a review on the operation performed by the distributor ', '2019-08-10', '06:38:37', '0000-00-00', '00:00:00', '', 'PENDING', 0, 0, '', '', '', 0),
+(4, 1, 'agent001', 'Distributor001', 'Dasani', 'SAMPLE SAMPLE', '2019-08-10', '07:18:19', '0000-00-00', '00:00:00', '', 'PENDING', 0, 0, '', '', '', 0),
+(5, 1, 'agent001', 'Distributor001', 'Soda', 'Tricky kidogo', '2019-08-10', '07:19:04', '0000-00-00', '00:00:00', '', 'PENDING', 0, 0, '', '', '', 0);
 
 -- --------------------------------------------------------
 
@@ -156,6 +192,12 @@ INSERT INTO `users` (`id`, `username`, `email`, `password`) VALUES
 --
 
 --
+-- Indexes for table `admins`
+--
+ALTER TABLE `admins`
+  ADD PRIMARY KEY (`id`);
+
+--
 -- Indexes for table `agents`
 --
 ALTER TABLE `agents`
@@ -171,6 +213,12 @@ ALTER TABLE `departments`
 -- Indexes for table `distributors`
 --
 ALTER TABLE `distributors`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `managers`
+--
+ALTER TABLE `managers`
   ADD PRIMARY KEY (`id`);
 
 --
@@ -190,6 +238,12 @@ ALTER TABLE `users`
 --
 
 --
+-- AUTO_INCREMENT for table `admins`
+--
+ALTER TABLE `admins`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
 -- AUTO_INCREMENT for table `agents`
 --
 ALTER TABLE `agents`
@@ -206,6 +260,12 @@ ALTER TABLE `departments`
 --
 ALTER TABLE `distributors`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+
+--
+-- AUTO_INCREMENT for table `managers`
+--
+ALTER TABLE `managers`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `tasks`
