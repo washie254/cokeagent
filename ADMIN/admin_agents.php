@@ -196,7 +196,7 @@
           <th scope="col">Agents Email</th>
           <th scope="col">Telephone No</th>
           <th scope="col">Date Added</th>
-          <th scope="col">Action</th>
+          <!-- <th scope="col">Action</th> -->
         </tr>
       </thead>
       <tbody>
@@ -215,7 +215,7 @@
                   echo '<td>'.$row[5].'</td> '; //EMAIL
                   echo '<td>'.$row[6].'</td> '; //TELEPHONE NUMBER
                   echo '<td>'.$row[8].'</td> '; //DATE ADDED
-                  echo '<td><a href="deactivate.php?id=' . $row[0] . '"><button class="btn btn-danger">DEACTIVATE</button></a> </td>';
+                  // echo '<td><a href="deactivate.php?id=' . $row[0] . '"><button class="btn btn-danger">DEACTIVATE</button></a> </td>';
               echo '</tr>';
           }
         ?>
@@ -238,7 +238,7 @@
           <th scope="col">Agents Email</th>
           <th scope="col">Telephone No</th>
           <th scope="col">Date Added</th>
-          <th scope="col">Action</th>
+          <!-- <th scope="col">Action</th> -->
         </tr>
       </thead>
       <tbody>
@@ -256,7 +256,7 @@
                   echo '<td>'.$row[5].'</td> '; //EMAIL
                   echo '<td>'.$row[6].'</td> '; //TELEPHONE NUMBER
                   echo '<td>'.$row[8].'</td> '; //DATE ADDED
-                  echo '<td><a href="activate.php?id=' . $row[0] . '"><button class="btn btn-success">ACTIVATE</button></a> </td>';
+                  // echo '<td><a href="activate.php?id=' . $row[0] . '"><button class="btn btn-success">ACTIVATE</button></a> </td>';
               echo '</tr>';
           }
         ?>
