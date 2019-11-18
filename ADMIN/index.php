@@ -1,16 +1,16 @@
+<?php include('server.php');?>
 <?php 
-	include('server.php');
 	//session_start(); 
 
 	if (!isset($_SESSION['username'])) {
 		$_SESSION['msg'] = "You must log in first";
-		header('location: login.php');
+		header('location: login_admin.php');
 	}
 
 	if (isset($_GET['logout'])) {
 		session_destroy();
 		unset($_SESSION['username']);
-		header("location: login.php");
+		header("location: login_admin.php");
 	}
 
 ?>
@@ -43,12 +43,33 @@
 
 <!-- Header Start --> 
 <header class="navigation">
+	<div class="header-top ">
+		<div class="container">
+			<div class="row justify-content-between align-items-center">
+				<div class="col-lg-2 col-md-4">
+					<div class="header-top-socials text-center text-lg-left text-md-left">
+						<a href="#"><i class="ti-github"></i></a>
+						<a href="#" style="color:Yellow"> <b>	
+							<?php  if (isset($_SESSION['username'])):?>
+							<?php echo $_SESSION['username']; ?> </b>
+						</a>
+						<a href="index.php?logout='1'" style="color: red;">logout</a>
+						<?php endif ?>
+					</div>
+				</div>
+				<div class="col-lg-10 col-md-8 text-center text-lg-right text-md-right">
+					<div class="header-top-info">
+						<a href="tel:+254720870388">Call Us : <span>+254-720-870388</span></a>
+						<a href="mailto:cokeagentsystem@yahoo.com" ><i class="fa fa-envelope mr-2"></i><span>cokeagentsystem@yahoo.com</span></a>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
 	<nav class="navbar navbar-expand-lg  py-4" id="navbar">
 		<div class="container">
-        
-        <!-- <a href="#"><i class="ti-github"></a> -->
 		  <a class="navbar-brand" href="#">
-              Coca<span>Cola.</span>
+		  	Coca<span>Cola.</span>
 		  </a>
 
 		  <button class="navbar-toggler collapsed" type="button" data-toggle="collapse" data-target="#navbarsExample09" aria-controls="navbarsExample09" aria-expanded="false" aria-label="Toggle navigation">
@@ -60,19 +81,16 @@
 			  <li class="nav-item active">
 				<a class="nav-link" href="index.php">Home <span class="sr-only">(current)</span></a>
 			  </li>
-			   <li class="nav-item"><a class="nav-link" href="profile.php">Pofile</a></li>
-
-              <li style="float:right;" class="nav-link">
-                <!-- <i class="ti-user"> -->
-                <a href="#" style="color:Yellow"> <b>	
-                    <?php  if (isset($_SESSION['username'])):?>
-                    <?php echo strtoupper($_SESSION['username']); ?> </b>
-                    <?php endif ?>
-                </a>
-              </li>
-              <li class="nav-link">
-                <a href="index.php?logout='1'" style="color: red;"><b>logout</b></a>
-              </li>
+			 	<li class="nav-item"><a class="nav-link" href="manager.php">Managers</a></li>
+			   <li class="nav-item"><a class="nav-link" href="admin_agents.php">Agents</a></li>
+			   
+			   <li class="nav-item dropdown">
+					<a class="nav-link dropdown-toggle" href="#" id="dropdown03" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Report</a>
+					<ul class="dropdown-menu" aria-labelledby="dropdown03">
+						<li><a class="dropdown-item" href="agents_reports.php">General Reports</a></li>
+						<li><a class="dropdown-item" href="distributors_reports.php">Distributor Reports</a></li>
+					</ul>
+			  </li>
 			</ul>
 		  </div>
 		</div>
@@ -84,53 +102,204 @@
 <div class="main-wrapper ">
 
 <section class="section intro">
-	<div class="container">
-		<P><h2>TASKS ASSIGNED</h2></p>
-		<div id="Pendingtasks" class="tabcontent" style="padding: 6px 12px; border: 1px solid #ccc;">
-			<h3>Pending Tasks</h3>
-			<p>the following are the tasks you are yet to complete.</p>
-			<table class="table table-bordered">
+<div class="container">
+    <div style="padding: 6px 12px; border: 1px solid #ccc;height:auto; verflow: auto;">
+        <h3>Active Tasks</h3> 
+		<p> Agents Assigned tasks that are yet to be completed:</p> 
+		
+		<table class="table table-bordered">
 			<thead>
 				<tr>
-				<th scope="col">T. ID </th>
-				<th scope="col">T. Dept</th>
-				<th scope="col">Distributor Name</th>
-				<th scope="col">Task Description</th>
+				<th scope="col">T.Id</th>
+				<th scope="col">A:Name</th>
+				<th scope="col">Distributor</th>
+				<th scope="col">Description</th>
 				<th scope="col">Date & Time Assigned</th>
 				<th scope="col">Status</th>
-				<th scope="col">ACTION</th>
+				<th scope="col">Action</th>
 				</tr>
 			</thead>
 			<tbody>
 				<!-- [ LOOP THE REGISTERED AGENTS ] -->
 				<?php
+				// $con = mysqli_connect('localhost','root','','coke');
+			
+				// if (!$con) {
+				// 	die('Could not connect: ' . mysqli_error($con));
+				// }
 
-				$agent = $_SESSION['username'];
-				$sql = "SELECT * FROM tasks WHERE agent='$agent' and status='PENDING'";
+				$sql = "SELECT * FROM tasks";
 				$result = mysqli_query($db, $sql);
 				while($row = mysqli_fetch_array($result, MYSQLI_NUM))
 				{	
 				
 					echo '<tr>';
-						echo '<td>'.$row[0].'</td> '; //TASKID
-						echo '<td>'.$row[3].'</td> '; //DEPERTMENT / CATEGORY
+						echo '<td>'.$row[0].'</td> '; //TASK ID 
+						echo '<td>'.$row[1].'</td> '; //AGENT USER NAME
 						echo '<td>'.$row[2].'</td> '; //DISTRIBUTOR
 						echo '<td>'.$row[4].'</td> '; //DESCRIPTION
-						echo '<td>'.$row[5]." ".$row[6].'</td> '; //DATE TIME ASSIGNRD
-						echo '<td>'.$row[10].'</td> '; //TASK STATUS
-						echo '<td>
-								<a href="file.php?id='.$row[0].'"><strong><button type="button" class="btn btn-success">File Report</button>
-							  </td> '; //EMAIL
+						echo '<td>'.$row[5]." ".$row[6].'</td> '; //DATE AND TIME CREATED
+						echo '<td>'.$row[10].'</td> '; //DATE ADDED
+						echo '<td><a href="deltask.php?id=' . $row[0] . '"><button class="btn btn-danger">DELETE</button></a> </td>';
 					echo '</tr>';
 				}
 				?>
 			</tbody>
-    		</table>
-    	</div>
-	</div>
+		</table>
+    </div>
+</div>	
+
+<br>
+  <div class="container">
+    <div style="padding: 6px 12px; border: 1px solid #ccc;">
+        <h3>Assign a New Task</h3> 
+		<p> Asssign new task to an agent</p>   
+		
+		<form method="post" action="admin_index.php">
+		<style>
+			.error {
+				width: 98%; 
+				margin: 0px auto; 
+				padding: 10px; 
+				border: 1px solid #a94442; 
+				color: #a94442; 
+				background: #f2dede; 
+				border-radius: 5px; 
+				text-align: left;
+			}
+		</style>
+          <?php include('errors.php'); ?>
+          <div class="form-group">
+              <label for="exampleAgent">Agent </label>
+              <?php
+					// $conn = new mysqli('localhost', 'root', '', 'coke') 
+					// or die ('Cannot connect to db');  
+
+					$result = $db->query("select id, username FROM agents");
+					echo "<select name='agent' class='form-control' style=width:98%>";
+						while ($row = $result->fetch_assoc()) {
+						unset($id, $name);
+						$id = $row['id'];
+						$name = $row['username']; 
+						echo '<option value="'.$name.'">'.$name.'</option>';      
+						}
+					echo "</select>";
+				?>
+          </div>
+          <div class="form-group">
+              <label for="exampleInputEmail1">Distributor</label>
+			  <?php
+					// $conn = new mysqli('localhost', 'root', '', 'coke') 
+					// or die ('Cannot connect to db');  
+
+					$result01 = $db->query("select id, distname FROM distributors");
+					echo "<select name='distributor' class='form-control' style=width:98%>";
+						while ($row = $result01->fetch_assoc()) {
+						unset($did, $dname);
+						$did = $row['id'];
+						$dname = $row['distname']; 
+						echo '<option value="'.$dname.'">'.$dname.'</option>';      
+						}
+					echo "</select>";
+				?>
+		  </div>
+		  <div class="form-group">
+              <label for="exampleInputEmail1">Task Category</label>
+			  <?php
+					// $conn = new mysqli('localhost', 'root', '', 'coke') 
+					// or die ('Cannot connect to db');  
+
+					$result02 = $db->query("select id, deptname FROM departments");
+					echo "<select name='dept' class='form-control' style=width:98%>";
+						while ($row = $result02->fetch_assoc()) {
+						unset($id, $name);
+						$deptid = $row['id'];
+						$deptname = $row['deptname']; 
+						echo '<option value="'.$deptname.'">'.$deptname.'</option>';      
+						}
+					echo "</select>";
+				?>
+		  </div>
+		  <div class="form-group">
+              <label for="exampleInputEmail1">Description</label>
+              <textarea type="text" class="form-control" name="description" rows="4" cols="50"placeholder="Enter brief description about the task" ></textarea>
+		  </div>
+		  <button type="submit" class="btn btn-success" name="add_task" style="width:100%;"><b>ADD TASK</b></button>
+
+		</form>
+
+      </div>
+  </div>
 </section>
 
-<!-- Section Intro END -->
+
+
+<!-- Section About End -->
+
+<!--  Section Services Start -->
+<section class="section service border-top">
+	<div class="container">
+		<div class="row justify-content-center">
+			<div class="col-lg-7 text-center">
+				<div class="section-title">
+					<span class="h6 text-color">Our Services</span>
+					<h2 class="mt-3 content-title ">We provide a wide range of creative services </h2>
+				</div>
+			</div>
+		</div>
+
+		<div class="row justify-content-center">
+			<div class="col-lg-4 col-md-6 col-sm-6">
+				<div class="service-item mb-5">
+					<i class="ti-desktop"></i>
+					<h4 class="mb-3">Web development.</h4>
+					<p>A digital agency isn't here to replace your internal team, we're here to partner</p>
+				</div>
+			</div>
+
+			<div class="col-lg-4 col-md-6 col-sm-6">
+				<div class="service-item mb-5">
+					<i class="ti-layers"></i>
+					<h4 class="mb-3">Interface Design.</h4>
+					<p>A digital agency isn't here to replace your internal team, we're here to partner</p>
+				</div>
+			</div>
+
+			<div class="col-lg-4 col-md-6 col-sm-6">
+				<div class="service-item mb-5">
+					<i class="ti-bar-chart"></i>
+					<h4 class="mb-3">Business Consulting.</h4>
+					<p>A digital agency isn't here to replace your internal team, we're here to partner</p>
+				</div>
+			</div>
+
+			<div class="col-lg-4 col-md-6 col-sm-6">
+				<div class="service-item mb-5 mb-lg-0">
+					<i class="ti-vector"></i>
+					<h4 class="mb-3">Branding.</h4>
+					<p>A digital agency isn't here to replace your internal team, we're here to partner</p>
+				</div>
+			</div>
+
+			<div class="col-lg-4 col-md-6 col-sm-6">
+				<div class="service-item mb-5 mb-lg-0">
+					<i class="ti-android"></i>
+					<h4 class="mb-3">App development.</h4>
+					<p>A digital agency isn't here to replace your internal team, we're here to partner</p>
+				</div>
+			</div>
+
+			<div class="col-lg-4 col-md-6 col-sm-6">
+				<div class="service-item mb-5 mb-lg-0">
+					<i class="ti-pencil-alt"></i>
+					<h4 class="mb-3">Content creation.</h4>
+					<p>A digital agency isn't here to replace your internal team, we're here to partner</p>
+				</div>
+			</div>
+		</div>
+	</div>
+</section>
+<!--  Section Services End -->
 
 <!-- footer Start -->
 <footer class="footer section">

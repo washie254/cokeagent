@@ -150,7 +150,7 @@
 		  </button>
 	  
 		  <div class="collapse navbar-collapse text-center" id="navbarsExample09">
-			<ul class="navbar-nav ml-auto">
+          <ul class="navbar-nav ml-auto">
 			  <li class="nav-item active">
 				<a class="nav-link" href="admin_index.php">Home <span class="sr-only">(current)</span></a>
 			  </li>
@@ -175,47 +175,49 @@
 
 <section class="section intro">
 	<div class="container">
-    <h2>THE AGENTS DASH BOARD</h2> 
+    <h2>THE DISTRIBUTOR DASH BOARD</h2> 
     <!-- Tab links -->
     <div class="tab">
-    <button class="tablinks" onclick="openCity(event, 'Viewagents')">Active  Agents</button>
-    <button class="tablinks" onclick="openCity(event, 'Addagents')">Innactive Agents</button>
-    <button class="tablinks" onclick="openCity(event, 'Other')">Other</button>
+    <button class="tablinks" onclick="openCity(event, 'Activedistributors')">Active  Distributors</button>
+    <button class="tablinks" onclick="openCity(event, 'Addagents')">InnactiveDistributors</button>
+    <button class="tablinks" onclick="openCity(event, 'Departments')">Departments</button>
     </div>
 
     <!-- Tab content -->
-    <div id="Viewagents" class="tabcontent">
-    <h3>Registered ACTIVE Agents</h3>
-    <p>the following are the registered and active agents on the system.</p>
+    <div id="Activedistributors" class="tabcontent">
+    <h3>Registered Distributors</h3>
+    <p>The following are the active distrbutors </p>
     <table class="table table-bordered">
       <thead>
         <tr>
           <th scope="col">ID </th>
-          <th scope="col">Sir Names</th>
-          <th scope="col">other names</th>
-          <th scope="col">Agents Email</th>
-          <th scope="col">Telephone No</th>
           <th scope="col">Date Added</th>
-          <th scope="col">Action</th>
+          <th scope="col">Distributor Name</th>
+          <th scope="col">Personell names</th>
+          <th scope="col">Distributor Email</th>
+          <th scope="col">Telephone No</th>
+          <th scope="col">Location</th>
+          <th scope="col">Status</th>
         </tr>
       </thead>
       <tbody>
         <!-- [ LOOP THE REGISTERED AGENTS ] -->
         <?php
-
-          $sql = "SELECT * FROM agents WHERE status='ACTIVE'";
+          
+          $sql = "SELECT * FROM distributors WHERE status='ACTIVE'";
           $result = mysqli_query($db, $sql);
           while($row = mysqli_fetch_array($result, MYSQLI_NUM))
           {	
           
               echo '<tr>';
-                  echo '<td>'.$row[0].'</td> '; //AGENT'S ID
-                  echo '<td>'.$row[4].'</td> '; //SIR NAME
-                  echo '<td>'.$row[2]." ".$row[3].'</td> '; //AGENT'S OTHER NAMES
-                  echo '<td>'.$row[5].'</td> '; //EMAIL
-                  echo '<td>'.$row[6].'</td> '; //TELEPHONE NUMBER
-                  echo '<td>'.$row[8].'</td> '; //DATE ADDED
-                  echo '<td><a href="deactivate.php?id=' . $row[0] . '"><button class="btn btn-danger">DEACTIVATE</button></a> </td>';
+                  echo '<td>'.$row[0].'</td> '; //DISTRIBUTOR ID
+                  echo '<td>'.$row[6].'</td> '; //DATE ADDED
+                  echo '<td>'.$row[1].'</td> '; //DISTRIBUTOR NAME
+                  echo '<td>'.$row[2].'</td> '; //OWNER NAMES
+                  echo '<td>'.$row[3].'</td> '; //DISTRIBUTOR EMAIL
+                  echo '<td>'.$row[4].'</td> '; //TELEPHONE NUMBER
+                  echo '<td>'.$row[5].'</td> '; //LOCATION
+                  echo '<td><a href="deactivate_distributor.php?id=' . $row[0] . '"><button class="btn btn-danger">DEACTIVATE</button></a> </td>';
               echo '</tr>';
           }
         ?>
@@ -226,37 +228,41 @@
     </div>
 
     <div id="Addagents" class="tabcontent">
-    <h3>Current Inactive Agents</h3>
-    <p>the following are the current innactive agents </p>
+    <h3>In-aactive distributors</h3>
+    <p>the following is information about inactive distributors in the system</p>
 
     <table class="table table-bordered">
       <thead>
         <tr>
           <th scope="col">ID </th>
-          <th scope="col">Sir Names</th>
-          <th scope="col">other names</th>
-          <th scope="col">Agents Email</th>
-          <th scope="col">Telephone No</th>
           <th scope="col">Date Added</th>
-          <th scope="col">Action</th>
+          <th scope="col">Distributor Name</th>
+          <th scope="col">Personell names</th>
+          <th scope="col">Distributor Email</th>
+          <th scope="col">Telephone No</th>
+          <th scope="col">Location</th>
+          <th scope="col">Status</th>
         </tr>
       </thead>
       <tbody>
         <!-- [ LOOP THE REGISTERED AGENTS ] -->
         <?php
-          $sql = "SELECT * FROM agents WHERE status='INNACTIVE'";
+          
+
+          $sql = "SELECT * FROM distributors WHERE status='INNACTIVE'";
           $result = mysqli_query($db, $sql);
           while($row = mysqli_fetch_array($result, MYSQLI_NUM))
           {	
           
               echo '<tr>';
-                  echo '<td>'.$row[0].'</td> '; //AGENT'S ID
-                  echo '<td>'.$row[4].'</td> '; //SIR NAME
-                  echo '<td>'.$row[2]." ".$row[3].'</td> '; //AGENT'S OTHER NAMES
-                  echo '<td>'.$row[5].'</td> '; //EMAIL
-                  echo '<td>'.$row[6].'</td> '; //TELEPHONE NUMBER
-                  echo '<td>'.$row[8].'</td> '; //DATE ADDED
-                  echo '<td><a href="activate.php?id=' . $row[0] . '"><button class="btn btn-success">ACTIVATE</button></a> </td>';
+                  echo '<td>'.$row[0].'</td> '; //DISTRIBUTOR ID
+                  echo '<td>'.$row[6].'</td> '; //DATE ADDED
+                  echo '<td>'.$row[1].'</td> '; //DISTRIBUTOR NAME
+                  echo '<td>'.$row[2].'</td> '; //OWNER NAMES
+                  echo '<td>'.$row[3].'</td> '; //DISTRIBUTOR EMAIL
+                  echo '<td>'.$row[4].'</td> '; //TELEPHONE NUMBER
+                  echo '<td>'.$row[5].'</td> '; //LOCATION
+                  echo '<td><a href="activate_distributor.php?id=' . $row[0] . '"><button class="btn btn-success">ACTIVATE</button></a> </td>';
               echo '</tr>';
           }
         ?>
@@ -265,54 +271,94 @@
 
     </div>
 
-    <div id="Other" class="tabcontent">
-        <h3>Something else </h3>
-        <p>Something else can come Here</p>
+    <div id="Departments" class="tabcontent">
+        <h3>Departments</h3>
+        <p>The departmental information</p>
+        <div style="padding: 6px 12px; border: 1px solid #ccc;">
+            <p>Current Departments</p>
+            <table class="table table-bordered">
+            <thead>
+                <tr>
+                <th scope="col">ID </th>
+                <th scope="col">Department Name</th>
+                <th scope="col">Date Created</th>
+                <th scope="col">Action</th>
+        
+                </tr>
+            </thead>
+            <tbody>
+                <!-- [ LOOP THE REGISTERED AGENTS ] -->
+                <?php
+                
+
+                $sql = "SELECT * FROM departments";
+                $result = mysqli_query($db, $sql);
+                while($row = mysqli_fetch_array($result, MYSQLI_NUM))
+                {	
+                    echo '<tr>';
+                        echo '<td>'.$row[0].'</td> '; //DEP ID
+                        echo '<td>'.$row[1].'</td> '; //dEPTNAME
+                        echo '<td>'.$row[2].'</td> '; //DATE CREATED
+                        echo '<td><a href="del_department.php?id=' . $row[0] . '"><button class="btn btn-danger">DELETE</button></a> </td>';
+                    echo '</tr>';
+                }
+                ?>
+            </tbody>
+            </table>
+        </div> 
+        <p>Add a new Department</p>
+        <div style="padding: 6px 12px; border: 1px solid #ccc;">
+            <form method="post" action="admin_distributors.php">
+                <?php include('errors.php'); ?>
+                <div class="form-group">
+                    <label for="exampleInputEmail1">Department Name</label>
+                    <input type="text" class="form-control" name="deptname" placeholder="Enter Department name">
+                </div>
+                <button type="submit" class="btn btn-success" name="add_department" style="width:100%;"><b>ADD DEPARTMERNT</b></button>
+
+            </form>
+        </div>
+
     </div> 
     <hr><br>
        
        <div style="padding: 6px 12px; border: 1px solid #ccc;">
-        <h3>Add a New agent</h3>
-        <p>fill in the following details to add an agent</p>
-        <?php $admin=$_SESSION["username"]?>
-        <form method="post" action="admin_agents.php">
+        <h3>Add a New Distributor</h3>
+        <p>fill in the following details to add a new destributor to the system</p>
+        <form method="post" action="admin_distributors.php">
           <?php include('errors.php'); ?>
-          <input name="admin" value="<?=$admin?>" style="opacity:0;" >
           <div class="form-group">
-              <label for="exampleInputEmail1">Agent's Username</label>
-              <input type="text" class="form-control" name="uname" placeholder="Enter Agent's Username">
+              <label for="exampleInputEmail1">Distributor Name</label>
+              <input type="text" class="form-control" name="dname" placeholder="Enter Distributor name">
           </div>
           <div class="form-group">
-              <label for="exampleInputEmail1">Email address</label>
-              <input type="email" class="form-control" name="email" placeholder="Enter email">
+              <label for="exampleInputEmail1">Owner names</label>
+              <input type="text" class="form-control" name="oname" placeholder="Enter owners names">
           </div>
           <div class="form-group">
-              <label for="exampleInputEmail1">Agent's Telephone</label>
-              <input type="number" class="form-control" name="tel" placeholder="Enter Agents Tel no">
+              <label for="exampleInputEmail1">Email</label>
+              <input type="email" class="form-control" name="demail" placeholder="Enter email of the sitributor">
           </div>
           <div class="form-group">
-              <label for="exampleInputPassword1">Password</label>
-              <input type="password" class="form-control" name="password_1" placeholder="Password">
+              <label for="exampleInputEmail1">Telephone</label>
+              <input type="number" class="form-control" name="dtel" placeholder="Enter Telephone">
           </div>
           <div class="form-group">
-              <label for="exampleInputPassword1">Password</label>
-              <input type="password" class="form-control" name="password_2" placeholder="confirm password">
+              <label for="exampleInputEmail1">Location</label>
+              <input type="text" class="form-control" name="dlocation" placeholder="Enter Location of the distributor">
           </div>
-          <button type="submit" class="btn btn-success" name="add_agent" style="width:100%;"><b>ADD AGENT</b></button>
+          <div class="form-group">
+              <label for="exampleInputPassword1">Description</label>
+              <textarea type="text" class="form-control" name="ddescription" rows="4" cols="50"placeholder="Enter brief description about the distributor" ></textarea>
+          </div>
+          <button type="submit" class="btn btn-success" name="add_distributor" style="width:100%;"><b>ADD DISTRIBUTTOR</b></button>
         </form>
       </div>
 	</div>
 </section>
 
 <!-- Section Intro END -->
-<!-- Section About Start -->
 
-
-<!-- Section About End -->
-
-<!--  Section Services Start -->
-
-<!--  Section Services End -->
 
 <!-- footer Start -->
 <footer class="footer section">

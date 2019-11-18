@@ -11,34 +11,7 @@
 	$db = mysqli_connect('localhost', 'root', '', 'dkut_coke');
 
 	// REGISTER ADMIN
-	if (isset($_POST['reg_user'])) {
-		// receive all input values from the form
-		$username = mysqli_real_escape_string($db, $_POST['username']);
-		$email = mysqli_real_escape_string($db, $_POST['email']);
-		$password_1 = mysqli_real_escape_string($db, $_POST['password_1']);
-		$password_2 = mysqli_real_escape_string($db, $_POST['password_2']);
 
-		// form validation: ensure that the form is correctly filled
-		if (empty($username)) { array_push($errors, "Username is required"); }
-		if (empty($email)) { array_push($errors, "Email is required"); }
-		if (empty($password_1)) { array_push($errors, "Password is required"); }
-
-		if ($password_1 != $password_2) {
-			array_push($errors, "The two passwords do not match");
-		}
-		// register user if there are no errors in the form
-		if (count($errors) == 0) {
-			$password = md5($password_1);//encrypt the password before saving in the database
-			$query = "INSERT INTO users (username, email, password) 
-					  VALUES('$username', '$email', '$password')";
-			mysqli_query($db, $query);
-
-			$_SESSION['username'] = $username;
-			$_SESSION['success'] = "You are now logged in";
-			header('location: admin_index.php');
-		}
-
-	}
 
 	// LOGIN ADMIN
 	if (isset($_POST['login_admin'])) {
@@ -54,13 +27,13 @@
 
 		if (count($errors) == 0) {
 			$password = md5($password);
-			$query = "SELECT * FROM users WHERE username='$username' AND password='$password'";
+			$query = "SELECT * FROM admins WHERE username='$username' AND password='$password'";
 			$results = mysqli_query($db, $query);
 
 			if (mysqli_num_rows($results) == 1) {
 				$_SESSION['username'] = $username;
 				$_SESSION['success'] = "You are now logged in";
-				header('location: admin_index.php');
+				header('location: index.php');
 			}else {
 				array_push($errors, "Wrong username/password combination");
 			}
@@ -68,16 +41,14 @@
 	}
 
 
-	// ADD A NEW AGENT ON THE SYSTEM
+	//ADD AGENT
 	if (isset($_POST['add_agent'])) {
 		$uname = mysqli_real_escape_string($db, $_POST['uname']);
-		$fname = mysqli_real_escape_string($db, $_POST['fname']);
-		$lname = mysqli_real_escape_string($db, $_POST['lname']);
-		$sname = mysqli_real_escape_string($db, $_POST['sname']);
 		$email = mysqli_real_escape_string($db, $_POST['email']);
 		$phone = mysqli_real_escape_string($db, $_POST['tel']);
 		$password_1 = mysqli_real_escape_string($db, $_POST['password_1']);
 		$password_2 = mysqli_real_escape_string($db, $_POST['password_2']);
+		$admin = mysqli_real_escape_string($db, $_POST['admin']);
 		$cdate = date("Y-m-d");
 		$ctime = date("h:i:s");
 		$status = 'ACTIVE';
@@ -103,9 +74,6 @@
 		}
 
 		if (empty($uname)) { array_push($errors, "Username is required"); }
-		if (empty($fname)) { array_push($errors, "First name required"); }
-		if (empty($lname)) { array_push($errors, "Last Name required"); }
-		if (empty($sname)) { array_push($errors, "Sir name is required"); }
 		if (empty($phone)) { array_push($errors, "input the tel no"); }
 		if (empty($email)) { array_push($errors, "Email is required"); }
 		if (empty($password_1)) { array_push($errors, "Password is required"); }
@@ -117,8 +85,8 @@
 		// register user if there are no errors in the form
 		if (count($errors) == 0) {
 			$password = md5($password_1);//encrypt the password before saving in the database
-			$query = "INSERT INTO agents (username, firstname, lastname, sirname, email, tel, password, dateCreated, timeCreated,status)
-							VALUES('$uname','$fname','$lname','$sname','$email','$phone','$password','$cdate','$ctime','$status')";
+			$query = "INSERT INTO agents (username,email, tel, password, dateCreated, timeCreated,status, admin)
+							VALUES('$uname','$email','$phone','$password','$cdate','$ctime','$status',$admin)";
 			$result = mysqli_query($db, $query);
 			if($result)
 				echo "<script type='text/javascript'>alert('Agent Added successfully!')</script>";
@@ -127,16 +95,6 @@
 			
 			header('location:admin_agents.php');
 			
-			// else
-			// $result=mysqli_query($db, $query);
-			// //show success message
-			// if($result)
-			// 	echo "<script type='text/javascript'>alert('Agent Added successfully!')</script>";
-			// else
-			// 	echo "<script type='text/javascript'>alert('failed!')</script>";
-			
-			// 	header('location: admin_agents.php#Addagents');
-
 		}
 
 	}
@@ -170,57 +128,38 @@
 	}
 
 
-	// ADD A NEW DISTRIBUTOR ON THE SYSTEM
-	if (isset($_POST['add_distributor'])) {
-		$dname = mysqli_real_escape_string($db, $_POST['dname']);
-		$oname = mysqli_real_escape_string($db, $_POST['oname']);
-		$demail = mysqli_real_escape_string($db, $_POST['demail']);
-		$phone = mysqli_real_escape_string($db, $_POST['dtel']);
-		$dlocation = mysqli_real_escape_string($db, $_POST['dlocation']);
-		$ddescription = mysqli_real_escape_string($db, $_POST['ddescription']);
+	// ADD MANAGER
+	if (isset($_POST['add_manager'])) {
+		$username = mysqli_real_escape_string($db, $_POST['username']);
+		$email = mysqli_real_escape_string($db, $_POST['email']);
+		$password_1 = mysqli_real_escape_string($db, $_POST['password_1']);
+		$password_2 = mysqli_real_escape_string($db, $_POST['password_2']);
+		$admin = mysqli_real_escape_string($db, $_POST['admin']);
 
 		$cdate = date("Y-m-d");
 		$ctime = date("h:i:s");
 		$status = 'ACTIVE';
-		
-		// form validation: ensure that the form is correctly filled
-		function validate_phone_number($phone)
-		{
-			// Allow +, - and . in phone number
-			$filtered_phone_number = filter_var($phone, FILTER_SANITIZE_NUMBER_INT);
-			// Remove "-" from number
-			$phone_to_check = str_replace("-", "", $filtered_phone_number);
-			// Check the lenght of number
-			// This can be customized if you want phone number from a specific country
-			if (strlen($phone_to_check) < 9 || strlen($phone_to_check) > 14) {
-			return false;
-			} else {
-			return true;
-			}
-		}
-		//VALIDATE PHONE NUMBER 
-		if (validate_phone_number($phone) !=true) {
-			array_push($errors, "Invalid phone number");
-		}
+	
 
-		if (empty($dname)){ array_push($errors, "distributor name required !"); }
-		if (empty($oname)){ array_push($errors, "names of the distribution center required !"); }
-		if (empty($demail)){ array_push($errors, "Email is required"); }
-		if (empty($phone)){ array_push($errors, "input the tel no"); }
-		if (empty($dlocation)) { array_push($errors, "Location Required");}
-		if (empty($ddescription)) { array_push($errors, "Insert a brief description");}
+		if (empty($username)){ array_push($errors, "manager username is required !"); }
+		if (empty($email)){ array_push($errors, "email is required !"); }
+		if (empty($password_1)){ array_push($errors, "Password is Required"); }
 		
+		if ($password_1 != $password_2) {
+			array_push($errors, "The two passwords do not match");
+		}
 		// register user if there are no errors in the form
 		if (count($errors) == 0) {
-			$query = "INSERT INTO distributors (distname, distoname, distemail, distel, distlocation, dateadded, timeadded, description, status)
-									VALUES('$dname', '$oname','$demail','$phone','$dlocation','$cdate','$ctime','$ddescription','$status')";
+			$password = md5($password_1);
+			$query = "INSERT INTO managers (username, email, password, dateadded, status, admin)
+								VALUES('$username', '$email','$password','$cdate','$status','$admin')";
 			$result = mysqli_query($db, $query);
 			if($result)
-				echo "<script type='text/javascript'>alert('Distributor added successfully!')</script>";
+				echo "<script type='text/javascript'>alert('Manager added successfully!')</script>";
 			else
 				echo "<script type'text/javascript'>alert('Something Went Wrong!!')</script>";
 			
-			header('location:admin_distributors.php');
+			header('location:manager.php');
 			
 
 		}

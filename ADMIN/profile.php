@@ -164,7 +164,7 @@
 
                 $user = $_SESSION['username'];
 
-                $query0 = "SELECT * FROM agents WHERE username='$user'";
+                $query0 = "SELECT * FROM admins WHERE username='$user'";
                 $result0 = mysqli_query($db, $query0);
                 
                 while($row = mysqli_fetch_array($result0, MYSQLI_NUM)){
