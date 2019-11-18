@@ -4,16 +4,16 @@
 }
 body {
 	font-size: 120%;
-	background: #F8F8FF;
+	background: rgb(255, 255, 255);
 }
 
 .header {
 	width: 30%;
 	margin: 50px auto 0px;
 	color: white;
-	background: rgba(216, 11, 11, 0.363);
+	background: rgba(6, 69, 187, 0.473);
 	text-align: center;
-	border: 1px solid #B0C4DE;
+	border: 1px solid rgb(99, 154, 226);
 	border-bottom: none;
 	border-radius: 10px 10px 0px 0px;
 	padding: 20px;
@@ -46,8 +46,8 @@ form, .content {
 .btn {
 	padding: 10px;
 	font-size: 15px;
-	color: white;
-	background: #5F9EA0;
+	color: rgb(255, 255, 255);
+	background: rgba(6, 69, 187, 0.473);
 	border: none;
 	border-radius: 5px;
 }
@@ -55,8 +55,8 @@ form, .content {
 	width: 92%; 
 	margin: 0px auto; 
 	padding: 10px; 
-	border: 1px solid #a94442; 
-	color: #a94442; 
+	border: 1px solid #1153ce; 
+	color: #0765bd; 
 	background: #f2dede; 
 	border-radius: 5px; 
 	text-align: left;

@@ -158,24 +158,26 @@
 <section class="section intro">
   <div class="container">
     <div style="padding: 6px 12px; border: 1px solid #ccc;">
-        <h3>Profile Information</h3>
+        <h3>Manager Profile</h3>
         <p> your profile information is as follows</p>
         <?php
-
                 $user = $_SESSION['username'];
 
-                $query0 = "SELECT * FROM agents WHERE username='$user'";
+                $query0 = "SELECT * FROM managers WHERE username='$user'";
                 $result0 = mysqli_query($db, $query0);
                 
                 while($row = mysqli_fetch_array($result0, MYSQLI_NUM)){
                     $uid=$row[0];
                     $uname=$row[1];
-                    $oname=$row[4]." ".$row[2]." ".$row[3];
-                    $umail=$row[5];//mail
-                    $utel=$row[6];//tel
-                    $udate=$row[8];//date created
-                    $utime=$row[9];// time 
-                    $status =$row[10]; //status
+                    $oname=$row[2]." ".$row[3];
+                    $umail=$row[4];//mail
+                    $utel=$row[5];//tel
+                    $status=$row[7];
+                    $dateadded=$row[8];
+                    $deactdate=$row[11];
+                    $deactreason=$row[10];
+                    $reactreason = $row[12];
+                    $reactdate = $row[13];
                 }
             ?>
             <table class="container">
@@ -195,7 +197,7 @@
                       <label>Other Names</label><br>
                       <label>Email </label><br>
                       <label>Tel No </label><br>
-              </b>
+                      </b>
                     </td>
                     <td>
                         <label><?php echo $uid; ?></label><br>
@@ -205,111 +207,97 @@
                         <label><?php echo $utel; ?></label><br>
                     </td>
                     <td>
-                        <label><b>Signup Date: </b>&nbsp;&nbsp;<?php echo $udate; ?></label><br>
-                        <label><b>Signup Time: </b>&nbsp;&nbsp;<?php echo $utime; ?></label><br>
+                        <label><b>Signup Date: </b>&nbsp;&nbsp;<?php echo $dateadded; ?></label><br>
+                        <label><b>Account Stat: </b>&nbsp;&nbsp;<?php echo $status; ?></label><br>
                     </td>
+                </tr>
+                <tr>
+                  <?php 
+                    if($status !='ACTIVE'){
+                      echo "<td><label><b>Deactivation Date: </b>&nbsp;&nbsp $deactdate </label><br>
+                             <b>Deactivation Reason: </b>&nbsp;&nbsp; $deactreason <br></td>";
+                    }
+                    if($reactdate > 0){
+                      echo "<td><label><b>Reactivation Date: </b>&nbsp;&nbsp $reactdate </label><br>
+                            <b> Reason: </b>&nbsp;&nbsp; $reactreason <br></td>";
+                    }
+                  ?>
                 </tr>
             </table>
       </div>
   </div>
   <hr><br>
 	<div class="container">
-    <h2>MY TASK REPORTS</h2> 
+    <h2>Update Profile</h2> 
     <!-- Tab links -->
     <div class="tab">
-    <button class="tablinks" onclick="openCity(event, 'Pendingtasks')">Pending Tasks</button>
-    <button class="tablinks" onclick="openCity(event, 'Completed')">Completed Tasks</button>
-    <button class="tablinks" onclick="openCity(event, 'Remarks')">Task Remarks</button>
+    <button class="tablinks" onclick="openCity(event, 'Pendingtasks')">Update Profile</button>
+    <!-- <button class="tablinks" onclick="openCity(event, 'Completed')">Completed Tasks</button>
+    <button class="tablinks" onclick="openCity(event, 'Remarks')">Task Remarks</button> -->
     </div>
 
     <!-- Tab content -->
     <div id="Pendingtasks" class="tabcontent">
-    <h3>Pending Tasks</h3>
-    <p>the following are the tasks you are yet to complete.</p>
-    <table class="table table-bordered">
-      <thead>
-        <tr>
-          <th scope="col">T. ID </th>
-          <th scope="col">T. Dept</th>
-          <th scope="col">Distributor Name</th>
-          <th scope="col">Task Description</th>
-          <th scope="col">Date & Time Assigned</th>
-          <th scope="col">ACTION</th>
-        </tr>
-      </thead>
-      <tbody>
-        <!-- [ LOOP THE REGISTERED AGENTS ] -->
-        <?php
+      <h3>Pending Tasks</h3>
+      <p>the following are the tasks you are yet to complete.</p>
+      <style>
+        .error {
+            width: 100%; 
+            margin: 0px auto; 
+            padding: 10px; 
+            border: 1px solid #a94442; 
+            color: #a94442; 
+            background: #f2dede; 
+            border-radius: 5px; 
+            text-align: left;
+        }
+      </style>
+      <?php require('errors.php'); ?>
+      <?php 
+        $resultz = mysqli_query($db,"SELECT * FROM managers WHERE id='$uid'");
+        $rowz= mysqli_fetch_array($resultz);
+      ?>
+      <form class="form" action="profile.php" method="post">
+        <div class="form-group">
+            <div class="col-xs-6">
+                <label for="first_name"><h4>First name</h4></label>
+                <input type="text" class="form-control" name="fname" id="fname" value="<?php echo $rowz['fname']; ?>">
+            </div>
+        </div>
+            <div class="form-group">
+                <div class="col-xs-6">
+                    <label for="last_name"><h4>Last name</h4></label>
+                    <input type="text" class="form-control" name="lname" id="lname" value="<?php echo $rowz['lname']; ?>">
+                </div>
+            </div>
+      
+            <div class="form-group">	
+                <div class="col-xs-6">
+                    <label for="phone"><h4>Phone</h4></label>
+                    <input type="text" class="form-control" name="phone" id="phone" value="<?php echo $rowz['tel']; ?>">
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-xs-6">
+                    <label for="email"><h4>Email</h4></label>
+                    <input type="email" class="form-control" name="email" id="email" value="<?php echo $rowz['email']; ?>">
+                </div>
+            </div>
 
-          $agent = $_SESSION['username'];
-          $sql = "SELECT * FROM tasks WHERE agent='$agent' AND status='PENDING'";
-          $result = mysqli_query($db, $sql);
-          while($row = mysqli_fetch_array($result, MYSQLI_NUM))
-          {	
-          
-              echo '<tr>';
-                  echo '<td>'.$row[0].'</td> '; //TASKID
-                  echo '<td>'.$row[3].'</td> '; //DEPERTMENT / CATEGORY
-                  echo '<td>'.$row[2].'</td> '; //DISTRIBUTOR
-                  echo '<td>'.$row[4].'</td> '; //DESCRIPTION
-                  echo '<td>'.$row[5]." ".$row[6].'</td> '; //DATE TIME ASSIGNRD
-                  echo '<td><button class="btn btn-secondary">DO IT !</button></td> '; //EMAIL
-              echo '</tr>';
-          }
-        ?>
-      </tbody>
-    </table>
-    
 
-    </div>
 
-    <div id="Completed" class="tabcontent">
-    <h3>Completed Tasks</h3>
-    <p>Tasks That you filled as complete</p>
+            <div class="form-group">
+                <input type="text" name="mid" value="<?=$uid?>" style="opacity: 0;" />
+            </div>
 
-    <table class="table table-bordered">
-			<thead>
-				<tr>
-				<th scope="col">T. ID </th>
-				<th scope="col">T. Dept</th>
-				<th scope="col">Distributor Name</th>
-				<th scope="col">Task Description</th>
-        <th scope="col">Date & Time Assigned</th>
-        <th scope="col">Status</th>
-				<th scope="col">ACTION</th>
-				</tr>
-			</thead>
-			<tbody>
-				<!-- [ LOOP THE REGISTERED AGENTS ] -->
-				<?php
-				$agent = $_SESSION['username'];
-				$sql = "SELECT * FROM tasks WHERE agent='$agent' AND status='AWAITING APPROVAL' OR status='COMPLETED'";
-				$result = mysqli_query($db, $sql);
-				while($row = mysqli_fetch_array($result, MYSQLI_NUM))
-				{	
-				
-					echo '<tr>';
-						echo '<td>'.$row[0].'</td> '; //TASKID
-						echo '<td>'.$row[3].'</td> '; //DEPERTMENT / CATEGORY
-						echo '<td>'.$row[2].'</td> '; //DISTRIBUTOR
-						echo '<td>'.$row[4].'</td> '; //DESCRIPTION
-            echo '<td>'.$row[5]." ".$row[6].'</td> '; //DATE TIME ASSIGNRD
-            echo '<td>'.$row[10].'</td> '; //TASK status
-						echo '<td><button class="btn btn-secondary">DO IT !</button></td> '; //EMAIL
-					echo '</tr>';
-				}
-				?>
-			</tbody>
-    		</table>
-    </table>
+            <div class="form-group">
+                <div class="col-xs-12">
+                    <br>
+                    <button class="btn btn-lg btn-success" type="submit" name="update_info"><i class="glyphicon glyphicon-ok-sign"></i> UPDATE MANAGER PROFILE</button>
+                </div>
+            </div>
+        </form>
 
-    </div>
-
-    <div id="Remarks" class="tabcontent">
-        <h3>Supervisor Remarks </h3>
-        <p>Remarks on submitted tasks</p>
-    </div> 
-    
 	</div>
 </section>
 

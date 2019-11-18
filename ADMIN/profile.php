@@ -158,24 +158,26 @@
 <section class="section intro">
   <div class="container">
     <div style="padding: 6px 12px; border: 1px solid #ccc;">
-        <h3>Profile Information</h3>
+        <h3>Manager Profile</h3>
         <p> your profile information is as follows</p>
         <?php
-
                 $user = $_SESSION['username'];
 
-                $query0 = "SELECT * FROM admins WHERE username='$user'";
+                $query0 = "SELECT * FROM managers WHERE username='$user'";
                 $result0 = mysqli_query($db, $query0);
                 
                 while($row = mysqli_fetch_array($result0, MYSQLI_NUM)){
                     $uid=$row[0];
                     $uname=$row[1];
-                    $oname=$row[4]." ".$row[2]." ".$row[3];
-                    $umail=$row[5];//mail
-                    $utel=$row[6];//tel
-                    $udate=$row[8];//date created
-                    $utime=$row[9];// time 
-                    $status =$row[10]; //status
+                    $oname=$row[2]." ".$row[3];
+                    $umail=$row[4];//mail
+                    $utel=$row[5];//tel
+                    $status=$row[7];
+                    $dateadded=$row[8];
+                    $deactdate=$row[11];
+                    $deactreason=$row[10];
+                    $reactreason = $row[12];
+                    $reactdate = $row[13];
                 }
             ?>
             <table class="container">

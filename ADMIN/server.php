@@ -284,7 +284,7 @@
 			else
 				echo "<script type'text/javascript'>alert('Something Went Wrong!!')</script>";
 			
-			header('location:admin_index.php');
+			header('location:index.php');
 			
 
 		}
