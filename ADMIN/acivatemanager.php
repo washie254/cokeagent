@@ -166,13 +166,13 @@
             
         }
     ?>
-    <h2>DEACTIVATE [ <b> <span style="color:red;"><?=$manusername?></span> </b> ]</h2> 
+    <h2>RE-ACTIVATE [ <b> <span style="color:green;"><?=$manusername?></span> </b> ]</h2> 
     <hr><br>
        
        <div style="padding: 6px 12px; border: 1px solid #ccc;">
-        <h3>Give reason for deactivating <span style="color:red;"><?=$manusername?></span></h3>
-        <p>Kindly provide a brief description as to why you are deactivting the managers</p>
-        <form method="post" action="deactivatemanager.php">
+        <h3>Give reason for Re- activating<span style="color:green;">.  <?=$manusername?></span></h3>
+        <p>Provide brief reason for reactivation</p>
+        <form method="post" action="acivatemanager.php">
           <?php include('errors.php'); ?>
             <?php $admin =$_SESSION["username"];?>
           <input name="admin" value="<?=$admin?>" style="opacity:0;">
@@ -183,10 +183,10 @@
               <label for="exampleInputEmail1">Email..............: <span style="color:green;"><?=$manemail?></span></label><br>
           </div>
           <div class="form-group">
-              <label for="exampleInputPassword1">Provide Reason for deactivating</label>
-              <textarea type="text" class="form-control" name="reason"  placeholder="Give some brief reason for deactivating manager" ></textarea>
+              <label for="exampleInputPassword1">Provide Reason for Reactivating </label>
+              <textarea type="text" class="form-control" name="reason"  placeholder="Give some brief reason for reactivating manager" ></textarea>
           </div>
-          <button type="submit" class="btn btn-danger" name="deactivate_manager" style="width:100%;"><b>DEACTIVATE MANAGER</b></button>
+          <button type="submit" class="btn btn-success" name="reactivate_manager" style="width:100%;"><b>REACTIVATE MANAGER</b></button>
         </form>
       </div>
 	</div>

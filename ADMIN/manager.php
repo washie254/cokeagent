@@ -228,19 +228,17 @@
     </div>
 
     <div id="Addagents" class="tabcontent">
-    <h3>In-aactive distributors</h3>
-    <p>the following is information about inactive distributors in the system</p>
+    <h3>Deactivated Managers</h3>
+    <p>the following are the deactivated managers</p>
 
     <table class="table table-bordered">
       <thead>
         <tr>
           <th scope="col">ID </th>
           <th scope="col">Manager username</th>
-          <th scope="col">other names</th>
           <th scope="col">email</th>
-          <th scope="col">Telephone No</th>
-          <th scope="col">Date Added</th>
-          <th scope="col">Status</th>
+          <th scope="col">Date Deactivated</th>
+          <th scope="col">Reason</th>
           <th scope="col">Action</th>
         </tr>
       </thead>
@@ -248,7 +246,7 @@
         <!-- [ LOOP THE REGISTERED AGENTS ] -->
         <?php
           
-          $sql = "SELECT * FROM managers WHERE status='ACTIVE'";
+          $sql = "SELECT * FROM managers WHERE status='DEACTIVATED'";
           $result = mysqli_query($db, $sql);
           while($row = mysqli_fetch_array($result, MYSQLI_NUM))
           {	
@@ -256,12 +254,10 @@
               echo '<tr>';
                   echo '<td>'.$row[0].'</td> '; 
                   echo '<td>'.$row[1].'</td> '; 
-                  echo '<td>'.$row[2]." ".$row[3].'</td> '; 
                   echo '<td>'.$row[4].'</td> '; 
-                  echo '<td>'.$row[5].'</td> '; 
-                  echo '<td>'.$row[8].'</td> '; 
-                  echo '<td>'.$row[7].'</td> '; 
-                  echo '<td><a href="deactivate_distributor.php?id=' . $row[0] . '"><button class="btn btn-danger">DEACTIVATE</button></a> </td>';
+                  echo '<td>'.$row[11].'</td> '; 
+                  echo '<td>'.$row[10].'</td> '; 
+                  echo '<td><a href="acivatemanager.php?id=' . $row[0] . '"><button class="btn btn-success">REACTIVATE</button></a> </td>';
               echo '</tr>';
           }
         ?>

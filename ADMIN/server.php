@@ -184,7 +184,9 @@
 						SET
 							status = '$status',
 							deactreason = '$reason',
-							deactdate = '$cdate'
+							deactdate = '$cdate',
+							reactdate = '',
+							reactreason=''
 						WHERE 
 						  	id='$managerid' ";
 			$result = mysqli_query($db, $query);
@@ -198,6 +200,42 @@
 		}
 
 	}
+
+	//reactivate_manager
+	if (isset($_POST['reactivate_manager'])) {
+		$reason = mysqli_real_escape_string($db, $_POST['reason']);
+		$managerid = mysqli_real_escape_string($db, $_POST['managerid']);
+
+
+		$cdate = date("Y-m-d");
+		$ctime = date("h:i:s");
+		$status = 'ACTIVE';
+
+		if (empty($reason)){ array_push($errors, "reason for re-activation is needed !"); }
+		if (empty($managerid )){ array_push($errors, "could not process manager identity !"); }
+	
+		if (count($errors) == 0) {
+			$query = "UPDATE managers 
+						SET
+							status = '$status',
+							reactreason = '$reason',
+							deactreason = '', #delete reason for deactivating
+							reactdate = '$cdate',
+							deactdate=''
+						WHERE 
+						  	id='$managerid' ";
+			$result = mysqli_query($db, $query);
+			if($result)
+				echo "<script type='text/javascript'>alert('Manager Deactivated successfully!')</script>";
+			else
+				echo "<script type'text/javascript'>alert('Something Went Wrong!!')</script>";
+			
+			header('location:manager.php');
+
+		}
+
+	}
+
 	// ADD A NEW DEPERTMENT
 	if (isset($_POST['add_department'])) {
 		$deptname = mysqli_real_escape_string($db, $_POST['deptname']);
