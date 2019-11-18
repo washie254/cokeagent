@@ -154,6 +154,13 @@
 			  <li class="nav-item active">
 				<a class="nav-link" href="index.php">Home <span class="sr-only">(current)</span></a>
 			  </li>
+        <li class="nav-item dropdown">
+					<a class="nav-link dropdown-toggle" href="#" id="dropdown03" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Tasks</a>
+					<ul class="dropdown-menu" aria-labelledby="dropdown03">
+						<li><a class="dropdown-item" href="allocatetasks.php">Allocate</a></li>
+						<li><a class="dropdown-item" href="allocated.php">Allocated Tasks</a></li>
+					</ul>
+			  </li>
         <li class="nav-item"><a class="nav-link" href="agents.php">Agents</a></li>
 			   <li class="nav-item"><a class="nav-link" href="profile.php">Pofile</a></li>
 
