@@ -1,12 +1,16 @@
+<?php include('server.php'); ?>
 <?php 
-	include('server.php');
-	//session_start(); 
+   if (isset($_GET['id'])){
+        $agentid = $_GET['id'];
+    }
 
+  //session_start(); 
+  
 	if (!isset($_SESSION['username'])) {
 		$_SESSION['msg'] = "You must log in first";
 		header('location: login.php');
-	}
-
+  }
+  
 	if (isset($_GET['logout'])) {
 		session_destroy();
 		unset($_SESSION['username']);
@@ -38,46 +42,107 @@
   <link rel="stylesheet" href="css/style.css">
 </head>
 
+<!-- tabs -->
+<style>
+  /* Style the tab */
+  .tab {
+  overflow: hidden;
+  border: 1px solid #ccc;
+  background-color: #f1f1f1;
+  }
+
+  /* Style the buttons that are used to open the tab content */
+  .tab button {
+  background-color: inherit;
+  float: left;
+  border: none;
+  outline: none;
+  cursor: pointer;
+  padding: 14px 16px;
+  transition: 0.3s;
+  }
+
+  /* Change background color of buttons on hover */
+  .tab button:hover {
+  background-color: #ddd;
+  }
+
+  /* Create an active/current tablink class */
+  .tab button.active {
+  background-color: #ccc;
+  }
+
+  /* Style the tab content */
+  .tabcontent {
+  display: none;
+  padding: 6px 12px;
+  border: 1px solid #ccc;
+  border-top: none;
+  } 
+
+  .error {
+	width: 100%; 
+	margin: 0px auto; 
+	padding: 10px; 
+	border: 1px solid #a94442; 
+	color: #a94442; 
+	background: #f2dede; 
+	border-radius: 5px; 
+	text-align: left;
+}
+</style>
+<script>
+  function openCity(evt, cityName) {
+    // Declare all variables
+    var i, tabcontent, tablinks;
+
+    // Get all elements with class="tabcontent" and hide them
+    tabcontent = document.getElementsByClassName("tabcontent");
+    for (i = 0; i < tabcontent.length; i++) {
+      tabcontent[i].style.display = "none";
+    }
+
+    // Get all elements with class="tablinks" and remove the class "active"
+    tablinks = document.getElementsByClassName("tablinks");
+    for (i = 0; i < tablinks.length; i++) {
+      tablinks[i].className = tablinks[i].className.replace(" active", "");
+    }
+
+    // Show the current tab, and add an "active" class to the button that opened the tab
+    document.getElementById(cityName).style.display = "block";
+    evt.currentTarget.className += " active";
+  } 
+</script>
+<!-- tabs -->
+
 <body>
 
 
 <!-- Header Start --> 
 <header class="navigation">
-	<nav class="navbar navbar-expand-lg  py-4" id="navbar">
+	<div class="header-top ">
 		<div class="container">
-        
-        <!-- <a href="#"><i class="ti-github"></a> -->
-		  <a class="navbar-brand" href="#">
-              Coca<span>Cola.</span>
-		  </a>
-
-		  <button class="navbar-toggler collapsed" type="button" data-toggle="collapse" data-target="#navbarsExample09" aria-controls="navbarsExample09" aria-expanded="false" aria-label="Toggle navigation">
-			<span class="fa fa-bars"></span>
-		  </button>
-	  
-		  <div class="collapse navbar-collapse text-center" id="navbarsExample09">
-			<ul class="navbar-nav ml-auto">
-			  <li class="nav-item active">
-				<a class="nav-link" href="index.php">Home <span class="sr-only">(current)</span></a>
-			  </li>
-			  <li class="nav-item"><a class="nav-link" href="agents.php">Agents</a></li>
-			   <li class="nav-item"><a class="nav-link" href="profile.php">Pofile</a></li>
-
-              <li style="float:right;" class="nav-link">
-                <!-- <i class="ti-user"> -->
-                <a href="#" style="color:Yellow"> <b>	
-                    <?php  if (isset($_SESSION['username'])):?>
-                    <?php echo strtoupper($_SESSION['username']); ?> </b>
-                    <?php endif ?>
-                </a>
-              </li>
-              <li class="nav-link">
-                <a href="index.php?logout='1'" style="color: red;"><b>logout</b></a>
-              </li>
-			</ul>
-		  </div>
+			<div class="row justify-content-between align-items-center">
+				<div class="col-lg-2 col-md-4">
+					<div class="header-top-socials text-center text-lg-left text-md-left">
+						<a href="#"><i class="ti-github"></i></a>
+						<a href="#" style="color:Yellow"> <b>	
+							<?php  if (isset($_SESSION['username'])):?>
+							<?php echo $_SESSION['username']; ?> </b>
+						</a>
+						<a href="index.php?logout='1'" style="color: red;">logout</a>
+						<?php endif ?>
+					</div>
+				</div>
+				<div class="col-lg-10 col-md-8 text-center text-lg-right text-md-right">
+					<div class="header-top-info">
+						<a href="tel:+254720870388">Call Us : <span>+254-720-870388</span></a>
+						<a href="mailto:cokeagentsystem@yahoo.com" ><i class="fa fa-envelope mr-2"></i><span>cokeagentsystem@yahoo.com</span></a>
+					</div>
+				</div>
+			</div>
 		</div>
-	</nav>
+	</div>
 </header>
 
 <!-- Header Close --> 
@@ -86,52 +151,48 @@
 
 <section class="section intro">
 	<div class="container">
-		<P><h2>TASKS ASSIGNED</h2></p>
-		<div id="Pendingtasks" class="tabcontent" style="padding: 6px 12px; border: 1px solid #ccc;">
-			<h3>Pending Tasks</h3>
-			<p>the following are the tasks you are yet to complete.</p>
-			<table class="table table-bordered">
-			<thead>
-				<tr>
-				<th scope="col">T. ID </th>
-				<th scope="col">T. Dept</th>
-				<th scope="col">Distributor Name</th>
-				<th scope="col">Task Description</th>
-				<th scope="col">Date & Time Assigned</th>
-				<th scope="col">Status</th>
-				<th scope="col">ACTION</th>
-				</tr>
-			</thead>
-			<tbody>
-				<!-- [ LOOP THE REGISTERED AGENTS ] -->
-				<?php
 
-				$agent = $_SESSION['username'];
-				$sql = "SELECT * FROM tasks WHERE agent='$agent' and status='PENDING'";
-				$result = mysqli_query($db, $sql);
-				while($row = mysqli_fetch_array($result, MYSQLI_NUM))
-				{	
-				
-					echo '<tr>';
-						echo '<td>'.$row[0].'</td> '; //TASKID
-						echo '<td>'.$row[3].'</td> '; //DEPERTMENT / CATEGORY
-						echo '<td>'.$row[2].'</td> '; //DISTRIBUTOR
-						echo '<td>'.$row[4].'</td> '; //DESCRIPTION
-						echo '<td>'.$row[5]." ".$row[6].'</td> '; //DATE TIME ASSIGNRD
-						echo '<td>'.$row[10].'</td> '; //TASK STATUS
-						echo '<td>
-								<a href="file.php?id='.$row[0].'"><strong><button type="button" class="btn btn-success">File Report</button>
-							  </td> '; //EMAIL
-					echo '</tr>';
-				}
-				?>
-			</tbody>
-    		</table>
-    	</div>
+    <!-- // get the manager details ::: -->
+    <?php 
+        // $user = $_SESSION['username'];
+        $query0 = "SELECT * FROM agents WHERE id='$agentid' ";
+        $result0 = mysqli_query($db, $query0);
+
+        while($row = mysqli_fetch_array($result0, MYSQLI_NUM)){
+            // $styid = $row[0];
+            $agentusername = $row[1];
+            $agentemail = $row[5];
+            $agentdateadded = $row[8];
+            
+        }
+    ?>
+    <h2>DEACTIVATE [ <b> <span style="color:red;"><?=$agentusername?></span> </b> ]</h2> 
+    <hr><br>
+       
+       <div style="padding: 6px 12px; border: 1px solid #ccc;">
+        <h3>Give reason for deactivating <span style="color:red;"><?=$agentusername?></span></h3>
+        <p>Kindly provide a brief description as to why you are deactivting the managers</p>
+        <form method="post" action="deactivateagent.php">
+          <?php include('errors.php'); ?>
+
+          <div class="form-group">
+              <input name="agentid" value="<?=$agentid?>" style="opacity:0;"><br>
+              <label for="exampleInputEmail1">Man..............#: <span style="color:green;"><?=$agentid?></span> </label><br>
+              <label for="exampleInputEmail1">Username: <span style="color:green;"><?=$agentusername?></span></label><br>
+              <label for="exampleInputEmail1">Email..............: <span style="color:green;"><?=$agentemail?></span></label><br>
+          </div>
+          <div class="form-group">
+              <label for="exampleInputPassword1">Provide Reason for deactivating</label>
+              <textarea type="text" class="form-control" name="reason"  placeholder="Give some brief reason for deactivating agent" ></textarea>
+          </div>
+          <button type="submit" class="btn btn-danger" name="deactivate_agent" style="width:100%;"><b>DEACTIVATE AGENT</b></button>
+        </form>
+      </div>
 	</div>
 </section>
 
 <!-- Section Intro END -->
+
 
 <!-- footer Start -->
 <footer class="footer section">
@@ -230,6 +291,7 @@
     <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAkeLMlsiwzp6b3Gnaxd86lvakimwGA6UA&callback=initMap"></script>    
     
     <script src="js/script.js"></script>
+    
 
   </body>
   </html>

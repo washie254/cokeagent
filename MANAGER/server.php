@@ -120,4 +120,73 @@
 
 
 	}
+
+	//DEACTIVATE AGENT 
+	if (isset($_POST['deactivate_agent'])) {
+		$reason = mysqli_real_escape_string($db, $_POST['reason']);
+		$agentid = mysqli_real_escape_string($db, $_POST['agentid']);
+
+
+		$cdate = date("Y-m-d");
+		$ctime = date("h:i:s");
+		$status = 'DEACTIVATED';
+
+		if (empty($reason)){ array_push($errors, "reason for deactivation is needed !"); }
+		if (empty($agentid )){ array_push($errors, "could not process agent identity !"); }
+	
+		if (count($errors) == 0) {
+			$query = "UPDATE agents 
+						SET
+							status = '$status',
+							deactreason = '$reason',
+							deactdate = '$cdate',
+							reactdate = '',
+							reactreason=''
+						WHERE 
+						  	id='$agentid' ";
+			$result = mysqli_query($db, $query);
+			if($result)
+				echo "<script type='text/javascript'>alert('Manager Deactivated successfully!')</script>";
+			else
+				echo "<script type'text/javascript'>alert('Something Went Wrong!!')</script>";
+			
+			header('location:agents.php');
+
+		}
+
+	}
+	//DEACTIVATE AGENT 
+	if (isset($_POST['activate_agent'])) {
+		$reason = mysqli_real_escape_string($db, $_POST['reason']);
+		$agentid = mysqli_real_escape_string($db, $_POST['agentid']);
+
+
+		$cdate = date("Y-m-d");
+		$ctime = date("h:i:s");
+		$status = 'ACTIVE';
+
+		if (empty($reason)){ array_push($errors, "reason for reactivation is needed !"); }
+		if (empty($agentid )){ array_push($errors, "could not process agent identity !"); }
+	
+		if (count($errors) == 0) {
+			$query = "UPDATE agents 
+						SET
+							status = '$status',
+							deactreason = '',
+							deactdate = '',
+							reactdate = '$cdate',
+							reactreason='$reason'
+						WHERE 
+						  	id='$agentid' ";
+			$result = mysqli_query($db, $query);
+			if($result)
+				echo "<script type='text/javascript'>alert('Manager Deactivated successfully!')</script>";
+			else
+				echo "<script type'text/javascript'>alert('Something Went Wrong!!')</script>";
+			
+			header('location:agents.php');
+
+		}
+
+	}
 ?>

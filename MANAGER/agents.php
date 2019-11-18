@@ -116,12 +116,33 @@
 
 <!-- Header Start --> 
 <header class="navigation">
+	<div class="header-top ">
+		<div class="container">
+			<div class="row justify-content-between align-items-center">
+				<div class="col-lg-2 col-md-4">
+					<div class="header-top-socials text-center text-lg-left text-md-left">
+						<a href="#"><i class="ti-github"></i></a>
+						<a href="#" style="color:Yellow"> <b>	
+							<?php  if (isset($_SESSION['username'])):?>
+							<?php echo $_SESSION['username']; ?> </b>
+						</a>
+						<a href="index.php?logout='1'" style="color: red;">logout</a>
+						<?php endif ?>
+					</div>
+				</div>
+				<div class="col-lg-10 col-md-8 text-center text-lg-right text-md-right">
+					<div class="header-top-info">
+						<a href="tel:+254720870388">Call Us : <span>+254-720-870388</span></a>
+						<a href="mailto:cokeagentsystem@yahoo.com" ><i class="fa fa-envelope mr-2"></i><span>cokeagentsystem@yahoo.com</span></a>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
 	<nav class="navbar navbar-expand-lg  py-4" id="navbar">
 		<div class="container">
-        
-        <!-- <a href="#"><i class="ti-github"></a> -->
 		  <a class="navbar-brand" href="#">
-              Coca<span>Cola.</span>
+		  	Coca<span>Cola.</span>
 		  </a>
 
 		  <button class="navbar-toggler collapsed" type="button" data-toggle="collapse" data-target="#navbarsExample09" aria-controls="navbarsExample09" aria-expanded="false" aria-label="Toggle navigation">
@@ -129,7 +150,7 @@
 		  </button>
 	  
 		  <div class="collapse navbar-collapse text-center" id="navbarsExample09">
-			<ul class="navbar-nav ml-auto">
+          <ul class="navbar-nav ml-auto">
 			  <li class="nav-item active">
 				<a class="nav-link" href="index.php">Home <span class="sr-only">(current)</span></a>
 			  </li>
@@ -152,153 +173,108 @@
 		</div>
 	</nav>
 </header>
+
 <!-- Header Close --> 
 
 <div class="main-wrapper ">
 
 <section class="section intro">
-  <div class="container">
-    <div style="padding: 6px 12px; border: 1px solid #ccc;">
-        <h3>Manager Profile</h3>
-        <p> your profile information is as follows</p>
-        <?php
-                $user = $_SESSION['username'];
-
-                $query0 = "SELECT * FROM managers WHERE username='$user'";
-                $result0 = mysqli_query($db, $query0);
-                
-                while($row = mysqli_fetch_array($result0, MYSQLI_NUM)){
-                    $uid=$row[0];
-                    $uname=$row[1];
-                    $oname=$row[2]." ".$row[3];
-                    $umail=$row[4];//mail
-                    $utel=$row[5];//tel
-                    $status=$row[7];
-                    $dateadded=$row[8];
-                    $deactdate=$row[11];
-                    $deactreason=$row[10];
-                    $reactreason = $row[12];
-                    $reactdate = $row[13];
-                }
-            ?>
-            <table class="container">
-                <thead>
-                    <tr>
-                        <th scope="col">Avatar</th>
-                        <th scope="col"><th>
-                        <th scope="col">Information</th>
-                    </tr>
-                    <hr>
-                </thead>
-                <tr style="width:200px;">
-                    <td style="width: 90px;"><img src="images/avatar.png" style="width:150px; height:150px;"></td>
-                    <td><b>
-                      <label>ID</label><br>
-                      <label>Username </label><br>
-                      <label>Other Names</label><br>
-                      <label>Email </label><br>
-                      <label>Tel No </label><br>
-                      </b>
-                    </td>
-                    <td>
-                        <label><?php echo $uid; ?></label><br>
-                        <label><?php echo $uname; ?></label><br>
-                        <label><?php echo $oname; ?></label><br>
-                        <label><?php echo $umail; ?></label><br>
-                        <label><?php echo $utel; ?></label><br>
-                    </td>
-                    <td>
-                        <label><b>Signup Date: </b>&nbsp;&nbsp;<?php echo $dateadded; ?></label><br>
-                        <label><b>Account Stat: </b>&nbsp;&nbsp;<?php echo $status; ?></label><br>
-                    </td>
-                </tr>
-                <tr>
-                  <?php 
-                    if($status !='ACTIVE'){
-                      echo "<td><label><b>Deactivation Date: </b>&nbsp;&nbsp $deactdate </label><br>
-                             <b>Deactivation Reason: </b>&nbsp;&nbsp; $deactreason <br></td>";
-                    }
-                    if($reactdate > 0){
-                      echo "<td><label><b>Reactivation Date: </b>&nbsp;&nbsp $reactdate </label><br>
-                            <b> Reason: </b>&nbsp;&nbsp; $reactreason <br></td>";
-                    }
-                  ?>
-                </tr>
-            </table>
-      </div>
-  </div>
-  <hr><br>
 	<div class="container">
-    <h2>Update Profile</h2> 
+    <h2>THE AGENTS DASH BOARD</h2> 
     <!-- Tab links -->
     <div class="tab">
-    <button class="tablinks" onclick="openCity(event, 'Pendingtasks')">Update Profile</button>
-    <!-- <button class="tablinks" onclick="openCity(event, 'Completed')">Completed Tasks</button>
-    <button class="tablinks" onclick="openCity(event, 'Remarks')">Task Remarks</button> -->
+    <button class="tablinks" onclick="openCity(event, 'Viewagents')">Active  Agents</button>
+    <button class="tablinks" onclick="openCity(event, 'Addagents')">Innactive Agents</button>
+    <button class="tablinks" onclick="openCity(event, 'Other')">Other</button>
     </div>
 
     <!-- Tab content -->
-    <div id="Pendingtasks" class="tabcontent">
-      <h3>Pending Tasks</h3>
-      <p>the following are the tasks you are yet to complete.</p>
-      <style>
-        .error {
-            width: 100%; 
-            margin: 0px auto; 
-            padding: 10px; 
-            border: 1px solid #a94442; 
-            color: #a94442; 
-            background: #f2dede; 
-            border-radius: 5px; 
-            text-align: left;
-        }
-      </style>
-      <?php require('errors.php'); ?>
-      <?php 
-        $resultz = mysqli_query($db,"SELECT * FROM managers WHERE id='$uid'");
-        $rowz= mysqli_fetch_array($resultz);
-      ?>
-      <form class="form" action="profile.php" method="post">
-        <div class="form-group">
-            <div class="col-xs-6">
-                <label for="first_name"><h4>First name</h4></label>
-                <input type="text" class="form-control" name="fname" id="fname" value="<?php echo $rowz['fname']; ?>">
-            </div>
-        </div>
-            <div class="form-group">
-                <div class="col-xs-6">
-                    <label for="last_name"><h4>Last name</h4></label>
-                    <input type="text" class="form-control" name="lname" id="lname" value="<?php echo $rowz['lname']; ?>">
-                </div>
-            </div>
-      
-            <div class="form-group">	
-                <div class="col-xs-6">
-                    <label for="phone"><h4>Phone</h4></label>
-                    <input type="text" class="form-control" name="phone" id="phone" value="<?php echo $rowz['tel']; ?>">
-                </div>
-            </div>
-            <div class="form-group">
-                <div class="col-xs-6">
-                    <label for="email"><h4>Email</h4></label>
-                    <input type="email" class="form-control" name="email" id="email" value="<?php echo $rowz['email']; ?>">
-                </div>
-            </div>
+    <div id="Viewagents" class="tabcontent">
+    <h3>Registered ACTIVE Agents</h3>
+    <p>the following are the registered and active agents on the system.</p>
+    <table class="table table-bordered">
+      <thead>
+        <tr>
+          <th scope="col">ID </th>
+          <th scope="col">Sir Names</th>
+          <th scope="col">other names</th>
+          <th scope="col">Agents Email</th>
+          <th scope="col">Telephone No</th>
+          <th scope="col">Date Added</th>
+          <th scope="col">Action</th>
+        </tr>
+      </thead>
+      <tbody>
+        <!-- [ LOOP THE REGISTERED AGENTS ] -->
+        <?php
 
+          $sql = "SELECT * FROM agents WHERE status='ACTIVE'";
+          $result = mysqli_query($db, $sql);
+          while($row = mysqli_fetch_array($result, MYSQLI_NUM))
+          {	
+          
+              echo '<tr>';
+                  echo '<td>'.$row[0].'</td> '; //AGENT'S ID
+                  echo '<td>'.$row[4].'</td> '; //SIR NAME
+                  echo '<td>'.$row[2]." ".$row[3].'</td> '; //AGENT'S OTHER NAMES
+                  echo '<td>'.$row[5].'</td> '; //EMAIL
+                  echo '<td>'.$row[6].'</td> '; //TELEPHONE NUMBER
+                  echo '<td>'.$row[8].'</td> '; //DATE ADDED
+                  echo '<td><a href="deactivateagent.php?id=' . $row[0] . '"><button class="btn btn-danger">DEACTIVATE</button></a> </td>';
+              echo '</tr>';
+          }
+        ?>
+      </tbody>
+    </table>
+    
 
+    </div>
 
-            <div class="form-group">
-                <input type="text" name="mid" value="<?=$uid?>" style="opacity: 0;" />
-            </div>
+    <div id="Addagents" class="tabcontent">
+    <h3>Current Inactive Agents</h3>
+    <p>the following are the current innactive agents </p>
 
-            <div class="form-group">
-                <div class="col-xs-12">
-                    <br>
-                    <button class="btn btn-lg btn-success" type="submit" name="update_info"><i class="glyphicon glyphicon-ok-sign"></i> UPDATE MANAGER PROFILE</button>
-                </div>
-            </div>
-        </form>
+    <table class="table table-bordered">
+      <thead>
+        <tr>
+          <th scope="col">ID </th>
+          <th scope="col">Sir Names</th>
+          <th scope="col">other names</th>
+          <th scope="col">Agents Email</th>
+          <th scope="col">Telephone No</th>
+          <th scope="col">Date Added</th>
+          <th scope="col">Action</th>
+        </tr>
+      </thead>
+      <tbody>
+        <!-- [ LOOP THE REGISTERED AGENTS ] -->
+        <?php
+          $sql = "SELECT * FROM agents WHERE status !='ACTIVE'";
+          $result = mysqli_query($db, $sql);
+          while($row = mysqli_fetch_array($result, MYSQLI_NUM))
+          {	
+          
+              echo '<tr>';
+                  echo '<td>'.$row[0].'</td> '; //AGENT'S ID
+                  echo '<td>'.$row[4].'</td> '; //SIR NAME
+                  echo '<td>'.$row[2]." ".$row[3].'</td> '; //AGENT'S OTHER NAMES
+                  echo '<td>'.$row[5].'</td> '; //EMAIL
+                  echo '<td>'.$row[6].'</td> '; //TELEPHONE NUMBER
+                  echo '<td>'.$row[8].'</td> '; //DATE ADDED
+                  echo '<td><a href="activateagent.php?id=' . $row[0] . '"><button class="btn btn-success">ACTIVATE</button></a> </td>';
+              echo '</tr>';
+          }
+        ?>
+      </tbody>
+    </table>
 
+    </div>
+
+    <div id="Other" class="tabcontent">
+        <h3>Something else </h3>
+        <p>Something else can come Here</p>
+    </div> 
+    <hr>
 	</div>
 </section>
 
