@@ -1,5 +1,9 @@
 <?php include('server.php'); ?>
 <?php 
+   if (isset($_GET['id'])){
+        $managerid = $_GET['id'];
+    }
+
   //session_start(); 
   
 	if (!isset($_SESSION['username'])) {
@@ -139,34 +143,6 @@
 			</div>
 		</div>
 	</div>
-	<nav class="navbar navbar-expand-lg  py-4" id="navbar">
-		<div class="container">
-		  <a class="navbar-brand" href="#">
-		  	Coca<span>Cola.</span>
-		  </a>
-
-		  <button class="navbar-toggler collapsed" type="button" data-toggle="collapse" data-target="#navbarsExample09" aria-controls="navbarsExample09" aria-expanded="false" aria-label="Toggle navigation">
-			<span class="fa fa-bars"></span>
-		  </button>
-	  
-		  <div class="collapse navbar-collapse text-center" id="navbarsExample09">
-          <ul class="navbar-nav ml-auto">
-			  <li class="nav-item active">
-				<a class="nav-link" href="admin_index.php">Home <span class="sr-only">(current)</span></a>
-			  </li>
-          <li class="nav-item"><a class="nav-link" href="manager.php">Managers</a></li>
-			    <li class="nav-item"><a class="nav-link" href="admin_agents.php">Agents</a></li>
-			    <li class="nav-item dropdown">
-					<a class="nav-link dropdown-toggle" href="#" id="dropdown03" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Report</a>
-					<ul class="dropdown-menu" aria-labelledby="dropdown03">
-						<li><a class="dropdown-item" href="agents_reports.php">General Reports</a></li>
-						<li><a class="dropdown-item" href="distributors_reports.php">Distributor Reports</a></li>
-					</ul>
-			  </li>
-			</ul>
-		  </div>
-		</div>
-	</nav>
 </header>
 
 <!-- Header Close --> 
@@ -175,176 +151,42 @@
 
 <section class="section intro">
 	<div class="container">
-    <h2>THE MANAGER DASH BOARD</h2> 
-    <!-- Tab links -->
-    <div class="tab">
-    <button class="tablinks" onclick="openCity(event, 'Activedistributors')">Active  Managers</button>
-    <button class="tablinks" onclick="openCity(event, 'Addagents')">Innactive Managers</button>
-    <button class="tablinks" onclick="openCity(event, 'Departments')">Departments</button>
-    </div>
 
-    <!-- Tab content -->
-    <div id="Activedistributors" class="tabcontent">
-    <h3>Registered Managers</h3>
-    <p>The following are the active managers in the system </p>
-    <table class="table table-bordered">
-      <thead>
-        <tr>
-          <th scope="col">ID </th>
-          <th scope="col">Manager username</th>
-          <th scope="col">other names</th>
-          <th scope="col">email</th>
-          <th scope="col">Telephone No</th>
-          <th scope="col">Date Added</th>
-          <th scope="col">Status</th>
-          <th scope="col">Action</th>
-        </tr>
-      </thead>
-      <tbody>
-        <!-- [ LOOP THE REGISTERED AGENTS ] -->
-        <?php
-          
-          $sql = "SELECT * FROM managers WHERE status='ACTIVE'";
-          $result = mysqli_query($db, $sql);
-          while($row = mysqli_fetch_array($result, MYSQLI_NUM))
-          {	
-          
-              echo '<tr>';
-                  echo '<td>'.$row[0].'</td> '; 
-                  echo '<td>'.$row[1].'</td> '; 
-                  echo '<td>'.$row[2]." ".$row[3].'</td> '; 
-                  echo '<td>'.$row[4].'</td> '; 
-                  echo '<td>'.$row[5].'</td> '; 
-                  echo '<td>'.$row[8].'</td> '; 
-                  echo '<td>'.$row[7].'</td> '; 
-                  echo '<td><a href="deactivatemanager.php?id=' . $row[0] . '"><button class="btn btn-danger">DEACTIVATE</button></a> </td>';
-              echo '</tr>';
-          }
-        ?>
-      </tbody>
-    </table>
-    
+    <!-- // get the manager details ::: -->
+    <?php 
+        // $user = $_SESSION['username'];
+        $query0 = "SELECT * FROM managers WHERE id='$managerid' ";
+        $result0 = mysqli_query($db, $query0);
 
-    </div>
-
-    <div id="Addagents" class="tabcontent">
-    <h3>In-aactive distributors</h3>
-    <p>the following is information about inactive distributors in the system</p>
-
-    <table class="table table-bordered">
-      <thead>
-        <tr>
-          <th scope="col">ID </th>
-          <th scope="col">Manager username</th>
-          <th scope="col">other names</th>
-          <th scope="col">email</th>
-          <th scope="col">Telephone No</th>
-          <th scope="col">Date Added</th>
-          <th scope="col">Status</th>
-          <th scope="col">Action</th>
-        </tr>
-      </thead>
-      <tbody>
-        <!-- [ LOOP THE REGISTERED AGENTS ] -->
-        <?php
-          
-          $sql = "SELECT * FROM managers WHERE status='ACTIVE'";
-          $result = mysqli_query($db, $sql);
-          while($row = mysqli_fetch_array($result, MYSQLI_NUM))
-          {	
-          
-              echo '<tr>';
-                  echo '<td>'.$row[0].'</td> '; 
-                  echo '<td>'.$row[1].'</td> '; 
-                  echo '<td>'.$row[2]." ".$row[3].'</td> '; 
-                  echo '<td>'.$row[4].'</td> '; 
-                  echo '<td>'.$row[5].'</td> '; 
-                  echo '<td>'.$row[8].'</td> '; 
-                  echo '<td>'.$row[7].'</td> '; 
-                  echo '<td><a href="deactivate_distributor.php?id=' . $row[0] . '"><button class="btn btn-danger">DEACTIVATE</button></a> </td>';
-              echo '</tr>';
-          }
-        ?>
-      </tbody>
-    </table>
-
-    </div>
-
-    <div id="Departments" class="tabcontent">
-        <h3>Departments</h3>
-        <p>The departmental information</p>
-        <div style="padding: 6px 12px; border: 1px solid #ccc;">
-            <p>Current Departments</p>
-            <table class="table table-bordered">
-            <thead>
-                <tr>
-                <th scope="col">ID </th>
-                <th scope="col">Department Name</th>
-                <th scope="col">Date Created</th>
-                <th scope="col">Action</th>
-        
-                </tr>
-            </thead>
-            <tbody>
-                <!-- [ LOOP THE REGISTERED AGENTS ] -->
-                <?php
-                
-
-                $sql = "SELECT * FROM departments";
-                $result = mysqli_query($db, $sql);
-                while($row = mysqli_fetch_array($result, MYSQLI_NUM))
-                {	
-                    echo '<tr>';
-                        echo '<td>'.$row[0].'</td> '; //DEP ID
-                        echo '<td>'.$row[1].'</td> '; //dEPTNAME
-                        echo '<td>'.$row[2].'</td> '; //DATE CREATED
-                        echo '<td><a href="del_department.php?id=' . $row[0] . '"><button class="btn btn-danger">DELETE</button></a> </td>';
-                    echo '</tr>';
-                }
-                ?>
-            </tbody>
-            </table>
-        </div> 
-        <p>Add a new Department</p>
-        <div style="padding: 6px 12px; border: 1px solid #ccc;">
-            <form method="post" action="admin_distributors.php">
-                <?php include('errors.php'); ?>
-                <div class="form-group">
-                    <label for="exampleInputEmail1">Department Name</label>
-                    <input type="text" class="form-control" name="deptname" placeholder="Enter Department name">
-                </div>
-                <button type="submit" class="btn btn-success" name="add_department" style="width:100%;"><b>ADD DEPARTMERNT</b></button>
-
-            </form>
-        </div>
-
-    </div> 
+        while($row = mysqli_fetch_array($result0, MYSQLI_NUM)){
+            // $styid = $row[0];
+            $manusername = $row[1];
+            $manemail = $row[4];
+            $mandateadded = $row[8];
+            
+        }
+    ?>
+    <h2>DEACTIVATE [ <b> <span style="color:green;"><?=$manusername?></span> </b> ]</h2> 
     <hr><br>
        
        <div style="padding: 6px 12px; border: 1px solid #ccc;">
-        <h3>Add a New Manager</h3>
-        <p>fill in the following details to add a new manager to the system</p>
-        <form method="post" action="manager.php">
+        <h3>Give reason for deactivating <span style="color:red;"><?=$manusername?></span></h3>
+        <p>Kindly provide a brief description as to why you are deactivting the managers</p>
+        <form method="post" action="deactivatemanager.php">
           <?php include('errors.php'); ?>
             <?php $admin =$_SESSION["username"];?>
           <input name="admin" value="<?=$admin?>" style="opacity:0;">
           <div class="form-group">
-              <label for="exampleInputEmail1">Manager Username</label>
-              <input type="text" class="form-control" name="username" placeholder="Enter Manager name">
+              <input name="managerid" value="<?=$managerid?>" style="opacity:0;"><br>
+              <label for="exampleInputEmail1">Man..............#: <span style="color:green;"><?=$managerid?></span> </label><br>
+              <label for="exampleInputEmail1">Username: <span style="color:green;"><?=$manusername?></span></label><br>
+              <label for="exampleInputEmail1">Email..............: <span style="color:green;"><?=$manemail?></span></label><br>
           </div>
           <div class="form-group">
-              <label for="exampleInputEmail1">Email</label>
-              <input type="email" class="form-control" name="email" placeholder="Enter email of the manager">
+              <label for="exampleInputPassword1">Provide Reason for deactivating</label>
+              <textarea type="text" class="form-control" name="reason"  placeholder="Give some brief reason for deactivating manager" ></textarea>
           </div>
-          <div class="form-group">
-              <label for="exampleInputPassword1">password</label>
-              <input type="password" class="form-control" name="password_1" rows="4" cols="50" placeholder="Enter a password" >
-          </div>
-          <div class="form-group">
-              <label for="exampleInputPassword1">Confirm password</label>
-              <input type="password" class="form-control" name="password_2" rows="4" cols="50" placeholder="confirm password" >
-          </div>
-          <button type="submit" class="btn btn-success" name="add_manager" style="width:100%;"><b>ADD MANAGER</b></button>
+          <button type="submit" class="btn btn-danger" name="deactivate_manager" style="width:100%;"><b>DEACTIVATE MANAGER</b></button>
         </form>
       </div>
 	</div>
