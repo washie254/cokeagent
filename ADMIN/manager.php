@@ -277,7 +277,7 @@
                 <th scope="col">ID </th>
                 <th scope="col">Department Name</th>
                 <th scope="col">Date Created</th>
-                <th scope="col">Action</th>
+                <!-- <th scope="col">Action</th> -->
         
                 </tr>
             </thead>
@@ -294,7 +294,7 @@
                         echo '<td>'.$row[0].'</td> '; //DEP ID
                         echo '<td>'.$row[1].'</td> '; //dEPTNAME
                         echo '<td>'.$row[2].'</td> '; //DATE CREATED
-                        echo '<td><a href="del_department.php?id=' . $row[0] . '"><button class="btn btn-danger">DELETE</button></a> </td>';
+                        // echo '<td><a href="del_department.php?id=' . $row[0] . '"><button class="btn btn-danger">DELETE</button></a> </td>';
                     echo '</tr>';
                 }
                 ?>
@@ -370,10 +370,10 @@
 					<h4 class="text-capitalize mb-4">Quick Links</h4>
 
 					<ul class="list-unstyled footer-menu lh-35">
-						<li><a href="admin_index.php">Home</a></li>
+						<li><a href="index.php">Home</a></li>
 						<li><a href="admin_agents.php">Agents</a></li>
 						<li><a href="admin_distributors.php">Distributors</a></li>
-						<li><a href="admin_agents_reports.php">Agent Reports</a></li>
+						<li><a href="agents_reports.php">Agent Reports</a></li>
 						<li><a href="admin_distributors_reports.php">Distributor Reports</a></li>
 					</ul>
 				</div>

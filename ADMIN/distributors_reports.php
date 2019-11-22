@@ -180,42 +180,36 @@
     
 
     <!-- Tab content -->
-        <p>General Distributor Stock Levels</p>
+        <p>General Distributor Stock Levels for the distributors in the system</p>
         <div style="padding: 6px 12px; border: 1px solid #ccc;">
         <table class="table table-bordered">
           <thead>
             <tr>
               <th scope="col">#id</th>
               <th scope="col">Disttname</th>
-              <th scope="col">Account Status</th>
-              <th scope="col">Operation Status</th>
-              <th scope="col">Total INventory</th>
-              <th scope="col">Sodas</th>
-              <th scope="col">Dasani</th>
-              <th scope="col">Need Restock ?</th>
-
-
+              <th scope="col">Current Sodas</th>
+              <th scope="col">Current Dasani</th>
+              <th scope="col">Max & Min Sodas</th>
+              <th scope="col">Max & Min Dasani</th>
+              <th scope="col">Reorder Soda</th>
+              <th scope="col">Reorder Dasani</th>
             </tr>
           </thead>
           <tbody>
-            <!-- [ LOOP THE REGISTERED AGENTS ] -->
             <?php
-              
-
-              $sql = "SELECT * FROM distributors WHERE status='INNACTIVE'";
+              $sql = "SELECT * FROM inventory ORDER BY maxsoda DESC";
               $result = mysqli_query($db, $sql);
               while($row = mysqli_fetch_array($result, MYSQLI_NUM))
               {	
-              
                   echo '<tr>';
-                      echo '<td>'.$row[0].'</td> '; //DISTRIBUTOR ID
-                      echo '<td>'.$row[6].'</td> '; //DATE ADDED
-                      echo '<td>'.$row[1].'</td> '; //DISTRIBUTOR NAME
-                      echo '<td>'.$row[2].'</td> '; //OWNER NAMES
-                      echo '<td>'.$row[3].'</td> '; //DISTRIBUTOR EMAIL
-                      echo '<td>'.$row[4].'</td> '; //TELEPHONE NUMBER
-                      echo '<td>'.$row[3].'</td> '; //DISTRIBUTOR EMAIL
-                      echo '<td>'.$row[4].'</td> '; //TELEPHONE NUMBER
+                      echo '<td>'.$row[0].'</td>'; 
+                      echo '<td>'.$row[1].'</td>'; 
+                      echo '<td>'.$row[9].'</td>'; 
+                      echo '<td>'.$row[8].'</td>'; 
+                      echo '<td> Max:'.$row[3]."<br>Min:".$row[6].'</td>';
+                      echo '<td> Max:'.$row[2]."<br>Min:".$row[7].'</td>'; 
+                      echo '<td>'.$row[5].'</td>'; 
+                      echo '<td>'.$row[4].'</td>'; 
                   echo '</tr>';
               }
             ?>

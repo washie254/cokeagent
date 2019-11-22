@@ -195,9 +195,6 @@
           <th scope="col">Telephone No</th>
           <th scope="col">Email</th>
           <th scope="col">Date Added</th>
-          <th scope="col">TotaL Tasks</th>
-          <th scope="col">Completed Tasks</th>
-          <th scope="col">Pending Tasks</th>
           <th scope="col">Current Status</th>
           
         </tr>
@@ -206,21 +203,18 @@
         <!-- [ LOOP THE REGISTERED AGENTS ] -->
         <?php
           
-          $sql = "SELECT * FROM distributors WHERE status='ACTIVE'";
+          $sql = "SELECT * FROM agents";
           $result = mysqli_query($db, $sql);
           while($row = mysqli_fetch_array($result, MYSQLI_NUM))
           {	
           
               echo '<tr>';
-                  echo '<td>'.$row[0].'</td> '; //DISTRIBUTOR ID
-                  echo '<td>'.$row[6].'</td> '; //DATE ADDED
-                  echo '<td>'.$row[1].'</td> '; //DISTRIBUTOR NAME
-                  echo '<td>'.$row[2].'</td> '; //OWNER NAMES
-                  echo '<td>'.$row[3].'</td> '; //DISTRIBUTOR EMAIL
-                  echo '<td>'.$row[4].'</td> '; //TELEPHONE NUMBER
-                  echo '<td>'.$row[5].'</td> '; //LOCATION
-                  echo '<td>'.$row[5].'</td> ';
-                  echo '<td>'.$row[5].'</td> ';
+                  echo '<td>'.$row[0].'</td> '; 
+                  echo '<td>'.$row[1]." :<br>".$row[3]." ".$row[4].'</td> '; 
+                  echo '<td>'.$row[6].'</td> '; 
+                  echo '<td>'.$row[5].'</td> '; 
+                  echo '<td>'.$row[8].'</td> '; 
+                  echo '<td>'.$row[10].'</td> ';
               echo '</tr>';
           }
         ?>
@@ -248,20 +242,18 @@
       <tbody>
         <!-- [ LOOP THE REGISTERED AGENTS ] -->
         <?php
-          
-
-          $sql = "SELECT * FROM distributors WHERE status='INNACTIVE'";
+          $sql = "SELECT * FROM managers";
           $result = mysqli_query($db, $sql);
           while($row = mysqli_fetch_array($result, MYSQLI_NUM))
           {	
           
               echo '<tr>';
-                  echo '<td>'.$row[0].'</td> '; //DISTRIBUTOR ID
-                  echo '<td>'.$row[6].'</td> '; //DATE ADDED
-                  echo '<td>'.$row[1].'</td> '; //DISTRIBUTOR NAME
-                  echo '<td>'.$row[2].'</td> '; //OWNER NAMES
-                  echo '<td>'.$row[3].'</td> '; //DISTRIBUTOR EMAIL
-                  echo '<td>'.$row[4].'</td> '; //TELEPHONE NUMBER
+                  echo '<td>'.$row[0].'</td> '; 
+                  echo '<td>'.$row[1]." :<br>".$row[2]." ".$row[3].'</td> '; 
+                  echo '<td>'.$row[4].'</td> ';
+                  echo '<td>'.$row[5].'</td> '; 
+                  echo '<td>'.$row[8].'</td> '; 
+                  echo '<td>'.$row[7].'</td> '; 
               echo '</tr>';
           }
         ?>
@@ -289,24 +281,21 @@
             </tr>
           </thead>
           <tbody>
-            <!-- [ LOOP THE REGISTERED AGENTS ] -->
             <?php
-              
-
-              $sql = "SELECT * FROM distributors WHERE status='INNACTIVE'";
+              $sql = "SELECT * FROM distributors ";
               $result = mysqli_query($db, $sql);
               while($row = mysqli_fetch_array($result, MYSQLI_NUM))
               {	
               
                   echo '<tr>';
-                      echo '<td>'.$row[0].'</td> '; //DISTRIBUTOR ID
-                      echo '<td>'.$row[6].'</td> '; //DATE ADDED
-                      echo '<td>'.$row[1].'</td> '; //DISTRIBUTOR NAME
-                      echo '<td>'.$row[2].'</td> '; //OWNER NAMES
-                      echo '<td>'.$row[3].'</td> '; //DISTRIBUTOR EMAIL
-                      echo '<td>'.$row[4].'</td> '; //TELEPHONE NUMBER
-                      echo '<td>'.$row[3].'</td> '; //DISTRIBUTOR EMAIL
-                      echo '<td>'.$row[4].'</td> '; //TELEPHONE NUMBER
+                      echo '<td>'.$row[0].'</td> '; 
+                      echo '<td>'.$row[1].'</td> '; 
+                      echo '<td>'.$row[2].'</td> '; 
+                      echo '<td>'.$row[3].'</td> '; 
+                      echo '<td>'.$row[4].'</td> ';
+                      echo '<td>'.$row[6]." :<br>".$row[11].", ".$row[12].'</td> ';
+                      echo '<td>'.$row[10].'</td> '; 
+                      echo '<td>'.$row[9].'</td> '; 
                   echo '</tr>';
               }
             ?>
