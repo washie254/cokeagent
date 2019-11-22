@@ -129,10 +129,12 @@
 		  </button>
 	  
 		  <div class="collapse navbar-collapse text-center" id="navbarsExample09">
-			<ul class="navbar-nav ml-auto">
+      <ul class="navbar-nav ml-auto">
 			  <li class="nav-item active">
 				<a class="nav-link" href="index.php">Home <span class="sr-only">(current)</span></a>
 			  </li>
+			  <li class="nav-item"><a class="nav-link" href="visits.php">Visits</a></li>
+			  <li class="nav-item"><a class="nav-link" href="reports.php">Reports</a></li>
 			   <li class="nav-item"><a class="nav-link" href="profile.php">Pofile</a></li>
 
               <li style="float:right;" class="nav-link">
@@ -153,6 +155,26 @@
 </header>
 <!-- Header Close --> 
 
+<!-- ====================================MAPS -->
+<script>
+    if(!navigator.geolocation){
+    alert('Your Browser does not support HTML5 Geo Location. Please Use Newer Version Browsers');
+    }
+    navigator.geolocation.getCurrentPosition(success, error);
+    function success(position){
+    var latitude  = position.coords.latitude;	
+    var longitude = position.coords.longitude;	
+    var accuracy  = position.coords.accuracy;
+    document.getElementById("lat").value  = latitude;
+    document.getElementById("lng").value  = longitude;
+    document.getElementById("acc").value  = accuracy;
+    }
+    function error(err){
+    alert('ERROR(' + err.code + '): ' + err.message);
+    }
+</script>
+<!-- ====================================MAPS -->
+
 <div class="main-wrapper ">
 
 <section class="section intro">
@@ -164,22 +186,35 @@
 
                 $user = $_SESSION['username'];
 
-                $query0 = "SELECT * FROM agents WHERE username='$user'";
+                $query0 = "SELECT * FROM distributors WHERE username='$user'";
                 $result0 = mysqli_query($db, $query0);
                 
                 while($row = mysqli_fetch_array($result0, MYSQLI_NUM)){
                     $uid=$row[0];
-                    $uname=$row[1];
-                    $oname=$row[4]." ".$row[2]." ".$row[3];
-                    $umail=$row[5];//mail
-                    $utel=$row[6];//tel
-                    $udate=$row[8];//date created
-                    $utime=$row[9];// time 
-                    $status =$row[10]; //status
+                    $distname=$row[1];
+                    $distoname=$row[2];
+                    $distemail=$row[3];
+                    $distel=$row[4];
+                    $distlocation=$row[5];
+                    $dateadded=$row[6];
+                    $timeadded=$row[7];
+                    $description=$row[8];
+                    $status=$row[9];
+                    $accountStatus=$row[10];
+                    $lat=$row[11];
+                    $lng=$row[12];
+                    ;
                 }
             ?>
-            <table class="container">
+            <table class="container table-striped ">
                 <thead>
+                  <thead class="thead-light">
+                    <tr style="background-color:rgba(10,200,10,0.5); height:50px;">
+                      <th scope="col" colspan="2">SUMMARY</th>
+                      <td>Account : <b><?=$accountStatus?></b></td>
+                      <td>Operational Status:<b><?=$status?><b></td>
+                    </tr>
+                  </thead>
                     <tr>
                         <th scope="col">Avatar</th>
                         <th scope="col"><th>
@@ -191,24 +226,28 @@
                     <td style="width: 90px;"><img src="images/avatar.png" style="width:150px; height:150px;"></td>
                     <td><b>
                       <label>ID</label><br>
-                      <label>Username </label><br>
-                      <label>Other Names</label><br>
+                      <label>Dist. Name </label><br>
+                      <label>Personel Names</label><br>
                       <label>Email </label><br>
                       <label>Tel No </label><br>
               </b>
                     </td>
                     <td>
                         <label><?php echo $uid; ?></label><br>
-                        <label><?php echo $uname; ?></label><br>
-                        <label><?php echo $oname; ?></label><br>
-                        <label><?php echo $umail; ?></label><br>
-                        <label><?php echo $utel; ?></label><br>
+                        <label><?php echo $distname; ?></label><br>
+                        <label><?php echo $distoname; ?></label><br>
+                        <label><?php echo $distemail; ?></label><br>
+                        <label><?php echo $distel; ?></label><br>
                     </td>
                     <td>
-                        <label><b>Signup Date: </b>&nbsp;&nbsp;<?php echo $udate; ?></label><br>
-                        <label><b>Signup Time: </b>&nbsp;&nbsp;<?php echo $utime; ?></label><br>
+                        <label><b>Location: </b>&nbsp;&nbsp;<?php echo $distlocation; ?></label><br>
+                        <label><b>Signup Date: </b>&nbsp;&nbsp;<?php echo $dateadded; ?></label><br>
+                        <label><b>Signup Time: </b>&nbsp;&nbsp;<?php echo $timeadded; ?></label><br>
                     </td>
                 </tr>
+                <tr>
+                  <td colspan="4"><b> Summary info</b><br><?=$description?><td>
+                <tr>
             </table>
       </div>
   </div>
@@ -217,111 +256,85 @@
     <h2>MY TASK REPORTS</h2> 
     <!-- Tab links -->
     <div class="tab">
-    <button class="tablinks" onclick="openCity(event, 'Pendingtasks')">Pending Tasks</button>
-    <button class="tablinks" onclick="openCity(event, 'Completed')">Completed Tasks</button>
-    <button class="tablinks" onclick="openCity(event, 'Remarks')">Task Remarks</button>
+    <button class="tablinks" onclick="openCity(event, 'UpdateProfile')">Update Profile</button>
+    <!-- <button class="tablinks" onclick="openCity(event, 'Completed')">Completed Tasks</button>
+    <button class="tablinks" onclick="openCity(event, 'Remarks')">Task Remarks</button> -->
     </div>
 
     <!-- Tab content -->
-    <div id="Pendingtasks" class="tabcontent">
-    <h3>Pending Tasks</h3>
-    <p>the following are the tasks you are yet to complete.</p>
-    <table class="table table-bordered">
-      <thead>
-        <tr>
-          <th scope="col">T. ID </th>
-          <th scope="col">T. Dept</th>
-          <th scope="col">Distributor Name</th>
-          <th scope="col">Task Description</th>
-          <th scope="col">Date & Time Assigned</th>
-          <th scope="col">ACTION</th>
-        </tr>
-      </thead>
-      <tbody>
-        <!-- [ LOOP THE REGISTERED AGENTS ] -->
-        <?php
-
-          $agent = $_SESSION['username'];
-          $sql = "SELECT * FROM tasks WHERE agent='$agent' AND status='PENDING'";
-          $result = mysqli_query($db, $sql);
-          while($row = mysqli_fetch_array($result, MYSQLI_NUM))
-          {	
-          
-              echo '<tr>';
-                  echo '<td>'.$row[0].'</td> '; //TASKID
-                  echo '<td>'.$row[3].'</td> '; //DEPERTMENT / CATEGORY
-                  echo '<td>'.$row[2].'</td> '; //DISTRIBUTOR
-                  echo '<td>'.$row[4].'</td> '; //DESCRIPTION
-                  echo '<td>'.$row[5]." ".$row[6].'</td> '; //DATE TIME ASSIGNRD
-                  echo '<td><button class="btn btn-secondary">DO IT !</button></td> '; //EMAIL
-              echo '</tr>';
-          }
+    <div id="UpdateProfile" class="tabcontent">
+      <h3>Update Profile</h3>
+      <p>Fill in the following details</p>
+      <style>
+        .error {
+            width: 100%; 
+            margin: 0px auto; 
+            padding: 10px; 
+            border: 1px solid #a94442; 
+            color: #a94442; 
+            background: #f2dede; 
+            border-radius: 5px; 
+            text-align: left;
+        }
+      </style>
+        
+        <?php require('errors.php'); ?>
+        <?php 
+          $resultz = mysqli_query($db,"SELECT * FROM distributors WHERE id='$uid'");
+          $rowz= mysqli_fetch_array($resultz);
         ?>
-      </tbody>
-    </table>
-    
+				<form class="form" action="profile.php" method="post">
+					<div class="form-group">
+            <div class="col-xs-6">
+                <label for="distoname"><h4>Names of owner</h4></label>
+                <input type="text" class="form-control" name="distoname" id="distoname" placeholder="eg john doe" value="<?php echo $rowz['distoname']; ?>" required>
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-xs-6">
+                <label for="distemail "><h4>Email</h4></label>
+                <input type="email" class="form-control" name="distemail" id="distemail" value="<?php echo $rowz['distemail']; ?>" required>
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-xs-6">
+                <label for="distel"><h4>Phone</h4></label>
+                <input type="text" class="form-control" name="distel" id="distel" placeholder="07XX XXX XXX" value="<?php echo $rowz['distel']; ?>" required>
+            </div>
+        </div>
+  
+        <div class="form-group">	
+            <div class="col-xs-6">
+                <label for="distlocation"><h4>Location</h4></label>
+                <input type="text" class="form-control" name="distlocation" id="distlocation" value="<?php echo $rowz['distlocation'];?>" required>
+            </div>
+        </div>
 
+        <div class="form-group">
+            <div class="col-xs-6">
+                <label for="description"><h4>Brief description</h4></label>
+                <textarea type="email" class="form-control" name="description" id="description" placeholder="insert a brief description partaining your distribution" value="<?php echo $rowz['description'];?>" required></textarea>
+            </div>
+        </div>
+
+
+        <div class="form-group">
+            <input type="text" id="lat" name="lat" style="opacity: 0.2;" readonly/>
+            <input type="text" id="lng" name="lng" style="opacity: 0.2;" readonly/>
+            <input type="text" id="uid" name="uid" style="opacity: 0.3;" value="<?=$uid?>" readonly/>
+        </div>
+
+        <div class="form-group">
+            <div class="col-xs-12">
+                <br>
+                <button class="btn btn-lg btn-success" type="submit" name="update_dist" style="width:98%;"><i class="glyphicon glyphicon-ok-sign"></i> UPDATE DISTRIBUTION PROFILE</button>
+            </div>
+        </div>
+  
     </div>
-
-    <div id="Completed" class="tabcontent">
-    <h3>Completed Tasks</h3>
-    <p>Tasks That you filled as complete</p>
-
-    <table class="table table-bordered">
-			<thead>
-				<tr>
-				<th scope="col">T. ID </th>
-				<th scope="col">T. Dept</th>
-				<th scope="col">Distributor Name</th>
-				<th scope="col">Task Description</th>
-        <th scope="col">Date & Time Assigned</th>
-        <th scope="col">Status</th>
-				<th scope="col">ACTION</th>
-				</tr>
-			</thead>
-			<tbody>
-				<!-- [ LOOP THE REGISTERED AGENTS ] -->
-				<?php
-				$agent = $_SESSION['username'];
-				$sql = "SELECT * FROM tasks WHERE agent='$agent' AND status='AWAITING APPROVAL' OR status='COMPLETED'";
-				$result = mysqli_query($db, $sql);
-				while($row = mysqli_fetch_array($result, MYSQLI_NUM))
-				{	
-				
-					echo '<tr>';
-						echo '<td>'.$row[0].'</td> '; //TASKID
-						echo '<td>'.$row[3].'</td> '; //DEPERTMENT / CATEGORY
-						echo '<td>'.$row[2].'</td> '; //DISTRIBUTOR
-						echo '<td>'.$row[4].'</td> '; //DESCRIPTION
-            echo '<td>'.$row[5]." ".$row[6].'</td> '; //DATE TIME ASSIGNRD
-            echo '<td>'.$row[10].'</td> '; //TASK status
-						echo '<td><button class="btn btn-secondary">DO IT !</button></td> '; //EMAIL
-					echo '</tr>';
-				}
-				?>
-			</tbody>
-    		</table>
-    </table>
-
-    </div>
-
-    <div id="Remarks" class="tabcontent">
-        <h3>Supervisor Remarks </h3>
-        <p>Remarks on submitted tasks</p>
-    </div> 
     
 	</div>
 </section>
-
-<!-- Section Intro END -->
-<!-- Section About Start -->
-
-
-<!-- Section About End -->
-
-<!--  Section Services Start -->
-
-<!--  Section Services End -->
 
 <!-- footer Start -->
 <footer class="footer section">
