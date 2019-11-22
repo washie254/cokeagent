@@ -259,11 +259,65 @@
 		</tbody>
 		</table>
     </div>
+	<?php
+		$sql = "SELECT * FROM distributors ORDER BY accountStatus, status ASC ";
+		$result = mysqli_query($db, $sql);
+		$totalcount=0;
+		$approved=0;
+		$rejected=0;
+		$pending=0;
+		$active=0;
+		$innactive=0;
+		while($row = mysqli_fetch_array($result, MYSQLI_NUM))
+		{	
+			if($row[10]=='APPROVED'){
+				$approved = $approved+1;
+			}
+			if($row[10]=='REJECTED'){
+				$rejected = $rejected+1;
+			}
+			if($row[10]=='PENDING'){
+				$pending = $pending+1;
+			}
+			if($row[9]=='ACTIVE'){
+				$active = $active +1;
+			}
+			if($row[9]=='INNACTIVE'){
+				$innactive =$innactive +1;
+			}
+			$totalcount = $totalcount+1;
+
+		}
+	?>
 
     <div id="Departments" class="tabcontent">
-        <h3>Distributors Summary</h3>
-        <p>Summary of the Distributor Accounts</p>
-        <table class="table table-bordered">
+        <h3>Distributors Summary | Highlights</h3>
+        <p>
+		<table class="table table-bordered table-dark">
+          <thead>
+            <tr>
+              <th scope="col">Total Accounts</th>
+              <th scope="col">Approved Acounts</th>
+              <th scope="col">Rejected Accounts</th>
+              <th scope="col">Pending Approval.</th>
+              <th scope="col">Active</th>
+              <th scope="col">Innactive</th>
+            </tr>
+          </thead>
+          <tbody>
+		  	<tr>
+			  <th scope="col"><?=$totalcount?></th>
+              <th scope="col"><?=$approved?></th>
+              <th scope="col"><?=$rejected?></th>
+              <th scope="col"><?=$pending?></th>
+              <th scope="col"><?=$active?></th>
+              <th scope="col"><?=$innactive?></th>
+            </tr>
+		  </tbody>
+		  </table>
+		</p>
+		<p></p>
+        <table class="table table-bordered table-striped">
           <thead>
             <tr>
               <th scope="col">#id</th>
@@ -274,17 +328,15 @@
               <th scope="col">Location : Coords</th>
               <th scope="col">Account Status</th>
               <th scope="col">Operation Status</th>
-
-
             </tr>
           </thead>
           <tbody>
+		  </tbody>
             <?php
-              $sql = "SELECT * FROM distributors ";
-              $result = mysqli_query($db, $sql);
+              $sql = "SELECT * FROM distributors ORDER BY accountStatus, status ASC ";
+			  $result = mysqli_query($db, $sql);
               while($row = mysqli_fetch_array($result, MYSQLI_NUM))
               {	
-              
                   echo '<tr>';
                       echo '<td>'.$row[0].'</td> '; 
                       echo '<td>'.$row[1].'</td> '; 
@@ -371,7 +423,7 @@
 			</thead>
 			<tbody>
 				<?php
-				$sql = "SELECT * FROM distributors ";
+				$sql = "SELECT * FROM distributors WHERE accountStatus='REJECTED'";
 				$result = mysqli_query($db, $sql);
 				while($row = mysqli_fetch_array($result, MYSQLI_NUM))
 				{	

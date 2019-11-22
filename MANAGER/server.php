@@ -7,6 +7,7 @@
 	$errors = array(); 
 	$_SESSION['success'] = "";
 	$cdate = date("Y-m-d");
+	$ctime = date("h:s a");
 
 	// connect to database
 	$db = mysqli_connect('localhost', 'root', '', 'dkut_coke');
@@ -39,38 +40,6 @@
 		}
 	}
 	
-	
-
-	// ASSIGN A TASK TO AN AGENT
-	if (isset($_POST['add_task'])) {
-		$agentname = mysqli_real_escape_string($db, $_POST['agent']);
-		$distname = mysqli_real_escape_string($db, $_POST['distributor']);
-		$deptname = mysqli_real_escape_string($db, $_POST['dept']);
-		$description = mysqli_real_escape_string($db, $_POST['description']);
-		
-		$cdate = date("Y-m-d");
-		$ctime = date("h:i:s");
-		$tstatus = 'PENDING';
-
-		if (empty($description)){ array_push($errors, "You must enter a brief description of the task!"); }
-		
-		// register user if there are no errors in the form
-		if (count($errors) == 0) {
-			$query = "INSERT INTO tasks (agent, distributor, category, description, datecreated, timecreated, status )
-									VALUES('$agentname','$distname', '$deptname','$description','$cdate','$ctime', '$tstatus')";
-			$result = mysqli_query($db, $query);
-			if($result)
-				echo "<script type='text/javascript'>alert('Task Successfully assigned!')</script>";
-			else
-				echo "<script type'text/javascript'>alert('Something Went Wrong!!')</script>";
-			
-			header('location:ndex.php');
-			
-
-		}
-
-	}
-
 	if (isset($_POST['update_info'])) {
 		$fname = mysqli_real_escape_string($db, $_POST['fname']);
 		$lname = mysqli_real_escape_string($db, $_POST['lname']);
@@ -213,6 +182,11 @@
 						WHERE 
 						  	id='$distid' ";
 			$result = mysqli_query($db, $query);
+
+			$query0 ="INSERT INTO inventory (distributor, maxdasani, maxsoda, reorderdasani, reordersoda, minsoda, mindasani, currentdasani,currentsoda) 
+									VALUES ('$distid','0','0','0','0','0','0','0','0')";
+			mysqli_query($db, $query0);
+
 			if($result)
 				echo "<script type='text/javascript'>alert('Manager Deactivated successfully!')</script>";
 			else
@@ -313,4 +287,30 @@
 		}
 
 	}
+
+	
+	// Allocate Inventory Task to agent
+	if (isset($_POST['allocate_inventory'])) {
+		$agentid = mysqli_real_escape_string($db, $_POST['agentid']);
+		$agentname = mysqli_real_escape_string($db, $_POST['agentname']);
+		$distid = mysqli_real_escape_string($db, $_POST['distid']);
+		$instructions = mysqli_real_escape_string($db, $_POST['instructions']);
+		$tstatus = 'PENDING';
+		
+		// register user if there are no errors in the form
+		if (count($errors) == 0) {
+			$query = "INSERT INTO tasks (agentid, agent, distributor, description, datecreated, timecreated, status)
+							VALUES('$agentid','$agentname', '$distid','$instructions','$cdate','$ctime', '$tstatus')";
+			$result = mysqli_query($db, $query);
+			if($result)
+				echo "<script type='text/javascript'>alert('Task Successfully assigned!')</script>";
+			else
+				echo "<script type'text/javascript'>alert('Something Went Wrong!!')</script>";
+			
+			header('location:allocatetasks.php');
+			
+		}
+
+	}
+
 ?>

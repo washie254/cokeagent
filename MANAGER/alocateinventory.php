@@ -1,7 +1,8 @@
 <?php include('server.php'); ?>
 <?php 
-   if (isset($_GET['id'])){
+   if (isset($_GET['id']) && $_GET['agentname']){
         $agentid = $_GET['id'];
+        $agentname=$_GET['agentname'];
     }
 
   //session_start(); 
@@ -42,79 +43,6 @@
   <link rel="stylesheet" href="css/style.css">
 </head>
 
-<!-- tabs -->
-<style>
-  /* Style the tab */
-  .tab {
-  overflow: hidden;
-  border: 1px solid #ccc;
-  background-color: #f1f1f1;
-  }
-
-  /* Style the buttons that are used to open the tab content */
-  .tab button {
-  background-color: inherit;
-  float: left;
-  border: none;
-  outline: none;
-  cursor: pointer;
-  padding: 14px 16px;
-  transition: 0.3s;
-  }
-
-  /* Change background color of buttons on hover */
-  .tab button:hover {
-  background-color: #ddd;
-  }
-
-  /* Create an active/current tablink class */
-  .tab button.active {
-  background-color: #ccc;
-  }
-
-  /* Style the tab content */
-  .tabcontent {
-  display: none;
-  padding: 6px 12px;
-  border: 1px solid #ccc;
-  border-top: none;
-  } 
-
-  .error {
-	width: 100%; 
-	margin: 0px auto; 
-	padding: 10px; 
-	border: 1px solid #a94442; 
-	color: #a94442; 
-	background: #f2dede; 
-	border-radius: 5px; 
-	text-align: left;
-}
-</style>
-<script>
-  function openCity(evt, cityName) {
-    // Declare all variables
-    var i, tabcontent, tablinks;
-
-    // Get all elements with class="tabcontent" and hide them
-    tabcontent = document.getElementsByClassName("tabcontent");
-    for (i = 0; i < tabcontent.length; i++) {
-      tabcontent[i].style.display = "none";
-    }
-
-    // Get all elements with class="tablinks" and remove the class "active"
-    tablinks = document.getElementsByClassName("tablinks");
-    for (i = 0; i < tablinks.length; i++) {
-      tablinks[i].className = tablinks[i].className.replace(" active", "");
-    }
-
-    // Show the current tab, and add an "active" class to the button that opened the tab
-    document.getElementById(cityName).style.display = "block";
-    evt.currentTarget.className += " active";
-  } 
-</script>
-<!-- tabs -->
-
 <body>
 
 
@@ -146,46 +74,52 @@
 </header>
 
 <!-- Header Close --> 
-
 <div class="main-wrapper ">
 
 <section class="section intro">
 	<div class="container">
 
-    <!-- // get the manager details ::: -->
-    <?php 
-        // $user = $_SESSION['username'];
-        $query0 = "SELECT * FROM agents WHERE id='$agentid' ";
-        $result0 = mysqli_query($db, $query0);
-
-        while($row = mysqli_fetch_array($result0, MYSQLI_NUM)){
-            // $styid = $row[0];
-            $agentusername = $row[1];
-            $agentemail = $row[5];
-            $agentdateadded = $row[8];
-            
-        }
-    ?>
-    <h2>Re- Activate [ <b> <span style="color:green;"><?=$agentusername?></span> </b> ]</h2> 
-    <hr><br>
-       
+    <h2>Assign <b> <span style="color:green;"><?=$agentname?></span> </b> ]</h2> 
+      <p><b>NB:</b> Only distributors who are yet to be allocated an agent will appear in the selection field</p>
        <div style="padding: 6px 12px; border: 1px solid #ccc;">
-        <h3>Give reason for reactivating <span style="color:green;"><?=$agentusername?></span></h3>
-        <p>Kindly provide a brief reason for reactivating agent</p>
-        <form method="post" action="activateagent.php">
-          <?php include('errors.php'); ?>
+       <form method="post" action="alocateinventory.php">
+            <div class="form-group">
+              <label for="exampleInputPassword1">Agentid</label>
+              <input type="text" class="form-control" name="agentid"  value="<?=$agentid?>" required readonly/>
+            </div>
+            <div class="form-group">
+              <label for="exampleInputPassword1">Agent name</label>
+              <input type="text" class="form-control" name="agentname"  value="<?=$agentname?>" required readonly/>
+		    </div>
+			  <div class="form-group">
+              <label for="selectdistributor">Select Distributor</label>
+				<?php                 
+					$result = $db->query("SELECT id, distname, distlocation FROM distributors WHERE status='ACTIVE' AND accountStatus='APPROVED'");
+					echo "<select class='form-control' name='distid'>";
+						while ($row = $result->fetch_assoc()) {
+						unset($id, $name);
+						$id = $row['id'];
+						$distname = $row['distname']; 
+                        $distlocation = $row['distlocation'];
+                        
+                        $sql_u = "SELECT * FROM tasks WHERE distributor='$id' AND	status ='PENDING'";
+                        $res_u = mysqli_query($db, $sql_u);
+                        if (mysqli_num_rows($res_u) > 0) { 
+                           
+                        }else{
+                            echo '<option value="'.$id.'">'.$distname." : ".$distlocation.'</option>';      
+                        }
+                    }
+					echo "</select>";
+				?>
+		  	</div>
+		  
+		  <div class="form-group">
+              <label for="exampleInputPassword1">Instructionst</label>
+              <textarea type="text" class="form-control" name="instructions"  placeholder="Some Brief Instructions" required></textarea>
+		  </div>
 
-          <div class="form-group">
-              <input name="agentid" value="<?=$agentid?>" style="opacity:0;"><br>
-              <label for="exampleInputEmail1">Man..............#: <span style="color:green;"><?=$agentid?></span> </label><br>
-              <label for="exampleInputEmail1">Username: <span style="color:green;"><?=$agentusername?></span></label><br>
-              <label for="exampleInputEmail1">Email..............: <span style="color:green;"><?=$agentemail?></span></label><br>
-          </div>
-          <div class="form-group">
-              <label for="exampleInputPassword1">Provide Reason for reactivating</label>
-              <textarea type="text" class="form-control" name="reason"  placeholder="Give some brief reason for reactivating agent" ></textarea>
-          </div>
-          <button type="submit" class="btn btn-success" name="activate_agent" style="width:100%;"><b>ACTIVATE AGENT</b></button>
+          <button type="submit" class="btn btn-success" name="allocate_inventory" style="width:100%;"><b>ALLOCATE TASK</b></button>
         </form>
       </div>
 	</div>
