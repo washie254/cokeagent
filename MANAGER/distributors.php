@@ -37,7 +37,77 @@
   <!-- Main Stylesheet -->
   <link rel="stylesheet" href="css/style.css">
 </head>
+<style>
+  /* Style the tab */
+  .tab {
+  overflow: hidden;
+  border: 1px solid #ccc;
+  background-color: #f1f1f1;
+  }
 
+  /* Style the buttons that are used to open the tab content */
+  .tab button {
+  background-color: inherit;
+  float: left;
+  border: none;
+  outline: none;
+  cursor: pointer;
+  padding: 14px 16px;
+  transition: 0.3s;
+  }
+
+  /* Change background color of buttons on hover */
+  .tab button:hover {
+  background-color: #ddd;
+  }
+
+  /* Create an active/current tablink class */
+  .tab button.active {
+  background-color: #ccc;
+  }
+
+  /* Style the tab content */
+  .tabcontent {
+  display: none;
+  padding: 6px 12px;
+  border: 1px solid #ccc;
+  border-top: none;
+  } 
+
+  .error {
+	width: 100%; 
+	margin: 0px auto; 
+	padding: 10px; 
+	border: 1px solid #a94442; 
+	color: #a94442; 
+	background: #f2dede; 
+	border-radius: 5px; 
+	text-align: left;
+}
+</style>
+<script>
+  function openCity(evt, cityName) {
+    // Declare all variables
+    var i, tabcontent, tablinks;
+
+    // Get all elements with class="tabcontent" and hide them
+    tabcontent = document.getElementsByClassName("tabcontent");
+    for (i = 0; i < tabcontent.length; i++) {
+      tabcontent[i].style.display = "none";
+    }
+
+    // Get all elements with class="tablinks" and remove the class "active"
+    tablinks = document.getElementsByClassName("tablinks");
+    for (i = 0; i < tablinks.length; i++) {
+      tablinks[i].className = tablinks[i].className.replace(" active", "");
+    }
+
+    // Show the current tab, and add an "active" class to the button that opened the tab
+    document.getElementById(cityName).style.display = "block";
+    evt.currentTarget.className += " active";
+  } 
+</script>
+<!-- tabs -->
 <body>
 
 
@@ -92,8 +162,146 @@
 <!-- Header Close --> 
 
 <div class="main-wrapper ">
-
 <section class="section intro">
+	<div class="container">
+	<h2>Distributors Accounts</h2> 
+	<p>Here you can approve distributor accounts, reject distributor accounts. also you can activate and deactivate the 
+		approved distributor accounts
+    <!-- Tab links -->
+    <div class="tab">
+    <button class="tablinks" onclick="openCity(event, 'Activedistributors')">Active Distributors</button>
+    <button class="tablinks" onclick="openCity(event, 'Addagents')">Innactive Distributors</button>
+    <button class="tablinks" onclick="openCity(event, 'Departments')">Distributors</button>
+    </div>
+
+    <!-- Tab content -->
+    <div id="Activedistributors" class="tabcontent">
+    <h3>Active Distributors</h3>
+    <p>the following are the distributors whoes accounts are approved and are active </p>
+    <table class="table table-bordered">
+		<thead>
+			<tr>
+			<th scope="col">#id</th>
+			<th scope="col">Disttname</th>
+			<th scope="col">User</th>
+			<th scope="col">Email.</th>
+			<th scope="col">Telephone</th>
+			<th scope="col">Location : Coords</th>
+			<th scope="col">Account Status</th>
+			<th scope="col">Operation Status</th>
+			<th scope="col">Action</th>
+			</tr>
+		</thead>
+		<tbody>
+			<?php
+			$sql = "SELECT * FROM distributors WHERE status='ACTIVE'";
+			$result = mysqli_query($db, $sql);
+			while($row = mysqli_fetch_array($result, MYSQLI_NUM))
+			{	
+				echo '<tr>';
+					echo '<td>'.$row[0].'</td> '; 
+					echo '<td>'.$row[1].'</td> '; 
+					echo '<td>'.$row[2].'</td> '; 
+					echo '<td>'.$row[3].'</td> '; 
+					echo '<td>'.$row[4].'</td> ';
+					echo '<td>'.$row[6]." :<br>".$row[11].", ".$row[12].'</td> ';
+					echo '<td>'.$row[10].'</td> '; 
+					echo '<td>'.$row[9].'</td> '; 
+					echo '<td>
+							<a href="deactivatedist.php?id='.$row[0].'"><strong><button type="button" class="btn btn-danger">Deactivate</button>
+						</td> ';
+				echo '</tr>';
+			}
+			?>
+		</tbody>
+		</table>
+    </div>
+
+    <div id="Addagents" class="tabcontent">
+    <h3>Innactive Distributors</h3>
+    <p>The distribuors whoes accounts are approve but are innactive</p>
+
+    <table class="table table-bordered">
+		<thead>
+			<tr>
+			<th scope="col">#id</th>
+			<th scope="col">Disttname</th>
+			<th scope="col">User</th>
+			<th scope="col">Email.</th>
+			<th scope="col">Telephone</th>
+			<th scope="col">Location : Coords</th>
+			<th scope="col">Account Status</th>
+			<th scope="col">Operation Status</th>
+			<th scope="col">Status</th>
+			</tr>
+		</thead>
+		<tbody>
+			<?php
+			$sql = "SELECT * FROM distributors WHERE status='INNACTIVE' AND accountStatus='APPROVED' ";
+			$result = mysqli_query($db, $sql);
+			while($row = mysqli_fetch_array($result, MYSQLI_NUM))
+			{	
+				echo '<tr>';
+					echo '<td>'.$row[0].'</td> '; 
+					echo '<td>'.$row[1].'</td> '; 
+					echo '<td>'.$row[2].'</td> '; 
+					echo '<td>'.$row[3].'</td> '; 
+					echo '<td>'.$row[4].'</td> ';
+					echo '<td>'.$row[6]." :<br>".$row[11].", ".$row[12].'</td> ';
+					echo '<td>'.$row[10].'</td> '; 
+					echo '<td>'.$row[9].'</td> '; 
+					echo '<td>
+							<a href="activatedist.php?id='.$row[0].'"><strong><button type="button" class="btn btn-success">Activate</button>
+						</td> ';
+				echo '</tr>';
+			}
+			?>
+		</tbody>
+		</table>
+    </div>
+
+    <div id="Departments" class="tabcontent">
+        <h3>Distributors Summary</h3>
+        <p>Summary of the Distributor Accounts</p>
+        <table class="table table-bordered">
+          <thead>
+            <tr>
+              <th scope="col">#id</th>
+              <th scope="col">Disttname</th>
+              <th scope="col">User</th>
+              <th scope="col">Email.</th>
+              <th scope="col">Telephone</th>
+              <th scope="col">Location : Coords</th>
+              <th scope="col">Account Status</th>
+              <th scope="col">Operation Status</th>
+
+
+            </tr>
+          </thead>
+          <tbody>
+            <?php
+              $sql = "SELECT * FROM distributors ";
+              $result = mysqli_query($db, $sql);
+              while($row = mysqli_fetch_array($result, MYSQLI_NUM))
+              {	
+              
+                  echo '<tr>';
+                      echo '<td>'.$row[0].'</td> '; 
+                      echo '<td>'.$row[1].'</td> '; 
+                      echo '<td>'.$row[2].'</td> '; 
+                      echo '<td>'.$row[3].'</td> '; 
+                      echo '<td>'.$row[4].'</td> ';
+                      echo '<td>'.$row[6]." :<br>".$row[11].", ".$row[12].'</td> ';
+                      echo '<td>'.$row[10].'</td> '; 
+                      echo '<td>'.$row[9].'</td> '; 
+                  echo '</tr>';
+              }
+            ?>
+          </tbody>
+        </table>
+
+    </div> 
+    <div></div><br>
 	<div style="padding: 6px 12px; border: 2px solid #ccc;">
 	<div class="container">
     <h2>Distributors pending approval</h2> 
@@ -117,7 +325,7 @@
 			</thead>
 			<tbody>
 				<?php
-				$sql = "SELECT * FROM distributors ";
+				$sql = "SELECT * FROM distributors  WHERE accountStatus='PENDING'";
 				$result = mysqli_query($db, $sql);
 				while($row = mysqli_fetch_array($result, MYSQLI_NUM))
 				{	
@@ -145,7 +353,7 @@
 	<br>
 	<div style="padding: 6px 12px; border: 1px solid #ccc;">
 	<div class="container">
-    <h2>Distributors pending approval</h2> 
+    <h2>Rejected Distributor Accounts</h2> 
         <p>The following are distributor accounts pending approval</p>
         <div style="padding: 6px 12px; border: 1px solid #ccc;">
 			<table class="table table-bordered">
