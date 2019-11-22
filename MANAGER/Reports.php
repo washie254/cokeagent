@@ -95,80 +95,96 @@
 
 <section class="section intro">
 	<div class="container">
-		<P><h2>Dashboard Highlights</h2></p>
-		<div id="Pendingtasks" class="tabcontent" style="padding: 6px 12px; border: 1px solid #ccc;">
-			<h3>OverView</h3>
-			<p>Higlights of the Tasks that can be performed.</p>
-			
-			<div class="row">
-			<div class="col-xl-3 col-sm-6 mb-3">
-				<div class="card text-white bg-primary o-hidden h-100">
-					<div class="card-body">
-						<div class="card-body-icon">
-						<i class="fas fa-fw fa-list"></i>
-						</div>
-						<div class="mr-5">Allocating  Tasks</div>
-					</div>
-					<a class="card-footer text-white clearfix small z-1" href="allocatetasks.php">
-						<span class="float-left">Allocate Tasks to Agents</span>
-						<span class="float-right">
-						<i class="fas fa-angle-right"></i>
-						</span>
-					</a>
-				</div>
-			</div>
-			<div class="col-xl-3 col-sm-6 mb-3">
-				<div class="card text-white bg-warning o-hidden h-100">
-					<div class="card-body">
-						<div class="card-body-icon">
-						<i class="fas fa-fw fa-qrcode"></i>
-						</div>
-						<div class="mr-5">Reviewing Allocated Tasks</div>
-					</div>
-					<a class="card-footer text-white clearfix small z-1" href="allocated.php">
-						<span class="float-left">View Allocated Tasks</span>
-						<span class="float-right">
-						<i class="fas fa-angle-right"></i>
-						</span>
-					</a>
-				</div>
-			</div>
-			<div class="col-xl-3 col-sm-6 mb-3">
-				<div class="card text-white bg-success o-hidden h-100">
-					<div class="card-body">
-						<div class="card-body-icon">
-						<i class="fas fa-fw fa-users"></i>
-						</div>
-						<div class="mr-5">Approving Fistributor Accounts <b></b></div>
-					</div>
-					<a class="card-footer text-white clearfix small z-1" href="distributors.php">
-						<span class="float-left">Approve Distributor Accounts</span>
-						<span class="float-right">
-						<i class="fas fa-angle-right"></i>
-						</span>
-					</a>
-				</div>
-			</div>
-			<div class="col-xl-3 col-sm-6 mb-3">
-				<div class="card text-white bg-danger o-hidden h-100">
-					<div class="card-body">
-						<div class="card-body-icon">
-						<i class="fas fa-fw fa-book"></i>
-						</div>
-						<div class="mr-5">General Reports !</div>
-					</div>
-					<a class="card-footer text-white clearfix small z-1" href="reports.php">
-						<span class="float-left">View reports</span>
-						<span class="float-right">
-						<i class="fas fa-angle-right"></i>
-						</span>
-					</a>
-				</div>
-			</div>
-			</div>
-				
-    	</div>
-	</div>
+    <h2>General Reports</h2> 
+    <!-- Tab links -->
+    <div class="tab">
+    <a href="#agents"><button class="btn btn-success">Agents</button></a>
+    <a href="#distributors"><button class="btn btn-primary">Distributors</button></a>
+    </div>
+
+    <!-- Tab content -->
+    <div id="agents" class="tabcontent">
+    <h3>General Agent Reports</h3>
+    <p>The following are the general Agents Reports </p>
+    <table class="table table-bordered table-striped">
+      <thead>
+        <tr>
+          <th scope="col">ID </th>
+          <th scope="col">Usrname : Other names</th>
+          <th scope="col">Telephone No</th>
+          <th scope="col">Email</th>
+          <th scope="col">Date Added</th>
+          <th scope="col">Current Status</th>
+          
+        </tr>
+      </thead>
+      <tbody>
+        <!-- [ LOOP THE REGISTERED AGENTS ] -->
+        <?php
+          
+          $sql = "SELECT * FROM agents";
+          $result = mysqli_query($db, $sql);
+          while($row = mysqli_fetch_array($result, MYSQLI_NUM))
+          {	
+          
+              echo '<tr>';
+                  echo '<td>'.$row[0].'</td> '; 
+                  echo '<td>'.$row[1]." :<br>".$row[3]." ".$row[4].'</td> '; 
+                  echo '<td>'.$row[6].'</td> '; 
+                  echo '<td>'.$row[5].'</td> '; 
+                  echo '<td>'.$row[8].'</td> '; 
+                  echo '<td>'.$row[10].'</td> ';
+              echo '</tr>';
+          }
+        ?>
+      </tbody>
+    </table>
+    
+
+    </div>
+    <br>
+    <div id="distributors" class="tabcontent">
+        <h3>Distributors Summary</h3>
+        <p>Summary of the Distributor Accounts</p>
+        <table class="table table-bordered">
+          <thead>
+            <tr>
+              <th scope="col">#id</th>
+              <th scope="col">Disttname</th>
+              <th scope="col">User</th>
+              <th scope="col">Email.</th>
+              <th scope="col">Telephone</th>
+              <th scope="col">Location : Coords</th>
+              <th scope="col">Account Status</th>
+              <th scope="col">Operation Status</th>
+
+
+            </tr>
+          </thead>
+          <tbody>
+            <?php
+              $sql = "SELECT * FROM distributors ";
+              $result = mysqli_query($db, $sql);
+              while($row = mysqli_fetch_array($result, MYSQLI_NUM))
+              {	
+              
+                  echo '<tr>';
+                      echo '<td>'.$row[0].'</td> '; 
+                      echo '<td>'.$row[1].'</td> '; 
+                      echo '<td>'.$row[2].'</td> '; 
+                      echo '<td>'.$row[3].'</td> '; 
+                      echo '<td>'.$row[4].'</td> ';
+                      echo '<td>'.$row[6]." :<br>".$row[11].", ".$row[12].'</td> ';
+                      echo '<td>'.$row[10].'</td> '; 
+                      echo '<td>'.$row[9].'</td> '; 
+                  echo '</tr>';
+              }
+            ?>
+          </tbody>
+        </table>
+
+    </div> 
+    
 </section>
 
 <!-- Section Intro END -->
