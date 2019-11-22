@@ -168,12 +168,12 @@
             $status=$row[9];
         }
     ?>
-    <h2>DEACTIVATE [ <b> <span style="color:green;"><?=$distname?></span> </b> ]</h2> 
+    <h2>APPROVE  <b> <span style="color:green;"><?=$distname?></span> </b> 's Account Application</h2> 
     <hr><br>
        
        <div style="padding: 6px 12px; border: 1px solid #ccc;">
-        <h3>Give reason for deactivating <span style="color:green;"><?=$distname?></span></h3>
-        <p>provide additional informattion if there's need</p>
+        <h3>Hihlights <span style="color:green;"><?=$distname?></span></h3>
+        <p>you can provide remarks for the distributor to be approved</p>
         <form method="post" action="approvedist.php">
           <?php include('errors.php'); 
                 $managerid = $_SESSION["username"];

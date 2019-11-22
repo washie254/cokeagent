@@ -1,7 +1,7 @@
 <?php include('server.php'); ?>
 <?php 
    if (isset($_GET['id'])){
-        $distributorid = $_GET['id'];
+        $distid = $_GET['id'];
     }
 
   //session_start(); 
@@ -146,7 +146,6 @@
 </header>
 
 <!-- Header Close --> 
-
 <div class="main-wrapper ">
 
 <section class="section intro">
@@ -155,38 +154,44 @@
     <!-- // get the manager details ::: -->
     <?php 
         // $user = $_SESSION['username'];
-        $query0 = "SELECT * FROM distributors WHERE id='$distributorid' ";
+        $query0 = "SELECT * FROM distributors WHERE id='$distid' ";
         $result0 = mysqli_query($db, $query0);
 
         while($row = mysqli_fetch_array($result0, MYSQLI_NUM)){
             // $styid = $row[0];
             $distname = $row[1];
-            $distuname = $row[4];
-            $mandateadded = $row[8];
-            
+            $distemail=$row[3];
+            $distel=$row[4];
+            $distlocation=$row[5];
+            $dateadded=$row[6];
+            $timeadded=$row[7];
+            $status=$row[9];
         }
     ?>
-    <h2>DEACTIVATE [ <b> <span style="color:red;"><?=$manusername?></span> </b> ]</h2> 
+    <h2>REJECT  <b> <span style="color:red;"><?=$distname?></span> </b> 's Application</h2> 
     <hr><br>
        
        <div style="padding: 6px 12px; border: 1px solid #ccc;">
-        <h3>Give reason for deactivating <span style="color:red;"><?=$manusername?></span></h3>
-        <p>Kindly provide a brief description as to why you are deactivting the managers</p>
-        <form method="post" action="deactivatemanager.php">
-          <?php include('errors.php'); ?>
-            <?php $admin =$_SESSION["username"];?>
-          <input name="admin" value="<?=$admin?>" style="opacity:0;">
+        <h3>Give reason for deactivating <span style="color:red;"><?=$distname?></span></h3>
+        <p>provide additional informattion if there's need</p>
+        <form method="post" action="approvedist.php">
+          <?php include('errors.php'); 
+                $managerid = $_SESSION["username"];
+          ?>
+          <input name="manager" value="<?=$manager?>" style="opacity:0;">
           <div class="form-group">
-              <input name="managerid" value="<?=$managerid?>" style="opacity:0;"><br>
-              <label for="exampleInputEmail1">Man..............#: <span style="color:green;"><?=$managerid?></span> </label><br>
-              <label for="exampleInputEmail1">Username: <span style="color:green;"><?=$manusername?></span></label><br>
-              <label for="exampleInputEmail1">Email..............: <span style="color:green;"><?=$manemail?></span></label><br>
+              <input name="distid" value="<?=$distid?>" style="opacity:0;"><br>
+              <label for="exampleInputEmail1">Dist..............#: <span style="color:red;"><?=$distid?></span> </label><br>
+              <label for="exampleInputEmail1">Distribution name: <span style="color:red;"><?=$distname?></span></label><br>
+              <label for="exampleInputEmail1">Email..............: <span style="color:red;"><?=$distemail?></span></label><br>
+              <label for="exampleInputEmail1">TEL..................: <span style="color:red;"><?=$distel?></span></label><br>
+              <label for="exampleInputEmail1">Location.........: <span style="color:red;"><?=$distlocation?></span></label><br>
           </div>
           <div class="form-group">
-              <label for="exampleInputPassword1">Provide Reason for deactivating</label>
-              <textarea type="text" class="form-control" name="reason"  placeholder="Give some brief reason for deactivating manager" ></textarea>
+              <label for="exampleInputPassword1">Provide Remarks for rejecting account</label>
+              <textarea type="text" class="form-control" name="remarks"  placeholder="give a brief reason for rejecting the Distributor account" ></textarea>
           </div>
-          <button type="submit" class="btn btn-danger" name="deactivate_manager" style="width:100%;"><b>DEACTIVATE MANAGER</b></button>
+          <button type="submit" class="btn btn-danger" name="reject_dist" style="width:100%;"><b>REJECT DISTRIBUTOR ACCOUNT</b></button>
         </form>
       </div>
 	</div>

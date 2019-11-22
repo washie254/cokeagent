@@ -223,6 +223,38 @@
 		}
 
 	}
+	//approve_dist
+	if (isset($_POST['reject_dist'])) {
+		$remarks = mysqli_real_escape_string($db, $_POST['remarks']);
+		$manager = mysqli_real_escape_string($db, $_POST['manager']);
+		$distid = mysqli_real_escape_string($db, $_POST['distid']);
+
+
+		$cdate = date("Y-m-d");
+		$status = 'REJECTED';
+
+		//if (empty($remarks )){ array_push($errors, "could not process agent identity !"); }
+	
+		if (count($errors) == 0) {
+			$query = "UPDATE distributors
+						SET
+							accountStatus = '$status',
+							manager = '$manager',
+							approvalremarks = '$remarks',
+							dapprovedrej='$cdate'
+						WHERE 
+						  	id='$distid' ";
+			$result = mysqli_query($db, $query);
+			if($result)
+				echo "<script type='text/javascript'>alert('Manager Deactivated successfully!')</script>";
+			else
+				echo "<script type'text/javascript'>alert('Something Went Wrong!!')</script>";
+			
+			header('location:distributors.php');
+
+		}
+
+	}
 
 	//DEACTIVATE A DISTRIBUTOR
 	if (isset($_POST['deact_dist'])) {
