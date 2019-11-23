@@ -155,7 +155,69 @@
     <div id="Merchandise" class="tabcontent">
     <h3>Marchandise distribution</h3>
     <p>You can allocate an agent to go hand out some marchanse to a distributor. </p>
-		//MARCHANDISE FORM
+	<form method="post" action="allocatetasks.php">
+		
+			<div class="form-group">
+              <label for="selectdistributor">Select Agent</label>
+				<?php                 
+					$result = $db->query("SELECT id, username  FROM agents WHERE status='ACTIVE'");
+					echo "<select class='form-control' name='agentid'>";
+						while ($row = $result->fetch_assoc()) {
+						unset($id, $name);
+						$id = $row['id'];
+						$username = $row['username']; 
+                        
+                        $sql_u = "SELECT * FROM marchandise WHERE agentid='$id' AND	status ='PENDING'";
+                        $res_u = mysqli_query($db, $sql_u);
+                        if (mysqli_num_rows($res_u) > 0) { 
+                           
+                        }else{
+                            echo '<option value="'.$id.'">'.$username.'</option>';      
+                        }
+                    }
+					echo "</select>";
+				?>
+		  	</div>
+			  <div class="form-group">
+              <label for="selectdistributor">Select Distributor</label>
+				<?php                 
+					$result = $db->query("SELECT id, distname, distlocation FROM distributors WHERE status='ACTIVE' AND accountStatus='APPROVED'");
+					echo "<select class='form-control' name='distid'>";
+						while ($row = $result->fetch_assoc()) {
+						unset($id, $name);
+						$id = $row['id'];
+						$distname = $row['distname']; 
+                        $distlocation = $row['distlocation'];
+                        
+                        $sql_u = "SELECT * FROM marchandise WHERE distributor='$id' AND	status ='PENDING'";
+                        $res_u = mysqli_query($db, $sql_u);
+                        if (mysqli_num_rows($res_u) > 0) { 
+                           
+                        }else{
+                            echo '<option value="'.$id.'">'.$distname." : ".$distlocation.'</option>';      
+                        }
+                    }
+					echo "</select>";
+				?>
+			  </div>
+			  	<div class="form-group">
+					<label for="exampleInputPassword1">Select Marchandise</label>
+					<select type="text" class="form-control" name="mername">
+						<option value="Fridge">Fridge</option>
+						<option value="T-shirts">T-shirts</option>
+						<option value="Keyholders">Keyholders</option>
+					</select>
+				</div>
+				<div class="form-group">
+					<label for="exampleInputPassword1">Number | Amount of marchandise</label>
+					<input type="number" class="form-control" name="amount" required/>
+				</div>
+				<div class="form-group">
+					<label for="exampleInputPassword1">Instructions</label>
+					<textarea type="text" class="form-control" name="instructions"  placeholder="Some Brief Instructions" required></textarea>
+				</div>
+          <button type="submit" class="btn btn-success" name="allocate_merchandise" style="width:100%;"><b>ALLOCATE Marchandise TASK</b></button>
+        </form>
     </div>
 	
     <div id="Higlights" class="tabcontent">
@@ -166,77 +228,10 @@
 	<div>
 	</div>
 	<br>
-			</section>
-<section class="section intro">
-  <div class="container">
-    <div style="padding: 6px 12px; border: 1px solid #ccc;">
-        <h3>Allocate a tak to Agents</h3>
-        <p> Fill in the followwing details to allocate tasks to Active agents registered in the  system</p>
-		<style>
-        .error {
-            width: 100%; 
-            margin: 0px auto; 
-            padding: 10px; 
-            border: 1px solid #a94442; 
-            color: #a94442; 
-            background: #f2dede; 
-            border-radius: 5px; 
-            text-align: left;
-        }
-      </style>
-        
-        <?php require('errors.php'); ?>
-		<form class="form" action="profile.php" method="post">
-			<div class="form-group">
-				<div class="col-xs-6">
-					<label for="distoname"><h4>Names of owner</h4></label>
-					<input type="text" class="form-control" name="distoname" id="distoname" placeholder="eg john doe" value="<?php echo $rowz['distoname']; ?>" required>
-				</div>
-        	</div>
-        	<div class="form-group">
-            	<div class="col-xs-6">
-					<label for="distemail "><h4>Email</h4></label>
-					<input type="email" class="form-control" name="distemail" id="distemail" value="<?php echo $rowz['distemail']; ?>" required>
-            	</div>
-        	</div>
-			<div class="form-group">
-				<div class="col-xs-6">
-					<label for="distel"><h4>Phone</h4></label>
-					<input type="text" class="form-control" name="distel" id="distel" placeholder="07XX XXX XXX" value="<?php echo $rowz['distel']; ?>" required>
-				</div>
-			</div>
-  
-			<div class="form-group">	
-				<div class="col-xs-6">
-					<label for="distlocation"><h4>Location</h4></label>
-					<input type="text" class="form-control" name="distlocation" id="distlocation" value="<?php echo $rowz['distlocation'];?>" required>
-				</div>
-			</div>
 
-			<div class="form-group">
-				<div class="col-xs-6">
-					<label for="description"><h4>Brief description</h4></label>
-					<textarea type="email" class="form-control" name="description" id="description" placeholder="insert a brief description partaining your distribution" value="<?php echo $rowz['description'];?>" required></textarea>
-				</div>
-			</div>
-
-
-			<div class="form-group">
-				<input type="text" id="lat" name="lat" style="opacity: 0.2;" readonly/>
-				<input type="text" id="lng" name="lng" style="opacity: 0.2;" readonly/>
-				<input type="text" id="uid" name="uid" style="opacity: 0.3;" value="<?=$uid?>" readonly/>
-			</div>
-
-			<div class="form-group">
-				<div class="col-xs-12">
-					<br>
-					<button class="btn btn-lg btn-success" type="submit" name="update_dist" style="width:98%;"><i class="glyphicon glyphicon-ok-sign"></i> UPDATE DISTRIBUTION PROFILE</button>
-				</div>
-			</div>
-		</form>
-    	</div>
-	</div>
+	<p>Only Agents without a task are selectable in the above fields
 </section>
+
 
 <!-- Section Intro END -->
 

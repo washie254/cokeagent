@@ -313,4 +313,29 @@
 
 	}
 
+	//alocate merchandise distribution 
+	if (isset($_POST['allocate_merchandise'])) {
+		$agentid = mysqli_real_escape_string($db, $_POST['agentid']);
+		$distid = mysqli_real_escape_string($db, $_POST['distid']);
+		$mernames = mysqli_real_escape_string($db, $_POST['mername']);
+		$amount = mysqli_real_escape_string($db, $_POST['amount']);
+		$instructions = mysqli_real_escape_string($db, $_POST['instructions']);
+		$tstatus = 'PENDING';
+		
+		// register user if there are no errors in the form
+		if (count($errors) == 0) {
+			$query = "INSERT INTO marchandise (marname, amount, distid, agentid, instructions, dateassigned,status)
+							VALUES('$mernames','$amount', '$distid','$agentid','$instructions','$cdate', '$tstatus')";
+			$result = mysqli_query($db, $query);
+			if($result)
+				echo "<script type='text/javascript'>alert('Task Successfully assigned!')</script>";
+			else
+				echo "<script type'text/javascript'>alert('Something Went Wrong!!')</script>";
+			
+			header('location:allocatetasks.php');
+			
+		}
+
+	}
+
 ?>
