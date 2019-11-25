@@ -114,7 +114,7 @@
 		  	</div>
 		  
 		  <div class="form-group">
-              <label for="exampleInputPassword1">Instructionst</label>
+              <label for="exampleInputPassword1">Instructions</label>
               <textarea type="text" class="form-control" name="instructions"  placeholder="Some Brief Instructions" required></textarea>
 		  </div>
 

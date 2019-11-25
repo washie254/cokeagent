@@ -184,7 +184,7 @@
           </div>
           <div class="form-group">
               <label for="exampleInputPassword1">Provide Reason for Reactivating </label>
-              <textarea type="text" class="form-control" name="reason"  placeholder="Give some brief reason for reactivating manager" ></textarea>
+              <textarea type="text" class="form-control" name="reason"  placeholder="Give some brief reason for reactivating manager" required></textarea>
           </div>
           <button type="submit" class="btn btn-success" name="reactivate_manager" style="width:100%;"><b>REACTIVATE MANAGER</b></button>
         </form>

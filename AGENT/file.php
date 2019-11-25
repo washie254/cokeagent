@@ -108,122 +108,83 @@
        
        <div style="padding: 6px 12px; border: 1px solid #ccc;">
         <h3>File Report</h3>
-        <p>fill in the necessary fields for filing the report</p>
 
+        <p>fill in the necessary fields for filing the report</p>
+        <div style="padding: 6px 12px; border: 1px solid #ccc;">
         <form method="post" action="file.php">
           <?php include('errors.php'); ?>
-          <?php
-            $query2 = "SELECT * FROM tasks WHERE id='$tid'";
-            $result2 = mysqli_query($db, $query2);
-            while($row = mysqli_fetch_array($result2, MYSQLI_NUM)){
-                $tid = $row[0]; // E ID 
-                $distributor= $row[2];
-                $category = $row[3]; 
-                $description = $row[4];
+            <?php
+                $query2 = "SELECT * FROM tasks WHERE id='$tid'";
+                $result2 = mysqli_query($db, $query2);
+                while($row = mysqli_fetch_array($result2, MYSQLI_NUM)){
+                    $tid = $row[0]; // E ID 
+                    $distributor= $row[3];
+                    $description = $row[4];
 
-            }
-        ?>
-          <div class="form-group">
-              <label for="taskinfo"><b>Task Info:</b></label><br>
-              <label for="other"><b>Task ID:</b> <?=$tid?> || <b>Category: </b><?=$category?> </label><br>
-              <label for="distributor"><b>Distributor:</b> <?=$distributor?></label>
-          </div>
+                }
+            ?>
+            <div class="form-group">
+              <label for="taskinfo"><b>Task Info:</b></label>&nbsp;&nbsp;
+              <label for="distributor"><b>Distributor:</b> <?=$distributor?></label>&nbsp;&nbsp;
+              <label for="distributor"><b>Manager Remarks:</b> <?=$description?></label>
+              <p>Collect the following details from the distributor</p>
+            </div>
 
-          <div class="form-group">
-              <label for="taskDescription">Task Description</label>
-              <textarea type="text" class="form-control" name="fname" placeholder="<?=$description?>" disabled></textarea>
-          </div>
+            <!-- <div class="form-group">
+                <label for="cratesinsystems">Crates in System</label>
+                <input type="number" class="form-control" name="syscrates" placeholder="45" disabled>
+            </div> -->
+            Current Levels:
+            <div class="form-row">
+                <div class="col">
+                    <input type="text" class="form-control" name="cdasani" placeholder="Current Level of Dasani" required>
+                </div>
+                <div class="col">
+                    <input type="text" class="form-control" name="csoda" placeholder="Current Level of Soda" required>
+                </div>
+            </div>
 
-          <?Php
-            if($category =='Soda'){
-                ?>
-                    <div class="form-group">
-                        <label for="cratesinsystems">Crates in System</label>
-                        <input type="number" class="form-control" name="syscrates" placeholder="45" disabled>
-                    </div>
+            Maximum Levels:
+            <br>
+            <div class="form-row">
+                <div class="col">
+                    <input type="text" class="form-control" name="maxdasani" placeholder="Dasani Max usage perday" required>
+                </div>
+                <div class="col">
+                    <input type="text" class="form-control" name="maxsoda" placeholder="Soda Max usage per day" required>
+                </div>
+            </div>
+            
+            Minimum Levels
+            <br>
+            <div class="form-row">
+                <div class="col">
+                    <input type="text" class="form-control" name="mindasani" placeholder="Dasani min usage perday" required>
+                </div>
+                <div class="col">
+                    <input type="text" class="form-control" name="minsoda" placeholder="Soda Min usage per day" required>
+                </div>
+            </div>
 
-                    <div class="form-group">
-                        <label for="crates">Current Crates</label>
-                        <input type="number" class="form-control" name="curcrates" placeholder="Current Number of Crates">
-                    </div>
+           Amount of quantities ordered
+            <br>
+            <div class="form-row">
+                <div class="col">
+                    <input type="text" class="form-control" name="dasaniorq" placeholder="Dasani Quantity Normally Ordered" required>
+                </div>
+                <div class="col">
+                    <input type="text" class="form-control" name="sodaorq"  placeholder="Dasani Quantity Normally Ordered" required>
+                </div>
+            </div>
 
-                    <div class="form-group">
-                        <label for="remarks">Remarks</label>
-                        <textarea type="text" class="form-control" name="remarks" placeholder="Give Remarks of the Distributor"></textarea>
-                    </div>
-
-                    <button type="submit" class="btn btn-success" name="filesoda" style="width:100%;"><b>File Report </b></button>
-
-                <?php
-            }
-            elseif($category =='Dasani'){
-                ?>
-                    <div class="form-group">
-                        <label for="cratesinsystems">Crates in System</label>
-                        <input type="number" class="form-control" name="syscrates" placeholder="45" disabled>
-                    </div>
-
-                    <div class="form-group">
-                        <label for="crates">Current Crates</label>
-                        <input type="number" class="form-control" name="curcrates" placeholder="Current Number of Dasani Crates">
-                    </div>
-
-                    <div class="form-group">
-                        <label for="remarks">Remarks</label>
-                        <textarea type="text" class="form-control" name="remarks" placeholder="Give Remarks of the Distributor"></textarea>
-                    </div>
-
-                    <button type="submit" class="btn btn-success" name="filedasani" style="width:100%;"><b>File Report </b></button>
-
-                <?php
-            }
-            elseif($category =='Merchandise'){
-                ?>
-                    <div class="form-group">
-                        <label for="crates">Marchandise Category</label>
-                        <select type="number" class="form-control" name="category">
-                            <option value="Fridge">Fridge</option>
-                            <option value="T-Shirts">T-Shirts</option>
-                            <option value="Keyholders">Keyholders</option>
-                        </select>
-                    </div>
-
-                    <div class="form-group">
-                        <label for="crates">Number of machandise Handed</label>
-                        <input type="number" class="form-control" name="machno" placeholder="Marchanise Handed">
-                    </div>
-
-                    <div class="form-group">
-                        <label for="crates">Remarks</label>
-                        <textarea type="text" class="form-control" name="remarks" placeholder="Remarks on the Distributor"></textarea>
-                    </div>
-
-                    <button type="submit" class="btn btn-success" name="filearchandise" style="width:100%;"><b>File Marchandise </b></button>
-
-                <?php
-            }
-            else{
-                ?>
-                    <h2>Couldn't Identisy The category of the Task !</h2>
-                <?php
-            }
-
-          ?>
+            <br>
+            <button type="submit" class="btn btn-success" name="fileinventory" ><b>File Report </b></button>
 
         </form>
+            </div>
       </div>
 	</div>
 </section>
-
-<!-- Section Intro END -->
-<!-- Section About Start -->
-
-
-<!-- Section About End -->
-
-<!--  Section Services Start -->
-
-<!--  Section Services End -->
 
 <!-- footer Start -->
 <footer class="footer section">

@@ -60,8 +60,8 @@
 			  <li class="nav-item active">
 				<a class="nav-link" href="index.php">Home <span class="sr-only">(current)</span></a>
 			  </li>
+			  <li class="nav-item"> <a class="nav-link" href="tasks.php">Tasks</a></li>
 			   <li class="nav-item"><a class="nav-link" href="profile.php">Pofile</a></li>
-
               <li style="float:right;" class="nav-link">
                 <!-- <i class="ti-user"> -->
                 <a href="#" style="color:Yellow"> <b>	
@@ -85,50 +85,66 @@
 
 <section class="section intro">
 	<div class="container">
-		<P><h2>TASKS ASSIGNED</h2></p>
+		<P><h2>Dashboard Highlights</h2></p>
 		<div id="Pendingtasks" class="tabcontent" style="padding: 6px 12px; border: 1px solid #ccc;">
-			<h3>Pending Tasks</h3>
-			<p>the following are the tasks you are yet to complete.</p>
-			<table class="table table-bordered">
-			<thead>
-				<tr>
-				<th scope="col">T. ID </th>
-				<th scope="col">T. Dept</th>
-				<th scope="col">Distributor Name</th>
-				<th scope="col">Task Description</th>
-				<th scope="col">Date & Time Assigned</th>
-				<th scope="col">Status</th>
-				<th scope="col">ACTION</th>
-				</tr>
-			</thead>
-			<tbody>
-				<!-- [ LOOP THE REGISTERED AGENTS ] -->
-				<?php
-
-				$agent = $_SESSION['username'];
-				$sql = "SELECT * FROM tasks WHERE agent='$agent' and status='PENDING'";
-				$result = mysqli_query($db, $sql);
-				while($row = mysqli_fetch_array($result, MYSQLI_NUM))
-				{	
+			<h3>OverView</h3>
+			<p>Higlights of the Tasks that can be performed.</p>
+			
+			<div class="row">
+			<div class="col-xl-3 col-sm-6 mb-3">
+				<div class="card text-white bg-primary o-hidden h-100">
+					<div class="card-body">
+						<div class="card-body-icon">
+						<i class="fas fa-fw fa-pen"></i>
+						</div>
+						<div class="mr-5">Allocated Tasks</div>
+					</div>
+					<a class="card-footer text-white clearfix small z-1" href="tasks.php">
+						<span class="float-left">View Allocaed Tasks</span>
+						<span class="float-right">
+						<i class="fas fa-angle-right"></i>
+						</span>
+					</a>
+				</div>
+			</div>
+			<div class="col-xl-3 col-sm-6 mb-3">
+				<div class="card text-white bg-success o-hidden h-100">
+					<div class="card-body">
+						<div class="card-body-icon">
+						<i class="fas fa-fw fa-user"></i>
+						</div>
+						<div class="mr-5">Account Information <b></b></div>
+					</div>
+					<a class="card-footer text-white clearfix small z-1" href="profile.php">
+						<span class="float-left">View Your Account</span>
+						<span class="float-right">
+						<i class="fas fa-angle-right"></i>
+						</span>
+					</a>
+				</div>
+			</div>
+			<div class="col-xl-3 col-sm-6 mb-3">
+				<div class="card text-white bg-danger o-hidden h-100">
+					<div class="card-body">
+						<div class="card-body-icon">
+						<i class="fas fa-fw fa-book"></i>
+						</div>
+						<div class="mr-5">General Reports !</div>
+					</div>
+					<a class="card-footer text-white clearfix small z-1" href="reports.php">
+						<span class="float-left">View reports</span>
+						<span class="float-right">
+						<i class="fas fa-angle-right"></i>
+						</span>
+					</a>
+				</div>
+			</div>
+			</div>
 				
-					echo '<tr>';
-						echo '<td>'.$row[0].'</td> '; //TASKID
-						echo '<td>'.$row[3].'</td> '; //DEPERTMENT / CATEGORY
-						echo '<td>'.$row[2].'</td> '; //DISTRIBUTOR
-						echo '<td>'.$row[4].'</td> '; //DESCRIPTION
-						echo '<td>'.$row[5]." ".$row[6].'</td> '; //DATE TIME ASSIGNRD
-						echo '<td>'.$row[10].'</td> '; //TASK STATUS
-						echo '<td>
-								<a href="file.php?id='.$row[0].'"><strong><button type="button" class="btn btn-success">File Report</button>
-							  </td> '; //EMAIL
-					echo '</tr>';
-				}
-				?>
-			</tbody>
-    		</table>
     	</div>
 	</div>
 </section>
+
 
 <!-- Section Intro END -->
 

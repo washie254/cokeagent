@@ -282,4 +282,38 @@
 		}
 
 	}
+
+	
+	if (isset($_POST['fileinventory'])) {
+		$agentname = mysqli_real_escape_string($db, $_POST['cdasani']);
+		$distname = mysqli_real_escape_string($db, $_POST['csoda']);
+		$deptname = mysqli_real_escape_string($db, $_POST['maxdasani']);
+		$description = mysqli_real_escape_string($db, $_POST['maxsoda']);
+		$deptname = mysqli_real_escape_string($db, $_POST['mindasani']);
+		$description = mysqli_real_escape_string($db, $_POST['minsoda']);
+		$deptname = mysqli_real_escape_string($db, $_POST['dasaniorq']);
+		$description = mysqli_real_escape_string($db, $_POST['sodaorq']);
+		
+		$cdate = date("Y-m-d");
+		$ctime = date("h:i:s");
+		$tstatus = 'PENDING';
+
+		if (empty($description)){ array_push($errors, "You must enter a brief description of the task!"); }
+		
+		// register user if there are no errors in the form
+		if (count($errors) == 0) {
+			$query = "INSERT INTO tasks (agent, distributor, category, description, datecreated, timecreated, status )
+									VALUES('$agentname','$distname', '$deptname','$description','$cdate','$ctime', '$tstatus')";
+			$result = mysqli_query($db, $query);
+			if($result)
+				echo "<script type='text/javascript'>alert('Task Successfully assigned!')</script>";
+			else
+				echo "<script type'text/javascript'>alert('Something Went Wrong!!')</script>";
+			
+			header('location:admin_index.php');
+			
+
+		}
+
+	}
 ?>

@@ -308,9 +308,7 @@
 				echo "<script type'text/javascript'>alert('Something Went Wrong!!')</script>";
 			
 			header('location:allocatetasks.php');
-			
 		}
-
 	}
 
 	//alocate merchandise distribution 
@@ -337,5 +335,7 @@
 		}
 
 	}
+
+	
 
 ?>

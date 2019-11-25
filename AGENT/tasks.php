@@ -1,12 +1,13 @@
-<?php include('server.php'); ?>
+
 <?php 
-  //session_start(); 
-  
+	include('server.php');
+	//session_start(); 
+
 	if (!isset($_SESSION['username'])) {
 		$_SESSION['msg'] = "You must log in first";
 		header('location: login.php');
-  }
-  
+	}
+
 	if (isset($_GET['logout'])) {
 		session_destroy();
 		unset($_SESSION['username']);
@@ -38,79 +39,6 @@
   <link rel="stylesheet" href="css/style.css">
 </head>
 
-<!-- tabs -->
-<style>
-  /* Style the tab */
-  .tab {
-  overflow: hidden;
-  border: 1px solid #ccc;
-  background-color: #f1f1f1;
-  }
-
-  /* Style the buttons that are used to open the tab content */
-  .tab button {
-  background-color: inherit;
-  float: left;
-  border: none;
-  outline: none;
-  cursor: pointer;
-  padding: 14px 16px;
-  transition: 0.3s;
-  }
-
-  /* Change background color of buttons on hover */
-  .tab button:hover {
-  background-color: #ddd;
-  }
-
-  /* Create an active/current tablink class */
-  .tab button.active {
-  background-color: #ccc;
-  }
-
-  /* Style the tab content */
-  .tabcontent {
-  display: none;
-  padding: 6px 12px;
-  border: 1px solid #ccc;
-  border-top: none;
-  } 
-
-  .error {
-	width: 100%; 
-	margin: 0px auto; 
-	padding: 10px; 
-	border: 1px solid #a94442; 
-	color: #a94442; 
-	background: #f2dede; 
-	border-radius: 5px; 
-	text-align: left;
-}
-</style>
-<script>
-  function openCity(evt, cityName) {
-    // Declare all variables
-    var i, tabcontent, tablinks;
-
-    // Get all elements with class="tabcontent" and hide them
-    tabcontent = document.getElementsByClassName("tabcontent");
-    for (i = 0; i < tabcontent.length; i++) {
-      tabcontent[i].style.display = "none";
-    }
-
-    // Get all elements with class="tablinks" and remove the class "active"
-    tablinks = document.getElementsByClassName("tablinks");
-    for (i = 0; i < tablinks.length; i++) {
-      tablinks[i].className = tablinks[i].className.replace(" active", "");
-    }
-
-    // Show the current tab, and add an "active" class to the button that opened the tab
-    document.getElementById(cityName).style.display = "block";
-    evt.currentTarget.className += " active";
-  } 
-</script>
-<!-- tabs -->
-
 <body>
 
 
@@ -132,10 +60,9 @@
 			<ul class="navbar-nav ml-auto">
 			  <li class="nav-item active">
 				<a class="nav-link" href="index.php">Home <span class="sr-only">(current)</span></a>
-        </li>
-        <li class="nav-item"> <a class="nav-link" href="tasks.php">Tasks</a></li>
+			  </li>
+			  <li class="nav-item"> <a class="nav-link" href="tasks.php">Tasks</a></li>
 			   <li class="nav-item"><a class="nav-link" href="profile.php">Pofile</a></li>
-
               <li style="float:right;" class="nav-link">
                 <!-- <i class="ti-user"> -->
                 <a href="#" style="color:Yellow"> <b>	
@@ -152,131 +79,69 @@
 		</div>
 	</nav>
 </header>
+
 <!-- Header Close --> 
 
 <div class="main-wrapper ">
 
 <section class="section intro">
-  <div class="container">
-    <div style="padding: 6px 12px; border: 1px solid #ccc;">
-        <h3>Profile Information</h3>
-        <p> your profile information is as follows</p>
-        <?php
-
-                $user = $_SESSION['username'];
-
-                $query0 = "SELECT * FROM agents WHERE username='$user'";
-                $result0 = mysqli_query($db, $query0);
-                
-                while($row = mysqli_fetch_array($result0, MYSQLI_NUM)){
-                    $uid=$row[0];
-                    $uname=$row[1];
-                    $oname=$row[4]." ".$row[2]." ".$row[3];
-                    $umail=$row[5];//mail
-                    $utel=$row[6];//tel
-                    $udate=$row[8];//date created
-                    $utime=$row[9];// time 
-                    $status =$row[10]; //status
-                }
-            ?>
-            <table class="container">
-                <thead>
-                    <tr>
-                        <th scope="col">Avatar</th>
-                        <th scope="col"><th>
-                        <th scope="col">Information</th>
-                    </tr>
-                    <hr>
-                </thead>
-                <tr style="width:200px;">
-                    <td style="width: 90px;"><img src="images/avatar.png" style="width:150px; height:150px;"></td>
-                    <td><b>
-                      <label>ID</label><br>
-                      <label>Username </label><br>
-                      <label>Other Names</label><br>
-                      <label>Email </label><br>
-                      <label>Tel No </label><br>
-              </b>
-                    </td>
-                    <td>
-                        <label><?php echo $uid; ?></label><br>
-                        <label><?php echo $uname; ?></label><br>
-                        <label><?php echo $oname; ?></label><br>
-                        <label><?php echo $umail; ?></label><br>
-                        <label><?php echo $utel; ?></label><br>
-                    </td>
-                    <td>
-                        <label><b>Signup Date: </b>&nbsp;&nbsp;<?php echo $udate; ?></label><br>
-                        <label><b>Signup Time: </b>&nbsp;&nbsp;<?php echo $utime; ?></label><br>
-                    </td>
-                </tr>
-            </table>
-      </div>
-  </div>
-  <hr><br>
 	<div class="container">
-    <h2>MY TASK REPORTS</h2> 
-    <!-- Tab links -->
-    <div class="tab">
-    <button class="tablinks" onclick="openCity(event, 'Pendingtasks')">Pending Tasks</button>
-    <button class="tablinks" onclick="openCity(event, 'Completed')">Completed Tasks</button>
-    <button class="tablinks" onclick="openCity(event, 'Remarks')">Task Remarks</button>
-    </div>
-
-    <!-- Tab content -->
-    <div id="Pendingtasks" class="tabcontent">
-    <h3>Pending Tasks</h3>
-    <p>the following are the tasks you are yet to complete.</p>
-    <table class="table table-bordered">
-      <thead>
-        <tr>
-          <th scope="col">T. ID </th>
-          <th scope="col">T. Dept</th>
-          <th scope="col">Distributor Name</th>
-          <th scope="col">Task Description</th>
-          <th scope="col">Date & Time Assigned</th>
-          <th scope="col">ACTION</th>
-        </tr>
-      </thead>
-      <tbody>
-        <!-- [ LOOP THE REGISTERED AGENTS ] -->
-        <?php
-
-          $agent = $_SESSION['username'];
-          $sql = "SELECT * FROM tasks WHERE agent='$agent' AND status='PENDING'";
-          $result = mysqli_query($db, $sql);
-          while($row = mysqli_fetch_array($result, MYSQLI_NUM))
-          {	
-          
-              echo '<tr>';
-                  echo '<td>'.$row[0].'</td> '; //TASKID
-                  echo '<td>'.$row[3].'</td> '; //DEPERTMENT / CATEGORY
-                  echo '<td>'.$row[2].'</td> '; //DISTRIBUTOR
-                  echo '<td>'.$row[4].'</td> '; //DESCRIPTION
-                  echo '<td>'.$row[5]." ".$row[6].'</td> '; //DATE TIME ASSIGNRD
-                  echo '<td><button class="btn btn-secondary">DO IT !</button></td> '; //EMAIL
-              echo '</tr>';
-          }
-        ?>
-      </tbody>
-    </table>
-    
-
-    </div>
-
-    <div id="Completed" class="tabcontent">
-    <h3>Completed Tasks</h3>
-    <p>Tasks That you filled as complete</p>
-
-    <table class="table table-bordered">
+		<P><h2>TASKS ASSIGNED</h2></p>
+		<div id="Pendingtasks" class="tabcontent" style="padding: 6px 12px; border: 1px solid #ccc;">
+			<h3>Pending Tasks</h3>
+			<p>the following are the tasks you are yet to complete.</p>
+			<table class="table table-bordered">
 			<thead>
 				<tr>
 				<th scope="col">T. ID </th>
 				<th scope="col">T. Dept</th>
 				<th scope="col">Distributor Name</th>
 				<th scope="col">Task Description</th>
-        <th scope="col">Date & Time Assigned</th>
-        <th scope="col">Status</th>
+				<th scope="col">Date & Time Assigned</th>
+				<th scope="col">Status</th>
+				<th scope="col">ACTION</th>
+				</tr>
+			</thead>
+			<tbody>
+				<!-- [ LOOP THE REGISTERED AGENTS ] -->
+				<?php
+
+				$agent = $_SESSION['username'];
+				$sql = "SELECT * FROM tasks WHERE agent='$agent' and status='PENDING'";
+				$result = mysqli_query($db, $sql);
+				while($row = mysqli_fetch_array($result, MYSQLI_NUM))
+				{	
+				
+					echo '<tr>';
+						echo '<td>'.$row[0].'</td> '; //TASKID
+						echo '<td>'.$row[3].'</td> '; //DEPERTMENT / CATEGORY
+						echo '<td>'.$row[2].'</td> '; //DISTRIBUTOR
+						echo '<td>'.$row[4].'</td> '; //DESCRIPTION
+						echo '<td>'.$row[5]." ".$row[6].'</td> '; //DATE TIME ASSIGNRD
+						echo '<td>'.$row[10].'</td> '; //TASK STATUS
+						echo '<td>
+								<a href="file.php?id='.$row[0].'"><strong><button type="button" class="btn btn-success">File Report</button>
+							  </td> '; //EMAIL
+					echo '</tr>';
+				}
+				?>
+			</tbody>
+    		</table>
+        </div>
+        
+        <br>
+        <div id="Pendingtasks" class="tabcontent" style="padding: 6px 12px; border: 1px solid #ccc;">
+			<h3> Awaiting Approval</h3>
+			<p>The folllowing are the tasks that you have marked complete but are awaiting approval from the manager.</p>
+			<table class="table table-bordered">
+			<thead>
+				<tr>
+				<th scope="col">T. ID </th>
+				<th scope="col">T. Dept</th>
+				<th scope="col">Distributor Name</th>
+				<th scope="col">Task Description</th>
+                <th scope="col">Date & Time Assigned</th>
+                <th scope="col">Status</th>
 				</tr>
 			</thead>
 			<tbody>
@@ -293,35 +158,17 @@
 						echo '<td>'.$row[3].'</td> '; //DEPERTMENT / CATEGORY
 						echo '<td>'.$row[2].'</td> '; //DISTRIBUTOR
 						echo '<td>'.$row[4].'</td> '; //DESCRIPTION
-            echo '<td>'.$row[5]." ".$row[6].'</td> '; //DATE TIME ASSIGNRD
-            echo '<td>'.$row[10].'</td> '; //TASK status
-						
-					echo '</tr>';
+                        echo '<td>'.$row[5]." ".$row[6].'</td> '; //DATE TIME ASSIGNRD
+                        echo '<td>'.$row[10].'</td> '; 
 				}
 				?>
 			</tbody>
     		</table>
-    </table>
-
-    </div>
-
-    <div id="Remarks" class="tabcontent">
-        <h3>Supervisor Remarks </h3>
-        <p>Remarks on submitted tasks</p>
-    </div> 
-    
+    	</div>
 	</div>
 </section>
 
 <!-- Section Intro END -->
-<!-- Section About Start -->
-
-
-<!-- Section About End -->
-
-<!--  Section Services Start -->
-
-<!--  Section Services End -->
 
 <!-- footer Start -->
 <footer class="footer section">
@@ -420,7 +267,6 @@
     <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAkeLMlsiwzp6b3Gnaxd86lvakimwGA6UA&callback=initMap"></script>    
     
     <script src="js/script.js"></script>
-    
 
   </body>
   </html>

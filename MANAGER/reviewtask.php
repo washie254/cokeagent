@@ -1,16 +1,12 @@
-<?php include('server.php'); ?>
 <?php 
-   if (isset($_GET['id'])){
-        $managerid = $_GET['id'];
-    }
+	include('server.php');
+	//session_start(); 
 
-  //session_start(); 
-  
 	if (!isset($_SESSION['username'])) {
 		$_SESSION['msg'] = "You must log in first";
 		header('location: login.php');
-  }
-  
+	}
+
 	if (isset($_GET['logout'])) {
 		session_destroy();
 		unset($_SESSION['username']);
@@ -27,7 +23,6 @@
   <meta name="description" content="megakit,business,company,agency,multipurpose,modern,bootstrap4">
   
   <meta name="author" content="themefisher.com">
-
   <title>CocaCola | Agent System</title>
   <!-- bootstrap.min css -->
   <link rel="stylesheet" href="plugins/bootstrap/css/bootstrap.min.css">
@@ -42,158 +37,139 @@
   <link rel="stylesheet" href="css/style.css">
 </head>
 
-<!-- tabs -->
-<style>
-  /* Style the tab */
-  .tab {
-  overflow: hidden;
-  border: 1px solid #ccc;
-  background-color: #f1f1f1;
-  }
-
-  /* Style the buttons that are used to open the tab content */
-  .tab button {
-  background-color: inherit;
-  float: left;
-  border: none;
-  outline: none;
-  cursor: pointer;
-  padding: 14px 16px;
-  transition: 0.3s;
-  }
-
-  /* Change background color of buttons on hover */
-  .tab button:hover {
-  background-color: #ddd;
-  }
-
-  /* Create an active/current tablink class */
-  .tab button.active {
-  background-color: #ccc;
-  }
-
-  /* Style the tab content */
-  .tabcontent {
-  display: none;
-  padding: 6px 12px;
-  border: 1px solid #ccc;
-  border-top: none;
-  } 
-
-  .error {
-	width: 100%; 
-	margin: 0px auto; 
-	padding: 10px; 
-	border: 1px solid #a94442; 
-	color: #a94442; 
-	background: #f2dede; 
-	border-radius: 5px; 
-	text-align: left;
-}
-</style>
-<script>
-  function openCity(evt, cityName) {
-    // Declare all variables
-    var i, tabcontent, tablinks;
-
-    // Get all elements with class="tabcontent" and hide them
-    tabcontent = document.getElementsByClassName("tabcontent");
-    for (i = 0; i < tabcontent.length; i++) {
-      tabcontent[i].style.display = "none";
-    }
-
-    // Get all elements with class="tablinks" and remove the class "active"
-    tablinks = document.getElementsByClassName("tablinks");
-    for (i = 0; i < tablinks.length; i++) {
-      tablinks[i].className = tablinks[i].className.replace(" active", "");
-    }
-
-    // Show the current tab, and add an "active" class to the button that opened the tab
-    document.getElementById(cityName).style.display = "block";
-    evt.currentTarget.className += " active";
-  } 
-</script>
-<!-- tabs -->
-
 <body>
 
 
 <!-- Header Start --> 
 <header class="navigation">
-	<div class="header-top ">
+	<nav class="navbar navbar-expand-lg  py-4" id="navbar">
 		<div class="container">
-			<div class="row justify-content-between align-items-center">
-				<div class="col-lg-2 col-md-4">
-					<div class="header-top-socials text-center text-lg-left text-md-left">
-						<a href="#"><i class="ti-github"></i></a>
-						<a href="#" style="color:Yellow"> <b>	
-							<?php  if (isset($_SESSION['username'])):?>
-							<?php echo $_SESSION['username']; ?> </b>
-						</a>
-						<a href="index.php?logout='1'" style="color: red;">logout</a>
-						<?php endif ?>
-					</div>
-				</div>
-				<div class="col-lg-10 col-md-8 text-center text-lg-right text-md-right">
-					<div class="header-top-info">
-						<a href="tel:+254720870388">Call Us : <span>+254-720-870388</span></a>
-						<a href="mailto:cokeagentsystem@yahoo.com" ><i class="fa fa-envelope mr-2"></i><span>cokeagentsystem@yahoo.com</span></a>
-					</div>
-				</div>
-			</div>
+        
+        <!-- <a href="#"><i class="ti-github"></a> -->
+		  <a class="navbar-brand" href="#">
+              Coca<span>Cola.</span>
+		  </a>
+
+		  <button class="navbar-toggler collapsed" type="button" data-toggle="collapse" data-target="#navbarsExample09" aria-controls="navbarsExample09" aria-expanded="false" aria-label="Toggle navigation">
+			<span class="fa fa-bars"></span>
+		  </button>
+	  
+		  <div class="collapse navbar-collapse text-center" id="navbarsExample09">
+			<ul class="navbar-nav ml-auto">
+			  	<li class="nav-item active">
+				<a class="nav-link" href="index.php">Home <span class="sr-only">(current)</span></a>
+			  	</li>
+			  	<li class="nav-item dropdown">
+					<a class="nav-link dropdown-toggle" href="#" id="dropdown03" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Tasks</a>
+					<ul class="dropdown-menu" aria-labelledby="dropdown03">
+						<li><a class="dropdown-item" href="allocatetasks.php">Allocate</a></li>
+						<li><a class="dropdown-item" href="allocated.php">Allocated Tasks</a></li>
+						<li><a class="dropdown-item" href="distributors.php">Distributors</a></li>
+					</ul>
+			  	</li>
+			  	<li class="nav-item"><a class="nav-link" href="agents.php">Agents</a></li>
+			  	<li class="nav-item"><a class="nav-link" href="Reports.php">Reports</a></li>
+				<li class="nav-item"><a class="nav-link" href="profile.php">Pofile</a></li>
+
+              <li style="float:right;" class="nav-link">
+                <!-- <i class="ti-user"> -->
+                <a href="#" style="color:Yellow"> <b>	
+                    <?php  if (isset($_SESSION['username'])):?>
+                    <?php echo strtoupper($_SESSION['username']); ?> </b>
+                    <?php endif ?>
+                </a>
+              </li>
+              <li class="nav-link">
+                <a href="index.php?logout='1'" style="color: red;"><b>logout</b></a>
+              </li>
+			</ul>
+		  </div>
 		</div>
-	</div>
+	</nav>
 </header>
 
 <!-- Header Close --> 
-
 <div class="main-wrapper ">
 
 <section class="section intro">
 	<div class="container">
-
-    <!-- // get the manager details ::: -->
-    <?php 
-        // $user = $_SESSION['username'];
-        $query0 = "SELECT * FROM managers WHERE id='$managerid' ";
-        $result0 = mysqli_query($db, $query0);
-
-        while($row = mysqli_fetch_array($result0, MYSQLI_NUM)){
-            // $styid = $row[0];
-            $manusername = $row[1];
-            $manemail = $row[4];
-            $mandateadded = $row[8];
-            
-        }
-    ?>
-    <h2>DEACTIVATE [ <b> <span style="color:red;"><?=$manusername?></span> </b> ]</h2> 
-    <hr><br>
-       
-       <div style="padding: 6px 12px; border: 1px solid #ccc;">
-        <h3>Give reason for deactivating <span style="color:red;"><?=$manusername?></span></h3>
-        <p>Kindly provide a brief description as to why you are deactivting the managers</p>
-        <form method="post" action="deactivatemanager.php">
-          <?php include('errors.php'); ?>
-            <?php $admin =$_SESSION["username"];?>
-          <input name="admin" value="<?=$admin?>" style="opacity:0;">
-          <div class="form-group">
-              <input name="managerid" value="<?=$managerid?>" style="opacity:0;"><br>
-              <label for="exampleInputEmail1">Man..............#: <span style="color:green;"><?=$managerid?></span> </label><br>
-              <label for="exampleInputEmail1">Username: <span style="color:green;"><?=$manusername?></span></label><br>
-              <label for="exampleInputEmail1">Email..............: <span style="color:green;"><?=$manemail?></span></label><br>
-          </div>
-          <div class="form-group">
-              <label for="exampleInputPassword1">Provide Reason for deactivating</label>
-              <textarea type="text" class="form-control" name="reason"  placeholder="Give some brief reason for deactivating manager" required></textarea>
-          </div>
-          <button type="submit" class="btn btn-danger" name="deactivate_manager" style="width:100%;"><b>DEACTIVATE MANAGER</b></button>
-        </form>
-      </div>
+		<P><h2>Dashboard Highlights</h2></p>
+		<div id="Pendingtasks" class="tabcontent" style="padding: 6px 12px; border: 1px solid #ccc;">
+			<h3>OverView</h3>
+			<p>Higlights of the Tasks that can be performed.</p>
+			
+			<div class="row">
+			<div class="col-xl-3 col-sm-6 mb-3">
+				<div class="card text-white bg-primary o-hidden h-100">
+					<div class="card-body">
+						<div class="card-body-icon">
+						<i class="fas fa-fw fa-list"></i>
+						</div>
+						<div class="mr-5">Allocating  Tasks</div>
+					</div>
+					<a class="card-footer text-white clearfix small z-1" href="allocatetasks.php">
+						<span class="float-left">Allocate Tasks to Agents</span>
+						<span class="float-right">
+						<i class="fas fa-angle-right"></i>
+						</span>
+					</a>
+				</div>
+			</div>
+			<div class="col-xl-3 col-sm-6 mb-3">
+				<div class="card text-white bg-warning o-hidden h-100">
+					<div class="card-body">
+						<div class="card-body-icon">
+						<i class="fas fa-fw fa-qrcode"></i>
+						</div>
+						<div class="mr-5">Reviewing Allocated Tasks</div>
+					</div>
+					<a class="card-footer text-white clearfix small z-1" href="allocated.php">
+						<span class="float-left">View Allocated Tasks</span>
+						<span class="float-right">
+						<i class="fas fa-angle-right"></i>
+						</span>
+					</a>
+				</div>
+			</div>
+			<div class="col-xl-3 col-sm-6 mb-3">
+				<div class="card text-white bg-success o-hidden h-100">
+					<div class="card-body">
+						<div class="card-body-icon">
+						<i class="fas fa-fw fa-users"></i>
+						</div>
+						<div class="mr-5">Approving Fistributor Accounts <b></b></div>
+					</div>
+					<a class="card-footer text-white clearfix small z-1" href="distributors.php">
+						<span class="float-left">Approve Distributor Accounts</span>
+						<span class="float-right">
+						<i class="fas fa-angle-right"></i>
+						</span>
+					</a>
+				</div>
+			</div>
+			<div class="col-xl-3 col-sm-6 mb-3">
+				<div class="card text-white bg-danger o-hidden h-100">
+					<div class="card-body">
+						<div class="card-body-icon">
+						<i class="fas fa-fw fa-book"></i>
+						</div>
+						<div class="mr-5">General Reports !</div>
+					</div>
+					<a class="card-footer text-white clearfix small z-1" href="reports.php">
+						<span class="float-left">View reports</span>
+						<span class="float-right">
+						<i class="fas fa-angle-right"></i>
+						</span>
+					</a>
+				</div>
+			</div>
+			</div>
+				
+    	</div>
 	</div>
 </section>
 
 <!-- Section Intro END -->
-
 
 <!-- footer Start -->
 <footer class="footer section">
@@ -214,7 +190,6 @@
 			<div class="col-lg-2 col-md-6 col-sm-6">
 				<div class="widget">
 					<h4 class="text-capitalize mb-4">Quick Links</h4>
-
 					<ul class="list-unstyled footer-menu lh-35">
 						<li><a href="admin_index.php">Home</a></li>
 						<li><a href="admin_agents.php">Agents</a></li>
@@ -241,7 +216,7 @@
 					<div class="logo mb-4">
 						<h3>Coca<span>Cola.</span></h3>
 					</div>
-					<h6><a href="tel:+254-720-870388" >+254-720-870388</a></h6>
+					<h6><a href="tel:+254-720-870388">+254-720-870388</a></h6>
 					<a href="mailto:cokeagentsystem@yahoo.com"><span class="text-color h4">cokeagentsystem@yahoo.com</span></a>
 				</div>
 			</div>
@@ -267,12 +242,9 @@
 </footer>
    
     </div>
-
     <!-- 
     Essential Scripts
     =====================================-->
-
-    
     <!-- Main jQuery -->
     <script src="plugins/jquery/jquery.js"></script>
     <script src="js/contact.js"></script>
@@ -292,7 +264,6 @@
     <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAkeLMlsiwzp6b3Gnaxd86lvakimwGA6UA&callback=initMap"></script>    
     
     <script src="js/script.js"></script>
-    
 
   </body>
   </html>

@@ -92,44 +92,96 @@
 <!-- Header Close --> 
 
 <div class="main-wrapper ">
-
 <section class="section intro">
 	<div class="container">
-		<P><h2>TASKS ASSIGNED</h2></p>
-		<div id="Pendingtasks" class="tabcontent" style="padding: 6px 12px; border: 1px solid #ccc;">
+		
+	<div id="Pendingtasks" class="tabcontent" style="padding: 6px 12px; border: 1px solid #ccc;">
+		<P><h2>Inventory tasks Allocated</h2></p>
+		<p>Quick Links:
+			<a href="#pendinginventory"><button class="btn btn-primary">Pending</button></a>&nbsp;
+			<a href="#awaitingapproval"><button class="btn btn-success">Awaiting Approval</button></a>&nbsp;
+			<a href="#completed"><button class="btn btn-secondary">Completed Tasks</button></a>&nbsp;
+		</p>
+		
+		<div id="pendinginventory" class="tabcontent" style="padding: 6px 12px; border: 1px solid #ccc;">
 			<h3>Pending Tasks</h3>
-			<p>the following are the tasks you are yet to complete.</p>
+			<p>the following are the inventory tasks allocated and their status.</p>
 			<table class="table table-bordered">
 			<thead>
 				<tr>
-				<th scope="col">T. ID </th>
-				<th scope="col">T. Dept</th>
-				<th scope="col">Distributor Name</th>
-				<th scope="col">Task Description</th>
+				<th scope="col">T.ID </th>
+				<th scope="col">Agent</th>
+				<th scope="col">Distributor</th>
 				<th scope="col">Date & Time Assigned</th>
+				<th scope="col">Task Description</th>
 				<th scope="col">Status</th>
-				<th scope="col">ACTION</th>
 				</tr>
 			</thead>
 			<tbody>
 				<!-- [ LOOP THE REGISTERED AGENTS ] -->
 				<?php
-
-				$agent = $_SESSION['username'];
-				$sql = "SELECT * FROM tasks WHERE agent='$agent' and status='PENDING'";
+				$sql = "SELECT * FROM tasks WHERE status='PENDING'";
 				$result = mysqli_query($db, $sql);
 				while($row = mysqli_fetch_array($result, MYSQLI_NUM))
 				{	
-				
+					$distid = $row[3];
+					$sql0 = "SELECT * FROM distributors WHERE id='$distid'";
+					$result0 = mysqli_query($db, $sql0);
+					while($rowz = mysqli_fetch_array($result0, MYSQLI_NUM))
+					{ $distname=$rowz[1];}
+
 					echo '<tr>';
 						echo '<td>'.$row[0].'</td> '; //TASKID
-						echo '<td>'.$row[3].'</td> '; //DEPERTMENT / CATEGORY
-						echo '<td>'.$row[2].'</td> '; //DISTRIBUTOR
-						echo '<td>'.$row[4].'</td> '; //DESCRIPTION
-						echo '<td>'.$row[5]." ".$row[6].'</td> '; //DATE TIME ASSIGNRD
+						echo '<td>'.$row[1]." : ".$row[2].'</td> '; //DEPERTMENT / CATEGORY
+						echo '<td>'.$distname.'</td> '; //DISTRIBUTOR
+						echo '<td>'.$row[5].' AT '.$row[6].'</td> '; //DESCRIPTION
+						echo '<td>'.$row[4].'</td> '; //DATE TIME ASSIGNRD
+						echo '<td>'.$row[10].'</td> '; //TASK STATU
+					echo '</tr>';
+				}
+				?>
+			</tbody>
+    		</table>
+		</div>
+
+		<br>
+
+		<div id="awaitingapproval" class="tabcontent" style="padding: 6px 12px; border: 1px solid #ccc;">
+			<h3>Awaiting Approval</h3>
+			<p>the following are the inventory tasks marked as comleted by the agents</p>
+			<table class="table table-bordered">
+			<thead>
+				<tr>
+				<th scope="col">T.ID </th>
+				<th scope="col">Agent</th>
+				<th scope="col">Distributor</th>
+				<th scope="col">Date & Time Assigned</th>
+				<th scope="col">Task Description</th>
+				<th scope="col">Status</th>
+				<th scope="col">Review and Approve</th>
+				</tr>
+			</thead>
+			<tbody>
+				<?php
+				$sql = "SELECT * FROM tasks WHERE status='AWAITING APPROVAL'";
+				$result = mysqli_query($db, $sql);
+				while($row = mysqli_fetch_array($result, MYSQLI_NUM))
+				{	
+					$distid = $row[3];
+					$sql0 = "SELECT * FROM distributors WHERE id='$distid'";
+					$result0 = mysqli_query($db, $sql0);
+					while($rowz = mysqli_fetch_array($result0, MYSQLI_NUM))
+					{ $distname=$rowz[1];}
+
+					echo '<tr>';
+						echo '<td>'.$row[0].'</td> '; //TASKID
+						echo '<td>'.$row[1]." : ".$row[2].'</td> '; //DEPERTMENT / CATEGORY
+						echo '<td>'.$distname.'</td> '; //DISTRIBUTOR
+						echo '<td>'.$row[5].' AT '.$row[6].'</td> '; //DESCRIPTION
+						echo '<td>'.$row[4].'</td> '; //DATE TIME ASSIGNRD
 						echo '<td>'.$row[10].'</td> '; //TASK STATUS
 						echo '<td>
-								<a href="file.php?id='.$row[0].'"><strong><button type="button" class="btn btn-success">File Report</button>
+								<a href="reviewtask.php?id='.$row[0].'"><strong><button type="button" class="btn btn-success">review</button>
 							  </td> '; //EMAIL
 					echo '</tr>';
 				}
@@ -137,8 +189,51 @@
 			</tbody>
     		</table>
     	</div>
+		<br>
+
+		<div id="completed" class="tabcontent" style="padding: 6px 12px; border: 1px solid #ccc;">
+			<h3>Completed Tasks</h3>
+			<p>the following are the inventory reviewed and affirmed by manager</p>
+			<table class="table table-bordered">
+			<thead>
+				<tr>
+				<th scope="col">T.ID </th>
+				<th scope="col">Agent</th>
+				<th scope="col">Distributor</th>
+				<th scope="col">Date & Time Assigned</th>
+				<th scope="col">Task Description</th>
+				<th scope="col">Status</th>
+				</tr>
+			</thead>
+			<tbody>
+				<?php
+				$sql = "SELECT * FROM tasks WHERE status='COMPLETED'";
+				$result = mysqli_query($db, $sql);
+				while($row = mysqli_fetch_array($result, MYSQLI_NUM))
+				{	
+					$distid = $row[3];
+					$sql0 = "SELECT * FROM distributors WHERE id='$distid'";
+					$result0 = mysqli_query($db, $sql0);
+					while($rowz = mysqli_fetch_array($result0, MYSQLI_NUM))
+					{ $distname=$rowz[1];}
+
+					echo '<tr>';
+						echo '<td>'.$row[0].'</td> '; //TASKID
+						echo '<td>'.$row[1]." : ".$row[2].'</td> '; //DEPERTMENT / CATEGORY
+						echo '<td>'.$distname.'</td> '; //DISTRIBUTOR
+						echo '<td>'.$row[5].' AT '.$row[6].'</td> '; //DESCRIPTION
+						echo '<td>'.$row[4].'</td> '; //DATE TIME ASSIGNRD
+						echo '<td>'.$row[10].'</td> '; //TASK STATUS
+					echo '</tr>';
+				}
+				?>
+			</tbody>
+    		</table>
+    	</div>
+	</div>
 	</div>
 </section>
+
 
 <!-- Section Intro END -->
 
