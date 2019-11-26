@@ -179,7 +179,7 @@
               <input name="agentid" value="<?=$agentid?>" style="opacity:0;"><br>
               <label for="exampleInputEmail1">Man..............#: <span style="color:green;"><?=$agentid?></span> </label><br>
               <label for="exampleInputEmail1">Username: <span style="color:green;"><?=$agentusername?></span></label><br>
-              <label for="exampleInputEmail1">Email..............: <span style="color:green;"><?=$agentemail?></span></label><br>
+              <input type="text" name="agentemail" value="<?=$agentemail?>" readonly><br>
           </div>
           <div class="form-group">
               <label for="exampleInputPassword1">Provide Reason for deactivating</label>

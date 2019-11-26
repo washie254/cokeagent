@@ -95,6 +95,7 @@
 	if (isset($_POST['deactivate_agent'])) {
 		$reason = mysqli_real_escape_string($db, $_POST['reason']);
 		$agentid = mysqli_real_escape_string($db, $_POST['agentid']);
+		$agentmail = mysqli_real_escape_string($db, $_POST['agentemail']);
 
 
 		$cdate = date("Y-m-d");
@@ -115,10 +116,29 @@
 						WHERE 
 						  	id='$agentid' ";
 			$result = mysqli_query($db, $query);
-			if($result)
-				echo "<script type='text/javascript'>alert('Manager Deactivated successfully!')</script>";
-			else
-				echo "<script type'text/javascript'>alert('Something Went Wrong!!')</script>";
+
+
+			// if($result){
+				$to = "washiemugo@gmail.com";
+				$subject = "Account Deactivation";
+				
+				$message = "<b>Account Deactivated</b>";
+				$message .= "<h1>This is headline.</h1>";
+				
+				$header = "From:cokeagent@comp,ac,ke \r\n";
+				$header .= "Cc:freddie@gmail.com \r\n";
+				$header .= "MIME-Version: 1.0\r\n";
+				$header .= "Content-type: text/html\r\n";
+				
+				$retval = mail ($to,$subject,$message,$header);
+				
+				if( $retval == true ) {
+				   echo "Message sent successfully...";
+				   header('location:agents.php');
+				}else {
+				   echo "Message could not be sent...";
+				   header('location:agents.php');
+				}
 			
 			header('location:agents.php');
 
@@ -331,6 +351,38 @@
 				echo "<script type'text/javascript'>alert('Something Went Wrong!!')</script>";
 			
 			header('location:allocatetasks.php');
+			
+		}
+
+	}
+
+	
+	if (isset($_POST['gradetask'])) {
+		$taskid  = mysqli_real_escape_string($db, $_POST['taskid']);
+		$remarks = mysqli_real_escape_string($db, $_POST['remarks']);
+		$grades = mysqli_real_escape_string($db, $_POST['grade']);
+
+		$tstatus = 'APPROVED';
+		
+		// register user if there are no errors in the form
+		if (count($errors) == 0) {
+			$query = "UPDATE tasks 
+						SET 
+							manageremarks = '$remarks',
+							managergrade = '$grades',
+							status = '$tstatus'
+						WHERE
+							id ='$taskid'
+						";
+
+			$result = mysqli_query($db, $query);
+
+			if($result)
+				echo "<script type='text/javascript'>alert('Task Successfully assigned!')</script>";
+			else
+				echo "<script type'text/javascript'>alert('Something Went Wrong!!')</script>";
+			
+			header('location:allocated.php');
 			
 		}
 

@@ -1,6 +1,9 @@
 <?php 
 	include('server.php');
 	//session_start(); 
+	if(isset($_GET['id'])){
+		$taskid = $_GET['id'];
+	}
 
 	if (!isset($_SESSION['username'])) {
 		$_SESSION['msg'] = "You must log in first";
@@ -16,7 +19,7 @@
 ?>
 <!doctype html>
 <html lang="en">
-  <head>
+<head>
   <!-- Required meta tags -->
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
@@ -93,78 +96,80 @@
 
 <section class="section intro">
 	<div class="container">
-		<P><h2>Dashboard Highlights</h2></p>
+		<P><h2>Task Report</h2></p>
 		<div id="Pendingtasks" class="tabcontent" style="padding: 6px 12px; border: 1px solid #ccc;">
-			<h3>OverView</h3>
-			<p>Higlights of the Tasks that can be performed.</p>
-			
-			<div class="row">
-			<div class="col-xl-3 col-sm-6 mb-3">
-				<div class="card text-white bg-primary o-hidden h-100">
+			The card below hods the  information  on the task awarded to the agent 
+
+			<?php
+
+				$sql = "SELECT * FROM tasks WHERE id='$taskid'";
+				$res = mysqli_query($db, $sql);
+				while($row = mysqli_fetch_array($res, MYSQLI_NUM)){
+					$remark = $row[9];
+					$lat = $row[11];
+					$lng = $row[12];
+					$distgrade =$row[13];
+					$distremarks = $row[14];
+
+					
+					$dt = $row[7]." At: ".$row[8];
+					$loc=$lat.", ".$lng;
+				}
+			?>
+		<div class="card">
+			<div class="card-body">
+				Information on the Task:<br>
+				<b>Remarks on Distributor:</b>
+				<div class="card">
 					<div class="card-body">
-						<div class="card-body-icon">
-						<i class="fas fa-fw fa-list"></i>
-						</div>
-						<div class="mr-5">Allocating  Tasks</div>
+						<p> <b>grade:<?=$distgrade?></b><br>
+							<b>Remarks:<?=$distremarks?></b>
+						</p>
 					</div>
-					<a class="card-footer text-white clearfix small z-1" href="allocatetasks.php">
-						<span class="float-left">Allocate Tasks to Agents</span>
-						<span class="float-right">
-						<i class="fas fa-angle-right"></i>
-						</span>
-					</a>
+				</div>
+				<br> <b>task Completion  Time $ place: </b>
+				<div class="card">
+					<div class="card-body">
+						<p> <b>Time: &nbsp;&nbsp;  </b><?=$dt?><br>
+							<b>Location: </b><?=$loc?><br>
+							<b>Feedback: </b><?=$remark?>
+						</p>
+					</div>
+				</div><br>
+				<div class="card">
+					<div class="card-body">
+						<p> <b>Give remarks on the task</b><br></p>
+						<form class="form" action="reviewtask.php" method="post">
+							<input name="taskid" value="<?=$taskid?>" style="opacity:0.2" readonly/>
+							<div class="form-group">
+								<div class="col-xs-6">
+									<label for="description"><b>Brief description</b></label>
+									<textarea type="email" class="form-control" name="remarks" id="remarks" placeholder="insert a brief review on the agent" required></textarea>
+								</div>
+							</div>
+							<div class="form-group">
+								<div class="col-xs-6">
+									<label for="description"><b>grade: [out of 5]</b></label>
+									<select type="text" class="form-control" name="grade">
+										<option value="1">1</option>
+										<option value="2">2</option>
+										<option value="3" selected>3</option>
+										<option value="4">4</option>
+										<option value="5">5</option>
+									</select>
+								</div>
+							</div>
+							<br><button class="btn btn-lg btn-success" type="submit" name="gradetask" style="width:98%;">POST REMARKS</button>
+						</form>
+
+
+
+					</div>
 				</div>
 			</div>
-			<div class="col-xl-3 col-sm-6 mb-3">
-				<div class="card text-white bg-warning o-hidden h-100">
-					<div class="card-body">
-						<div class="card-body-icon">
-						<i class="fas fa-fw fa-qrcode"></i>
-						</div>
-						<div class="mr-5">Reviewing Allocated Tasks</div>
-					</div>
-					<a class="card-footer text-white clearfix small z-1" href="allocated.php">
-						<span class="float-left">View Allocated Tasks</span>
-						<span class="float-right">
-						<i class="fas fa-angle-right"></i>
-						</span>
-					</a>
-				</div>
-			</div>
-			<div class="col-xl-3 col-sm-6 mb-3">
-				<div class="card text-white bg-success o-hidden h-100">
-					<div class="card-body">
-						<div class="card-body-icon">
-						<i class="fas fa-fw fa-users"></i>
-						</div>
-						<div class="mr-5">Approving Fistributor Accounts <b></b></div>
-					</div>
-					<a class="card-footer text-white clearfix small z-1" href="distributors.php">
-						<span class="float-left">Approve Distributor Accounts</span>
-						<span class="float-right">
-						<i class="fas fa-angle-right"></i>
-						</span>
-					</a>
-				</div>
-			</div>
-			<div class="col-xl-3 col-sm-6 mb-3">
-				<div class="card text-white bg-danger o-hidden h-100">
-					<div class="card-body">
-						<div class="card-body-icon">
-						<i class="fas fa-fw fa-book"></i>
-						</div>
-						<div class="mr-5">General Reports !</div>
-					</div>
-					<a class="card-footer text-white clearfix small z-1" href="reports.php">
-						<span class="float-left">View reports</span>
-						<span class="float-right">
-						<i class="fas fa-angle-right"></i>
-						</span>
-					</a>
-				</div>
-			</div>
-			</div>
-				
+		</div>
+
+
     	</div>
 	</div>
 </section>

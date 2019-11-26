@@ -1,6 +1,9 @@
 <?php 
 	include('server.php');
 	//session_start(); 
+	if(isset($_GET['id'])){
+		$taskid = $_GET['id'];
+	}
 
 	if (!isset($_SESSION['username'])) {
 		$_SESSION['msg'] = "You must log in first";
@@ -16,14 +19,13 @@
 ?>
 <!doctype html>
 <html lang="en">
-  <head>
+<head>
   <!-- Required meta tags -->
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
   <meta name="description" content="megakit,business,company,agency,multipurpose,modern,bootstrap4">
   
   <meta name="author" content="themefisher.com">
-
   <title>CocaCola | Agent System</title>
   <!-- bootstrap.min css -->
   <link rel="stylesheet" href="plugins/bootstrap/css/bootstrap.min.css">
@@ -56,21 +58,11 @@
 		  </button>
 	  
 		  <div class="collapse navbar-collapse text-center" id="navbarsExample09">
-		  <ul class="navbar-nav ml-auto">
+			<ul class="navbar-nav ml-auto">
 			  	<li class="nav-item active">
 				<a class="nav-link" href="index.php">Home <span class="sr-only">(current)</span></a>
 			  	</li>
-			  	<li class="nav-item dropdown">
-					<a class="nav-link dropdown-toggle" href="#" id="dropdown03" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Tasks</a>
-					<ul class="dropdown-menu" aria-labelledby="dropdown03">
-						<li><a class="dropdown-item" href="allocatetasks.php">Allocate</a></li>
-						<li><a class="dropdown-item" href="allocated.php">Allocated Tasks</a></li>
-						<li><a class="dropdown-item" href="distributors.php">Distributors</a></li>
-					</ul>
-			  	</li>
-			  	<li class="nav-item"><a class="nav-link" href="agents.php">Agents</a></li>
-			  	<li class="nav-item"><a class="nav-link" href="Reports.php">Reports</a></li>
-				<li class="nav-item"><a class="nav-link" href="profile.php">Pofile</a></li>
+			  	
 
               <li style="float:right;" class="nav-link">
                 <!-- <i class="ti-user"> -->
@@ -90,150 +82,75 @@
 </header>
 
 <!-- Header Close --> 
-
 <div class="main-wrapper ">
+
 <section class="section intro">
 	<div class="container">
-		
-	<div id="Pendingtasks" class="tabcontent" style="padding: 6px 12px; border: 1px solid #ccc;">
-		<P><h2>Inventory tasks Allocated</h2></p>
-		<p>Quick Links:
-			<a href="#pendinginventory"><button class="btn btn-primary">Pending</button></a>&nbsp;
-			<a href="#awaitingapproval"><button class="btn btn-success">Awaiting Approval</button></a>&nbsp;
-			<a href="#completed"><button class="btn btn-secondary">Completed Tasks</button></a>&nbsp;
-		</p>
-		
-		<div id="pendinginventory" class="tabcontent" style="padding: 6px 12px; border: 1px solid #ccc;">
-			<h3>Pending Tasks</h3>
-			<p>the following are the inventory tasks allocated and their status.</p>
-			<table class="table table-bordered">
-			<thead>
-				<tr>
-				<th scope="col">T.ID </th>
-				<th scope="col">Agent</th>
-				<th scope="col">Distributor</th>
-				<th scope="col">Date & Time Assigned</th>
-				<th scope="col">Task Description</th>
-				<th scope="col">Status</th>
-				</tr>
-			</thead>
-			<tbody>
-				<!-- [ LOOP THE REGISTERED AGENTS ] -->
-				<?php
-				$sql = "SELECT * FROM tasks WHERE status='PENDING'";
-				$result = mysqli_query($db, $sql);
-				while($row = mysqli_fetch_array($result, MYSQLI_NUM))
-				{	
-					$distid = $row[3];
-					$sql0 = "SELECT * FROM distributors WHERE id='$distid'";
-					$result0 = mysqli_query($db, $sql0);
-					while($rowz = mysqli_fetch_array($result0, MYSQLI_NUM))
-					{ $distname=$rowz[1];}
+		<P><h2>Task Report</h2></p>
+		<div id="Pendingtasks" class="tabcontent" style="padding: 6px 12px; border: 1px solid #ccc;">
+			The card below hods the  information  on the task awarded to the agent 
 
-					echo '<tr>';
-						echo '<td>'.$row[0].'</td> '; //TASKID
-						echo '<td>'.$row[1]." : ".$row[2].'</td> '; //DEPERTMENT / CATEGORY
-						echo '<td>'.$distname.'</td> '; //DISTRIBUTOR
-						echo '<td>'.$row[5].' AT '.$row[6].'</td> '; //DESCRIPTION
-						echo '<td>'.$row[4].'</td> '; //DATE TIME ASSIGNRD
-						echo '<td>'.$row[10].'</td> '; //TASK STATU
-					echo '</tr>';
+			<?php
+
+				$sql = "SELECT * FROM tasks WHERE id='$taskid'";
+				$res = mysqli_query($db, $sql);
+				while($row = mysqli_fetch_array($res, MYSQLI_NUM)){
+					$remark = $row[9];
+					$lat = $row[11];
+					$lng = $row[12];
+					$distgrade =$row[13];
+					$distremarks = $row[14];
+
+					
+					$dt = $row[7]." At: ".$row[8];
+					$loc=$lat.", ".$lng;
 				}
-				?>
-			</tbody>
-    		</table>
+			?>
+		<div class="card">
+			<div class="card-body">
+				<br> <b>task Completion  Time $ place: </b>
+				<div class="card">
+					<div class="card-body">
+						<p> <b>Time: &nbsp;&nbsp;  </b><?=$dt?><br>
+							<b>Location: </b><?=$loc?><br>
+						</p>
+					</div>
+				</div><br>
+				<div class="card">
+					<div class="card-body">
+						<p> <b>Give remarks on the work of the agent</b><br></p>
+						<form class="form" action="review.php" method="post">
+							<input name="taskid" value="<?=$taskid?>" style="opacity:0.2" readonly/>
+							<div class="form-group">
+								<div class="col-xs-6">
+									<label for="description"><b>Brief description</b></label>
+									<textarea type="text" class="form-control" name="remarks" id="remarks" placeholder="insert a brief review on the agent" required></textarea>
+								</div>
+							</div>
+							<div class="form-group">
+								<div class="col-xs-6">
+									<label for="description"><b>grade: [out of 5]</b></label>
+									<select type="text" class="form-control" name="grade">
+										<option value="1">1</option>
+										<option value="2">2</option>
+										<option value="3" selected>3</option>
+										<option value="4">4</option>
+										<option value="5">5</option>
+									</select>
+								</div>
+							</div>
+							<br><button class="btn btn-lg btn-success" type="submit" name="gradetask" style="width:98%;">REVIEW AGENT'S WORK</button>
+						</form>
+
+					</div>
+				</div>
+			</div>
 		</div>
 
-		<br>
 
-		<div id="awaitingapproval" class="tabcontent" style="padding: 6px 12px; border: 1px solid #ccc;">
-			<h3>Awaiting Approval</h3>
-			<p>the following are the inventory tasks marked as comleted by the agents</p>
-			<table class="table table-bordered">
-			<thead>
-				<tr>
-				<th scope="col">T.ID </th>
-				<th scope="col">Agent</th>
-				<th scope="col">Distributor</th>
-				<th scope="col">Date & Time Assigned</th>
-				<th scope="col">Task Description</th>
-				<th scope="col">Status</th>
-				<th scope="col">Review and Approve</th>
-				</tr>
-			</thead>
-			<tbody>
-				<?php
-				$sql = "SELECT * FROM tasks WHERE status='AWAITING APPROVAL'";
-				$result = mysqli_query($db, $sql);
-				while($row = mysqli_fetch_array($result, MYSQLI_NUM))
-				{	
-					$distid = $row[3];
-					$sql0 = "SELECT * FROM distributors WHERE id='$distid'";
-					$result0 = mysqli_query($db, $sql0);
-					while($rowz = mysqli_fetch_array($result0, MYSQLI_NUM))
-					{ $distname=$rowz[1];}
-
-					echo '<tr>';
-						echo '<td>'.$row[0].'</td> '; //TASKID
-						echo '<td>'.$row[1]." : ".$row[2].'</td> '; //DEPERTMENT / CATEGORY
-						echo '<td>'.$distname.'</td> '; //DISTRIBUTOR
-						echo '<td>'.$row[5].' AT '.$row[6].'</td> '; //DESCRIPTION
-						echo '<td>'.$row[4].'</td> '; //DATE TIME ASSIGNRD
-						echo '<td>'.$row[10].'</td> '; //TASK STATUS
-						echo '<td>
-								<a href="reviewtask.php?id='.$row[0].'"><strong><button type="button" class="btn btn-success">review</button>
-							  </td> '; //EMAIL
-					echo '</tr>';
-				}
-				?>
-			</tbody>
-    		</table>
     	</div>
-		<br>
-
-		<div id="completed" class="tabcontent" style="padding: 6px 12px; border: 1px solid #ccc;">
-			<h3>Completed Tasks</h3>
-			<p>the following are the inventory reviewed and affirmed by manager</p>
-			<table class="table table-bordered">
-			<thead>
-				<tr>
-				<th scope="col">T.ID </th>
-				<th scope="col">Agent</th>
-				<th scope="col">Distributor</th>
-				<th scope="col">Date & Time Assigned</th>
-				<th scope="col">Task Description</th>
-				<th scope="col">Status</th>
-				</tr>
-			</thead>
-			<tbody>
-				<?php
-				$sql = "SELECT * FROM tasks WHERE status='APPROVED'";
-				$result = mysqli_query($db, $sql);
-				while($row = mysqli_fetch_array($result, MYSQLI_NUM))
-				{	
-					$distid = $row[3];
-					$sql0 = "SELECT * FROM distributors WHERE id='$distid'";
-					$result0 = mysqli_query($db, $sql0);
-					while($rowz = mysqli_fetch_array($result0, MYSQLI_NUM))
-					{ $distname=$rowz[1];}
-
-					echo '<tr>';
-						echo '<td>'.$row[0].'</td> '; //TASKID
-						echo '<td>'.$row[1]." : ".$row[2].'</td> '; //DEPERTMENT / CATEGORY
-						echo '<td>'.$distname.'</td> '; //DISTRIBUTOR
-						echo '<td>'.$row[5].' AT '.$row[6].'</td> '; //DESCRIPTION
-						echo '<td>'.$row[4].'</td> '; //DATE TIME ASSIGNRD
-						echo '<td>'.$row[10].'</td> '; //TASK STATUS
-					echo '</tr>';
-				}
-				?>
-			</tbody>
-    		</table>
-    	</div>
-	</div>
 	</div>
 </section>
-
 
 <!-- Section Intro END -->
 
@@ -256,7 +173,6 @@
 			<div class="col-lg-2 col-md-6 col-sm-6">
 				<div class="widget">
 					<h4 class="text-capitalize mb-4">Quick Links</h4>
-
 					<ul class="list-unstyled footer-menu lh-35">
 						<li><a href="admin_index.php">Home</a></li>
 						<li><a href="admin_agents.php">Agents</a></li>
@@ -283,7 +199,7 @@
 					<div class="logo mb-4">
 						<h3>Coca<span>Cola.</span></h3>
 					</div>
-					<h6><a href="tel:+254-720-870388" >+254-720-870388</a></h6>
+					<h6><a href="tel:+254-720-870388">+254-720-870388</a></h6>
 					<a href="mailto:cokeagentsystem@yahoo.com"><span class="text-color h4">cokeagentsystem@yahoo.com</span></a>
 				</div>
 			</div>
@@ -309,12 +225,9 @@
 </footer>
    
     </div>
-
     <!-- 
     Essential Scripts
     =====================================-->
-
-    
     <!-- Main jQuery -->
     <script src="plugins/jquery/jquery.js"></script>
     <script src="js/contact.js"></script>

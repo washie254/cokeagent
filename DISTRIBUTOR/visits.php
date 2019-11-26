@@ -13,6 +13,8 @@
 		header("location: login.php");
 	}
 
+	
+
 ?>
 <!doctype html>
 <html lang="en">
@@ -86,43 +88,133 @@
 <div class="main-wrapper ">
 
 <section class="section service border-top">
+	<?php
+		$user = $_SESSION['username'];
+
+		$query0 = "SELECT * FROM distributors WHERE username='$user'";
+		$result0 = mysqli_query($db, $query0);
+		
+		while($row = mysqli_fetch_array($result0, MYSQLI_NUM)){
+			$uid=$row[0];
+		}
+	?>
 	<div class="container">
-		<div class="row justify-content-center">
-			<div class="col-lg-7 text-center">
-				<div class="section-title">
-					<!-- <span class="h6 text-color">Our Services</span> -->
-					<h2 class="mt-3 content-title ">Summary </h2>
-				</div>
-			</div>
-		</div>
 
-		<div class="row justify-content-center">
-			<div class="col-lg-4 col-md-6 col-sm-6">
-				<div class="service-item mb-5">
-					<i class="ti-user"></i>
-					<h4 class="mb-3"><a href="profile.php">Distribution Profile.</a></h4>
-					<p>View your distribution profile information</p>
-				</div>
-			</div>
+	<div id="Pendingtasks" class="tabcontent">
+	<h3>Pending Visits</h3> 
+	<?=$uid?>
+    <p>The following are the visits that are yet to be made</p>
+    <table class="table table-bordered">
+      <thead>
+        <tr>
+          <th scope="col">T. ID </th>
+          <th scope="col">T. Dept</th>
+          <th scope="col">Agent Name</th>
+          <th scope="col">Task Description</th>
+          <th scope="col">Date & Time Assigned</th>
+        </tr>
+      </thead>
+      <tbody>
+		  
+        <?php
+          $agent = $_SESSION['username'];
+          $sql = "SELECT * FROM tasks WHERE distributor ='$uid' AND status='PENDING'";
+          $result = mysqli_query($db, $sql);
+          while($row = mysqli_fetch_array($result, MYSQLI_NUM))
+          {	
+          
+              echo '<tr>';
+                  echo '<td>'.$row[0].'</td> '; //TASKID
+                  echo '<td>'.$row[3].'</td> '; //DEPERTMENT / CATEGORY
+                  echo '<td>'.$row[2].'</td> '; //DISTRIBUTOR
+                  echo '<td>'.$row[4].'</td> '; //DESCRIPTION
+                  echo '<td>'.$row[5]." ".$row[6].'</td> '; //DATE TIME ASSIGNRD
+              echo '</tr>';
+          }
+        ?>
+      </tbody>
+    </table>
+	</div>
+	
+	<br>
+	<div id="Pendingtasks" class="tabcontent">
+    <h3>Completed  Visits</h3>
+    <p>The following are the completed visits</p>
+    <table class="table table-bordered">
+      <thead>
+        <tr>
+          <th scope="col">T. ID </th>
+          <th scope="col">T. Dept</th>
+          <th scope="col">Agent Name</th>
+          <th scope="col">Task Description</th>
+		  <th scope="col">Date & Time Assigned</th>
+		  <th scope="col">GIVE REMARKS</th>
+        </tr>
+      </thead>
+      <tbody>
+        <!-- [ LOOP THE REGISTERED AGENTS ] -->
+        <?php
 
-			<div class="col-lg-4 col-md-6 col-sm-6">
-				<div class="service-item mb-5">
-					<i class="ti-layers"></i>
-					<h4 class="mb-3"><a href="visits.php">Visits.</a></h4>
-					<p>Visits to allocated to agents on your distribution and their status</p>
-				</div>
-			</div>
+          $agent = $_SESSION['username'];
+          $sql = "SELECT * FROM tasks WHERE distributor ='$uid' AND distributorgrade = 0 ";
+          $result = mysqli_query($db, $sql);
+          while($row = mysqli_fetch_array($result, MYSQLI_NUM))
+          {	
+          
+              echo '<tr>';
+                  echo '<td>'.$row[0].'</td> '; //TASKID
+                  echo '<td>'.$row[3].'</td> '; //DEPERTMENT / CATEGORY
+                  echo '<td>'.$row[2].'</td> '; //DISTRIBUTOR
+                  echo '<td>'.$row[4].'</td> '; //DESCRIPTION
+				  echo '<td>'.$row[5]." ".$row[6].'</td> '; //DATE TIME ASSIGNRD
+				  echo '<td>
+							<a href="review.php?id='.$row[0].'"><strong><button type="button" class="btn btn-success">Give Feedback</button>
+						</td> ';
+              echo '</tr>';
+          }
+        ?>
+      </tbody>
+    </table>
+	</div>
+	
+	<br>
+	<div id="Pendingtasks" class="tabcontent">
+    <h3>Completed  Visits</h3>
+    <p>The following are the completed visits</p>
+    <table class="table table-bordered">
+      <thead>
+        <tr>
+          <th scope="col">T. ID </th>
+          <th scope="col">T. Dept</th>
+          <th scope="col">Agent Name</th>
+          <th scope="col">Task Description</th>
+          <th scope="col">Date & Time Assigned</th>
+        </tr>
+      </thead>
+      <tbody>
+        <!-- [ LOOP THE REGISTERED AGENTS ] -->
+        <?php
 
-			<div class="col-lg-4 col-md-6 col-sm-6">
-				<div class="service-item mb-5">
-					<i class="ti-bar-chart"></i>
-					<h4 class="mb-3"><a href="reports.php">General reports and stats.</a></h4>
-					<p>stats about your inventory levels as wellas your remarks towards agents</p>
-				</div>
-			</div>
+          $agent = $_SESSION['username'];
+          $sql = "SELECT * FROM tasks WHERE distributor ='$uid' AND status='APPROVED'";
+          $result = mysqli_query($db, $sql);
+          while($row = mysqli_fetch_array($result, MYSQLI_NUM))
+          {	
+          
+              echo '<tr>';
+                  echo '<td>'.$row[0].'</td> '; //TASKID
+                  echo '<td>'.$row[3].'</td> '; //DEPERTMENT / CATEGORY
+                  echo '<td>'.$row[2].'</td> '; //DISTRIBUTOR
+                  echo '<td>'.$row[4].'</td> '; //DESCRIPTION
+                  echo '<td>'.$row[5]." ".$row[6].'</td> '; //DATE TIME ASSIGNRD
+              echo '</tr>';
+          }
+        ?>
+      </tbody>
+    </table>
+    </div>
 
-			
-		</div>
+
 	</div>
 </section>
 

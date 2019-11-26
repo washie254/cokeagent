@@ -135,4 +135,31 @@
 		}
 	}
 
+	if (isset($_POST['gradetask'])) {
+		$taskid  = mysqli_real_escape_string($db, $_POST['taskid']);
+		$remarks = mysqli_real_escape_string($db, $_POST['remarks']);
+		$grades = mysqli_real_escape_string($db, $_POST['grade']);
+		
+		// register user if there are no errors in the form
+		if (count($errors) == 0) {
+			$query = "UPDATE tasks 
+						SET 
+							distributorremarks = '$remarks',
+							distributorgrade = '$grades'
+						WHERE
+							id ='$taskid'
+						";
+
+			$result = mysqli_query($db, $query);
+
+			if($result)
+				echo "<script type='text/javascript'>alert('Task Successfully assigned!')</script>";
+			else
+				echo "<script type'text/javascript'>alert('Something Went Wrong!!')</script>";
+			
+			header('location:visits.php');
+			
+		}
+
+	}
 ?>

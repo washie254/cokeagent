@@ -14,6 +14,58 @@
 	}
 
 ?>
+
+
+<?php
+ 
+$dataPoints = array();
+//Best practice is to create a separate file for handling connection to database
+try{
+     // Creating a new connection.
+    // Replace your-hostname, your-db, your-username, your-password according to your database
+    $link = new \PDO(   'mysql:host=localhost;dbname=dkut_coke;charset=utf8mb4', //'mysql:host=localhost;dbname=canvasjs_db;charset=utf8mb4',
+                        'root', //'root',
+                        '', //'',
+                        array(
+                            \PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
+                            \PDO::ATTR_PERSISTENT => false
+                        )
+                    );
+	
+    $handle = $link->prepare('select distributor, stocklevel from inventory'); 
+    $handle->execute(); 
+    $result = $handle->fetchAll(\PDO::FETCH_OBJ);
+		
+    foreach($result as $row){
+        array_push($dataPoints, array("x"=> $row->distributor, "y"=> $row->stocklevel));
+    }
+	$link = null;
+}
+catch(\PDOException $ex){
+    print($ex->getMessage());
+}
+	
+?>
+
+<script>
+window.onload = function () {
+ 
+var chart = new CanvasJS.Chart("chartContainer", {
+	animationEnabled: true,
+	exportEnabled: true,
+	theme: "light1", // "light1", "light2", "dark1", "dark2"
+	title:{
+		text: "PHP Column Chart from Database"
+	},
+	data: [{
+		type: "column", //change type to bar, line, area, pie, etc  
+		dataPoints: <?php echo json_encode($dataPoints, JSON_NUMERIC_CHECK); ?>
+	}]
+});
+chart.render();
+ 
+}
+</script>
 <!doctype html>
 <html lang="en">
   <head>
@@ -100,6 +152,7 @@
     <div class="tab">
     <a href="#agents"><button class="btn btn-success">Agents</button></a>
     <a href="#distributors"><button class="btn btn-primary">Distributors</button></a>
+    <a href="#inventory"><button class="btn btn-secondary">Inventory Levels</button></a>
     </div>
 
     <!-- Tab content -->
@@ -182,6 +235,58 @@
             ?>
           </tbody>
         </table>
+
+    </div> 
+    <br>
+    <div id="inventory" class="tabcontent">
+        <h3>Distributors Inventost Level Summary</h3>
+        <p>The Following Shows Distributor inventory levels</p>
+        <table class="table table-bordered">
+          <thead>
+            <tr>
+              <th scope="col">#Dist id</th>
+              <th scope="col">D. max</th>
+              <th scope="col">D. min</th>
+              <th scope="col">S. max.</th>
+              <th scope="col">S. min</th>
+              <th scope="col">D. RQ</th>
+              <th scope="col">S. RQ</th>
+              <th scope="col">D. Cur </th>
+              <th scope="col">S. Cur </th>
+              <th scope="col">TotaL Stock</th>
+              <th scope="col">Date recorded</th>
+            </tr>
+          </thead>
+          <tbody>
+            <?php
+              $sql = "SELECT * FROM inventory";
+              $result = mysqli_query($db, $sql);
+              while($row = mysqli_fetch_array($result, MYSQLI_NUM))
+              {	
+              
+                  echo '<tr>';
+                      echo '<td>'.$row[1].'</td> '; 
+                      echo '<td>'.$row[2].'</td> '; 
+                      echo '<td>'.$row[7].'</td> '; 
+                      echo '<td>'.$row[3].'</td> '; 
+                      echo '<td>'.$row[6].'</td> ';
+                      echo '<td>'.$row[4].'</td> ';
+                      echo '<td>'.$row[5].'</td> '; 
+                      echo '<td>'.$row[8].'</td>'; 
+                      echo '<td>'.$row[9].'</td> '; 
+                      echo '<td>'.$row[10].'</td> ';
+                      echo '<td>'.$row[11].'</td> ';
+                  echo '</tr>';
+              }
+            ?>
+          </tbody>
+        </table>
+        <br>
+        Cart Section
+        
+        <div id="chartContainer" style="height: 370px; width: 100%;"></div>
+        <script src="https://canvasjs.com/assets/script/canvasjs.min.js"></script>
+
 
     </div> 
     

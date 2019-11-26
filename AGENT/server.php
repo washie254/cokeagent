@@ -285,32 +285,66 @@
 
 	
 	if (isset($_POST['fileinventory'])) {
-		$agentname = mysqli_real_escape_string($db, $_POST['cdasani']);
-		$distname = mysqli_real_escape_string($db, $_POST['csoda']);
-		$deptname = mysqli_real_escape_string($db, $_POST['maxdasani']);
-		$description = mysqli_real_escape_string($db, $_POST['maxsoda']);
-		$deptname = mysqli_real_escape_string($db, $_POST['mindasani']);
-		$description = mysqli_real_escape_string($db, $_POST['minsoda']);
-		$deptname = mysqli_real_escape_string($db, $_POST['dasaniorq']);
-		$description = mysqli_real_escape_string($db, $_POST['sodaorq']);
+		$distributorid= mysqli_real_escape_string($db, $_POST['did']);
+		$tid= mysqli_real_escape_string($db, $_POST['tid']);
+		$remarks= mysqli_real_escape_string($db, $_POST['remarks']);
+		$lat = mysqli_real_escape_string($db, $_POST['lat']);
+		$lng =mysqli_real_escape_string($db, $_POST['lng']);
+
+		//INVENTORY DATA 
+		$cdasani = mysqli_real_escape_string($db, $_POST['cdasani']);
+		$csoda= mysqli_real_escape_string($db, $_POST['csoda']);
+		$maxdasani = mysqli_real_escape_string($db, $_POST['maxdasani']);
+		$maxsoda = mysqli_real_escape_string($db, $_POST['maxsoda']);
+		$mindasani = mysqli_real_escape_string($db, $_POST['mindasani']);
+		$minsoda = mysqli_real_escape_string($db, $_POST['minsoda']);
+		$dasaniorq = mysqli_real_escape_string($db, $_POST['dasaniorq']);
+		$sodaorq = mysqli_real_escape_string($db, $_POST['sodaorq']);
 		
 		$cdate = date("Y-m-d");
 		$ctime = date("h:i:s");
-		$tstatus = 'PENDING';
+		$tstatus = 'AWAITING APPROVAL';
 
-		if (empty($description)){ array_push($errors, "You must enter a brief description of the task!"); }
-		
+		$cstocklevel = $cdasani + $csoda;
 		// register user if there are no errors in the form
 		if (count($errors) == 0) {
-			$query = "INSERT INTO tasks (agent, distributor, category, description, datecreated, timecreated, status )
-									VALUES('$agentname','$distname', '$deptname','$description','$cdate','$ctime', '$tstatus')";
+			$query = "UPDATE  inventory 
+						SET	
+							maxdasani = '$maxdasani',
+							maxsoda = '$maxsoda',
+							reorderdasani = '$dasaniorq',
+							reordersoda = '$sodaorq',
+							minsoda = '$minsoda',
+							mindasani = '$mindasani',
+							currentdasani ='$cdasani',
+							currentsoda = '$csoda',
+							stocklevel	= '$cstocklevel',
+							ldate	= '$cdate',
+							ltime	= '$ctime'
+						WHERE 
+							distributor = '$distributorid'";
+
 			$result = mysqli_query($db, $query);
+
+			$query0 = "UPDATE  tasks
+							SET 
+								datecompleted = '$cdate',
+								timecompleted = '$ctime',
+								remarks = '$remarks',
+								lat = '$lat', 
+								lng = '$lng',
+								status = '$tstatus'
+							WHERE 
+								id='$tid'
+							";
+			$result2= mysqli_query($db, $query0);
+
 			if($result)
 				echo "<script type='text/javascript'>alert('Task Successfully assigned!')</script>";
 			else
 				echo "<script type'text/javascript'>alert('Something Went Wrong!!')</script>";
 			
-			header('location:admin_index.php');
+			header('location:tasks.php');
 			
 
 		}

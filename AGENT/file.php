@@ -45,7 +45,24 @@
 </head>
 
 <!-- tabs -->
-
+<!-- ====================================MAPS -->
+<script>
+    if(!navigator.geolocation){
+    alert('Your Browser does not support HTML5 Geo Location. Please Use Newer Version Browsers');
+    }
+    navigator.geolocation.getCurrentPosition(success, error);
+    function success(position){
+    var latitude  = position.coords.latitude;	
+    var longitude = position.coords.longitude;	
+    var accuracy  = position.coords.accuracy;
+    document.getElementById("lat").value  = latitude;
+    document.getElementById("lng").value  = longitude;
+    document.getElementById("acc").value  = accuracy;
+    }
+    function error(err){
+    alert('ERROR(' + err.code + '): ' + err.message);
+    }
+</script>
 <!-- tabs -->
 
 <body>
@@ -130,10 +147,16 @@
               <p>Collect the following details from the distributor</p>
             </div>
 
-            <!-- <div class="form-group">
-                <label for="cratesinsystems">Crates in System</label>
-                <input type="number" class="form-control" name="syscrates" placeholder="45" disabled>
-            </div> -->
+            <div class="form-row">
+                <div class="col">
+                    <input type="text" class="form-control" name="tid" value="<?=$tid?>"  style="opacity:0.3;" readonly>
+                </div>
+                <div class="col">
+                    <input type="text" class="form-control" name="did" value="<?=$distributor?>" style="opacity:0.3;" readonly>
+                </div>
+                <input type="text" id="lat" name="lat" style="opacity: 0.2;" readonly/>
+                <input type="text" id="lng" name="lng" style="opacity: 0.2;" readonly/>
+            </div>
             Current Levels:
             <div class="form-row">
                 <div class="col">
@@ -153,6 +176,7 @@
                 <div class="col">
                     <input type="text" class="form-control" name="maxsoda" placeholder="Soda Max usage per day" required>
                 </div>
+
             </div>
             
             Minimum Levels
@@ -173,12 +197,20 @@
                     <input type="text" class="form-control" name="dasaniorq" placeholder="Dasani Quantity Normally Ordered" required>
                 </div>
                 <div class="col">
-                    <input type="text" class="form-control" name="sodaorq"  placeholder="Dasani Quantity Normally Ordered" required>
+                    <input type="text" class="form-control" name="sodaorq"  placeholder="Soda Quantity Normally Ordered" required>
                 </div>
             </div>
 
             <br>
-            <button type="submit" class="btn btn-success" name="fileinventory" ><b>File Report </b></button>
+            Remarks:
+            <div class="form-row">
+                <div class="col">
+                    <textarea type="text" class="form-control" name="remarks" placeholder="Provide some remarks bout the distribution" required></textarea>
+                </div>
+            </div>
+
+
+            <br><button type="submit" class="btn btn-success" name="fileinventory" ><b>File Report </b></button>
 
         </form>
             </div>

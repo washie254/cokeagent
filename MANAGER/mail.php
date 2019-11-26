@@ -1,47 +1,17 @@
-<?php
-
-    if ($_SERVER["REQUEST_METHOD"] == "POST") {
-
-        # FIX: Replace this email with recipient email
-        $mail_to = "USEREMAIL@gmail.com";
-        
-        # Sender Data
-        // $subject = trim($_POST["subject"]);
-        $name = str_replace(array("\r","\n"),array(" "," ") , strip_tags(trim($_POST["name"])));
-        $email = filter_var(trim($_POST["email"]), FILTER_SANITIZE_EMAIL);
-        $message = trim($_POST["message"]);
-        
-        if ( empty($name) OR !filter_var($email, FILTER_VALIDATE_EMAIL) OR empty($subject) OR empty($message)) {
-            # Set a 400 (bad request) response code and exit.
-            http_response_code(400);
-            echo "Please complete the form and try again.";
-            exit;
-        }
-        
-        # Mail Content
-        $content = "Name: $name\n";
-        $content .= "Email: $email\n\n";
-        $content .= "Message:\n$message\n";
-
-        # email headers.
-        $headers = "From: $name <$email>";
-
-        # Send the email.
-        $success = mail($mail_to,$content, $headers);
-        if ($success) {
-            # Set a 200 (okay) response code.
-            http_response_code(200);
-            echo "Thank You! Your message has been sent.";
-        } else {
-            # Set a 500 (internal server error) response code.
-            http_response_code(500);
-            echo "Oops! Something went wrong, we couldn't send your message.";
-        }
-
-    } else {
-        # Not a POST request, set a 403 (forbidden) response code.
-        http_response_code(403);
-        echo "There was a problem with your submission, please try again.";
+<?php 
+    if (isset($_POST['smail'])){	
+            $ToEmail = 'washiemugo@gmail.com'; 
+            $EmailSubject = 'From Mintari Contact Form'; 
+            $mailheader = "From: ".$_POST["email"]."\r\n"; 
+            $mailheader .= "Reply-To: ".$_POST["email"]."\r\n"; 
+            $mailheader .= "Content-type: text/html; charset=iso-8859-1\r\n"; 
+            $MESSAGE_BODY = "Name: ".$_POST["name"]."<br>"; 
+            $MESSAGE_BODY = "Subject: ".$_POST["subject"]."<br>"; 
+            $MESSAGE_BODY .= "Email: ".$_POST["email"]."<br>"; 
+            $MESSAGE_BODY .= "Message ".nl2br($_POST["message"])."<br>"; 
+            mail($ToEmail, $EmailSubject, $MESSAGE_BODY, $mailheader) or die ("Failure"); 
+        echo "Message Successfully Sent !";
+    } else { 
+        echo "Message not sent";
     }
-
 ?>
